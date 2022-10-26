@@ -145,8 +145,43 @@ Conduct dynamic analysis of malware samples by observing their activities in a c
 Document and report all the findings
 
 
+### Penetration Tester
+
+![1](./media/1-pentester.png)
+
+Responsible for testing technology products for security loopholes
+
+You may see penetration testing referred to as pentesting and ethical hacking. A penetration tester's job role is to test the security of the systems and software within a company - this is achieved through attempts to uncover flaws and vulnerabilities through systemised hacking. Penetration testers exploit these vulnerabilities to evaluate the risk in each instance. The company can then take these insights to rectify issues to prevent a real-world cyberattack.
+
+**Responsibilities**  
+Conduct tests on computer systems, networks, and web-based applications
+Perform security assessments, audits, and analyse policies
+Evaluate and report on insights, recommending actions for attack prevention
+
+**Learning Paths**  
+TryHackMe's learning paths will give you both the fundamental technical knowledge and hands-on experience, which is crucial to becoming a successful Penetration Tester.
+
+- JR Penetration Tester
+- Offensive Pentesting
+
+### Red Teamer
+
+![1](./media/1-red-team.png)
+Plays the role of an adversary, attacking an organisation and providing feedback from an enemies perspective
+
+Red teamers share similarities to penetration testers, with a more targeted job role. Penetration testers look to uncover many vulnerabilities across systems to keep cyber-defence in good standing, whilst red teamers are enacted to test the company's detection and response capabilities. This job role requires imitating cyber criminals' actions, emulating malicious attacks, retaining access, and avoiding detection. Red team assessments can run for up to a month, typically by a team external to the company. They are often best suited to organisations with mature security programs in place.
+
+Responsibilities
+Emulate the role of a threat actor to uncover exploitable vulnerabilities, maintain access and avoid detection
+Assess organisations' security controls, threat intelligence, and incident response procedures
+Evaluate and report on insights, with actionable data for companies to avoid real-world instances
+Learning Paths
+TryHackMe's learning paths will give you both the fundamental technical knowledge and hands-on experience, which is crucial to becoming a successful Red Teamer.
+
+JR Penetration Tester
+Offensive Pentesting
+Red Teamer
 
 
-
-
+## MY NOTES 
 
