@@ -76,6 +76,12 @@ Breaking into a target network usually includes a number of steps. According to 
 Another analogy would be a thief interested in a target house. The thief will spend some time learning about the target house, who lives there, when they leave, and when they return home. The thief will determine whether they have security cameras and alarm systems. Once enough information has been gathered, the thief will plan the best entrance strategy. Physical theft planning and execution resemble, in a way, the malicious attack that aims to break into a network and steal data.
 
 
+### Exam 
+
+Instructions
+nmap MACHINE_IP
+ftp MACHINE_IP 
+> get secret.txt 
 
 
 
