@@ -39,7 +39,7 @@ Preventing intrusions from occurring
 Detecting intrusions when they occur and responding properly
 Blue teams are part of the defensive security landscape.
 
-![blue_team]( https://tryhackme-images.s3.amazonaws.com/user-uploads/5f04259cf9bf5b57aed2c476/room-content/10bfd751e4cd249e9d1ad0614d7fc049.png )
+![blue_team](./media/1-blueteam.png )
 
 Some of the responsibilities:
 - Security Operations Center (SOC)
