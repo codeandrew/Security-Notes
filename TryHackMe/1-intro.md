@@ -62,5 +62,91 @@ The four major phases of the incident response process are:
 - **Containment, Eradication, and Recovery**: Once an incident is detected, it is crucial to stop it from affecting other systems, eliminate it, and recover the affected systems. For instance, when we notice that a system is infected with a computer virus, we would like to stop (contain) the virus from spreading to other systems, clean (eradicate) the virus, and ensure proper system recovery.
 - **Post-Incident Activity** : After successful recovery, a report is produced, and the learned lesson is shared to prevent similar future incidents.
 
+![Incident](./media/1-incident-response.png )
+
+**Malware Analysis**
+Malware stands for malicious software. Software refers to programs, documents, and files that you can save on a disk or send over the network. Malware includes many types, such as:
+
+- Virus is a piece of code (part of a program) that attaches itself to a program. It is designed to spread from one computer to another; moreover, it works by altering, overwriting, and deleting files once it infects a computer. The result ranges from the computer becoming slow to unusable.
+- Trojan Horse is a program that shows one desirable function but hides a malicious function underneath. For example, a victim might download a video player from a shady website that gives the attacker complete control over their system.
+- Ransomware is a malicious program that encrypts the user’s files. Encryption makes the files unreadable without knowing the encryption password. The attacker offers the user the encryption password if the user is willing to pay a “ransom.”
+
+![malware](./media/1-malware.png )
+
+ Malware analysis aims to learn about such malicious programs using various means:
+
+- Static analysis works by inspecting the malicious program without running it. Usually, this requires solid knowledge of assembly language (processor’s instruction set, i.e., computer’s fundamental instructions).
+- Dynamic analysis works by running the malware in a controlled environment and monitoring its activities. It lets you observe how the malware behaves when running.
+
+
+**NOTE:**
+```
+There are many open-source databases out there, like AbuseIPDB, and Cisco Talos Intelligence, where you can perform a reputation and location check for the IP address. Most security analysts use these tools to aid them with alert investigations. You can also make the Internet safer by reporting the malicious IPs, for example, on AbuseIPDB
+
+once you get the malicious IP address we need to escalate it to a staff member
+```
+
+
+## Careers in Cyber Security 
+
+### Security Analyst 
+
+![1](./media/1-security-analyst.png)
+
+Responsible for maintaining the security of an organisation's data
+
+Security analysts are integral to constructing security measures across organisations to protect the company from attacks. Analysts explore and evaluate company networks to uncover actionable data and recommendations for engineers to develop preventative measures. This job role requires working with various stakeholders to gain an understanding of security requirements and the security landscape.
+
+**Responsibilities**  
+Working with various stakeholders to analyse the cyber security throughout the company
+Compile ongoing reports about the safety of networks, documenting security issues and measures taken in response
+Develop security plans, incorporating research on new attack tools and trends, and measures needed across teams to maintain data security.
+
+**Learning Paths**  
+TryHackMe's learning paths will give you both the fundamental technical knowledge and hands-on experience, which is crucial to becoming a successful Security Analyst.
+
+- Pre Security
+- Cyber Defense
+
+
+
+### Security Engineer 
+
+![1](./media/1-security-engineer.png)
+Design, monitor and maintain security controls, networks, and systems to help prevent cyberattacks
+
+Security engineers develop and implement security solutions using threats and vulnerability data - often sourced from members of the security workforce. Security engineers work across circumventing a breadth of attacks, including web application attacks, network threats, and evolving trends and tactics. The ultimate goal is to retain and adopt security measures to mitigate the risk of attack and data loss.
+
+**Responsibilities**  
+Testing and screening security measures across software
+Monitor networks and reports to update systems and mitigate vulnerabilities
+Identify and implement systems needed for optimal security
+
+**Learning Paths**  
+TryHackMe's learning paths will give you both the fundamental technical knowledge and hands-on experience, which is crucial to becoming a successful Security Engineer.
+
+- Cyber Defense
+- JR Penetration Tester
+- Offensive Pentesting
+
+
+
+### Malware Analyst
+
+![1](./media/1-malware-analyst.png)
+
+Analyses all types of malware to learn more about how they work and what they do
+
+A malware analyst's work involves analysing suspicious programs, discovering what they do and writing reports about their findings. A malware analyst is sometimes called a reverse-engineer as their core task revolves around converting compiled programs from machine language to readable code, usually in a low-level language. This work requires the malware analyst to have a strong programming background, especially in low-level languages such as assembly language and C language. The ultimate goal is to learn about all the activities that a malicious program carries out, find out how to detect it and report it.
+
+**Responsibilities**  
+Carry out static analysis of malicious programs, which entails reverse-engineering
+Conduct dynamic analysis of malware samples by observing their activities in a controlled environment
+Document and report all the findings
+
+
+
+
+
 
 
