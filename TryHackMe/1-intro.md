@@ -1,4 +1,6 @@
+# INTRO TO CYBER SECURITY
 
+## Offensive Security Intro
 ```
 gobuster -u http://fakebank.com -w wordlist.txt dir
 ```
@@ -25,4 +27,40 @@ https://inventory-management.thm/activity?user_id=9
 i was able to make changes with the website using the identity of user_id=9
 the database admin
 ```
+
+
+## Defensive Security Intro 
+
+Offensive security focuses on one thing: breaking into systems. Breaking into systems might be achieved through exploiting bugs, abusing insecure setups, and taking advantage of unenforced access control policies, among other things. Red teams and penetration testers specialize in offensive security.
+
+Defensive security is somewhat the opposite of offensive security, as it is concerned with two main tasks:
+
+Preventing intrusions from occurring
+Detecting intrusions when they occur and responding properly
+Blue teams are part of the defensive security landscape.
+
+![blue_team]( https://tryhackme-images.s3.amazonaws.com/user-uploads/5f04259cf9bf5b57aed2c476/room-content/10bfd751e4cd249e9d1ad0614d7fc049.png )
+
+Some of the responsibilities:
+- Security Operations Center (SOC)
+- Threat Intelligence
+- Digital Forensics and Incident Response (DFIR)
+- Malware Analysis
+
+### Areas of Defensive Security 
+- Security Operations Center (SOC), where we cover Threat Intelligence
+- Digital Forensics and Incident Response (DFIR), where we also cover Malware Analysis
+
+
+**Incident Response**
+An incident usually refers to a data breach or cyber attack; however, in some cases, it can be something less critical, such as a misconfiguration, an intrusion attempt, or a policy violation. Examples of a cyber attack include an attacker making our network or systems inaccessible, defacing (changing) the public website, and data breach (stealing company data). How would you respond to a cyber attack? Incident response specifies the methodology that should be followed to handle such a case. The aim is to reduce damage and recover in the shortest time possible. Ideally, you would develop a plan ready for incident response.
+
+The four major phases of the incident response process are:
+
+- **Preparation**: This requires a team trained and ready to handle incidents. Ideally, various measures are put in place to prevent incidents from happening in the first place.
+- **Detection and Analysis**: The team has the necessary resources to detect any incident; moreover, it is essential to further analyze any detected incident to learn about its severity.
+- **Containment, Eradication, and Recovery**: Once an incident is detected, it is crucial to stop it from affecting other systems, eliminate it, and recover the affected systems. For instance, when we notice that a system is infected with a computer virus, we would like to stop (contain) the virus from spreading to other systems, clean (eradicate) the virus, and ensure proper system recovery.
+- **Post-Incident Activity** : After successful recovery, a report is produced, and the learned lesson is shared to prevent similar future incidents.
+
+
 
