@@ -118,7 +118,90 @@ gobuster is really fast and i like the output more
 The purpose of Certificate Transparency logs is to stop malicious and accidentally made certificates from being used. We can use this service to our advantage to discover subdomains belonging to a domain, sites like https://crt.sh and https://ui.ctsearch.entrust.com/ui/ctsearchui offer a searchable database of certificates that shows current and historical results.
 
 Example result in **https://crt.sh** 
-![crt](./5-crt.png)
+![crt](./media/5-crt.png)
+
+crt.sh is good for tracking with date when it was renewed
+
+### OSINT - Search Engines
+
+Search Engines
+Search engines contain trillions of links to more than a billion websites, which can be an excellent resource for finding new subdomains. Using advanced search methods on websites like Google, such as the site: filter, can narrow the search results. For example, "-site:www.domain.com site:*.domain.com" would only contain results leading to the domain name domain.com but exclude any links to www.domain.com; therefore, it shows us only subdomain names belonging to domain.com.
+
+Go to Google and use the search term -site:www.tryhackme.com  site:*.tryhackme.com, which should reveal a subdomain for tryhackme.com; use that subdomain to answer the question below.
+
+
+### DNS Bruteforce 
+
+Bruteforce DNS (Domain Name System) enumeration is the method of trying tens, hundreds, thousands or even millions of different possible subdomains from a pre-defined list of commonly used subdomains. Because this method requires many requests, we automate it with tools to make the process quicker. In this instance, we are using a tool called dnsrecon to perform this
+
+![dns](./media/5-dns.png)
+
+
+### OSINT - Sublis3r 
+To speed up the process of OSINT subdomain discovery, we can automate the above methods with the help of tools like Sublist3r
+
+```
+user@thm:~$ ./sublist3r.py -d acmeitsupport.thm
+
+          ____        _     _ _     _   _____
+         / ___| _   _| |__ | (_)___| |_|___ / _ __
+         \___ \| | | | '_ \| | / __| __| |_ \| '__|
+          ___) | |_| | |_) | | \__ \ |_ ___) | |
+         |____/ \__,_|_.__/|_|_|___/\__|____/|_|
+
+         # Coded By Ahmed Aboul-Ela - @aboul3la
+
+[-] Enumerating subdomains now for acmeitsupport.thm
+[-] Searching now in Baidu..
+[-] Searching now in Yahoo..
+[-] Searching now in Google..
+[-] Searching now in Bing..
+[-] Searching now in Ask..
+[-] Searching now in Netcraft..
+[-] Searching now in Virustotal..
+[-] Searching now in ThreatCrowd..
+[-] Searching now in SSL Certificates..
+[-] Searching now in PassiveDNS..
+[-] Searching now in Virustotal..
+[-] Total Unique Subdomains Found: 2
+web55.acmeitsupport.thm
+www.acmeitsupport.thm
+user@thm:~$
+```
+
+### Virtual Hosts 
+
+
+Some subdomains aren't always hosted in publically accessible DNS results, such as development versions of a web application or administration portals. Instead, the DNS record could be kept on a private DNS server or recorded on the developer's machines in their /etc/hosts file (or c:\windows\system32\drivers\etc\hosts file for Windows users) which maps domain names to IP addresses.
+Because web servers can host multiple websites from one server when a website is requested from a client, the server knows which website the client wants from the Host header. We can utilise this host header by making changes to it and monitoring the response to see if we've discovered a new website.
+Like with DNS Bruteforce, we can automate this process by using a wordlist of commonly used subdomains.
+
+Start an AttackBox and then try the following command against the Acme IT Support machine to try and discover a new subdomain.
+
+```
+user@machine$ ffuf -w /usr/share/wordlists/SecLists/Discovery/DNS/namelist.txt -H "Host: FUZZ.acmeitsupport.thm" -u http://10.10.1.96
+# This command gave a lot of output and we need to filter
+```
+The above command uses the -w switch to specify the wordlist we are going to use. The -H switch adds/edits a header (in this instance, the Host header), we have the FUZZ keyword in the space where a subdomain would normally go, and this is where we will try all the options from the wordlist. 
+
+Because the above command will always produce a valid result, we need to filter the output. We can do this by using the page size result with the -fs switch. Edit the below command replacing {size} with the most occurring size value from the previous result and try it on the AttackBox
+
+```
+user@machine$ ffuf -w /usr/share/wordlists/SecLists/Discovery/DNS/namelist.txt -H "Host: FUZZ.acmeitsupport.thm" -u http://10.10.1.96 -fs {size}
+```
+
+![vhost](./media/fuff-vhost.png)
+
+size: 2395
+get what is the most common number in size 
+
+
+
+
+
+
+
+
 
 
 ## AUTHENTICATION
