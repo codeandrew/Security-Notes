@@ -190,7 +190,7 @@ Because the above command will always produce a valid result, we need to filter 
 user@machine$ ffuf -w /usr/share/wordlists/SecLists/Discovery/DNS/namelist.txt -H "Host: FUZZ.acmeitsupport.thm" -u http://10.10.1.96 -fs {size}
 ```
 
-![vhost](./media/fuff-vhost.png)
+![vhost](./media/5-fuff-vhost.png)
 
 size: 2395
 get what is the most common number in size 
