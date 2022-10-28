@@ -106,13 +106,22 @@ gobuster dir --url http://10.10.18.148/ -w /usr/share/wordlists/SecLists/Discove
 gobuster is really fast and i like the output more
 
 
-
-
-
-
-
 ## SUBDOMAIN ENUMERATION
-## AUTHENTI
+
+3 Subdomain enumeration methods:
+- Brute Force
+- OSINT
+- Virtual Host 
+
+### OSINT - SSL/TLS Certificates 
+
+The purpose of Certificate Transparency logs is to stop malicious and accidentally made certificates from being used. We can use this service to our advantage to discover subdomains belonging to a domain, sites like https://crt.sh and https://ui.ctsearch.entrust.com/ui/ctsearchui offer a searchable database of certificates that shows current and historical results.
+
+Example result in **https://crt.sh** 
+![crt](./5-crt.png)
+
+
+## AUTHENTICATION
 
 ## My TakeAways
 
