@@ -408,13 +408,49 @@ Similarly, if the web application runs on a Windows server, the attacker needs t
 
 LFI attacks against web applications are often due to a developers' lack of security awareness. With PHP, using functions such as include, require, include_once, and require_once often contribute to vulnerable web applications. In this room, we'll be picking on PHP, but it's worth noting LFI vulnerabilities also occur when using other languages such as ASP, JSP, or even in Node.js apps. LFI exploits follow the same concepts as path traversal. 
 
+tried to access `/etc/passwd`
 ![lfi](./media/5-lfi.png)
 
 
 ### LOCAL FILE INCLUSION - LFI #2
 
+```
+Warning: include(languages/../../../../../etc/passwd.php): failed to open stream: No such file or directory in /var/www/html/THM-4/index.php on line 12
+```
+
+
+It seems we could move out of the PHP directory but still, the `include` function reads the input with `.php` at the end! This tells us that the developer specifies the file type to pass to the include function. To bypass this scenario, we can use the `NULL BYTE`, which is `%00`.
+
+Using null bytes is an injection technique where URL-encoded representation such as `%00` or `0x00` in hex with user-supplied data to terminate strings. You could think of it as trying to trick the web app into disregarding whatever comes after the Null Byte.
+
+By adding the Null Byte at the end of the payload, we tell the  `include` function to ignore anything after the null byte which may look like:
+
+`include("languages/../../../../../etc/passwd%00").".php");` which equivalent to → `include("languages/../../../../../etc/passwd");`
+
+**NOTE: the %00 trick is fixed and not working with PHP 5.3.4 and above.**
+
+LAB4  
+```
+# Doesn't work
+../../../etc/passwd # will not work
+
+# Worked because of null byte %00
+../../../etc/passwd%00 
+
+```
+
+LAB5
+If we check the warning message in the include(languages/etc/passwd) section, we know that the web application replaces the ../ with the empty string. There are a couple of techniques we can use to bypass this.
+
+First, we can send the following payload to bypass it: ....//....//....//....//....//etc/passwd
+![lfi](./media/5-lfi-lab5.png)
+
+
+
 ![lfi](./media/5-lfi-lab3.png)
 ![lfi](./media/5-lfi-lab6.png)
+
+My Answers 
 ![lfi](./media/5-lfi-2-answers.png)
 
 
@@ -452,4 +488,11 @@ Content can be many things, a file, video, picture, backup, a website feature.
 - basically, inspect element check the apis, copy as curl and change some ids or identity, try to access other ids from your cookie 
 
 
+**LFI**
 
+Study 
+Null Bytes
+ENCODING 
+
+
+ 
