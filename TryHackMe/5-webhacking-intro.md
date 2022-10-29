@@ -404,6 +404,22 @@ Similarly, if the web application runs on a Windows server, the attacker needs t
 |         C:\boot.ini         | contains the boot options for computers with BIOS firmware                                                                                                        |
 
 
+### LOCAL FILE INCLUSION - LFI 
+
+LFI attacks against web applications are often due to a developers' lack of security awareness. With PHP, using functions such as include, require, include_once, and require_once often contribute to vulnerable web applications. In this room, we'll be picking on PHP, but it's worth noting LFI vulnerabilities also occur when using other languages such as ASP, JSP, or even in Node.js apps. LFI exploits follow the same concepts as path traversal. 
+
+![lfi](./media/5-lfi.png)
+
+
+### LOCAL FILE INCLUSION - LFI #2
+
+![lfi](./media/5-lfi-lab3.png)
+![lfi](./media/5-lfi-lab6.png)
+![lfi](./media/5-lfi-2-answers.png)
+
+
+
+
 ## My TakeAways
 
 **WALKING APPLICATION**
