@@ -429,7 +429,7 @@ By adding the Null Byte at the end of the payload, we tell the  `include` functi
 
 **NOTE: the %00 trick is fixed and not working with PHP 5.3.4 and above.**
 
-LAB4  
+**LAB4**
 ```
 # Doesn't work
 ../../../etc/passwd # will not work
@@ -439,10 +439,10 @@ LAB4
 
 ```
 
-LAB5
-If we check the warning message in the include(languages/etc/passwd) section, we know that the web application replaces the ../ with the empty string. There are a couple of techniques we can use to bypass this.
+**LAB5**  
+If we check the warning message in the `include(languages/etc/passwd)` section, we know that the web application replaces the ../ with the empty string. There are a couple of techniques we can use to bypass this.
 
-First, we can send the following payload to bypass it: ....//....//....//....//....//etc/passwd
+First, we can send the following payload to bypass it: `....//....//....//....//....//etc/passwd`
 ![lfi](./media/5-lfi-lab5.png)
 
 
