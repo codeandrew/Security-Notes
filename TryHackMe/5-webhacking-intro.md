@@ -305,7 +305,34 @@ When passing data from page to page either by post data, query strings, or cooki
 ![idor](./media/5-idor-encoded.png)
 
 
+### FINDING IDORS IN HASHED IDS
 
+Get the `hash` and paste to `https://crackstation.net/`
+the most common hasing algorithm is md5 
+
+### FINDING IDORS IN UNPREDICTABLE IDS
+
+Create two accounts in the same site.
+try swapping ids. and look if you can view you different account by just changing you values 
+
+### WHERE ARE IDORS LOCATED 
+
+Where are they located?
+The vulnerable endpoint you're targeting may not always be something you see in the address bar. It could be content your browser loads in via an AJAX request or something that you find referenced in a JavaScript file. 
+
+Sometimes endpoints could have an unreferenced parameter that may have been of some use during development and got pushed to production. For example, you may notice a call to /user/details displaying your user information (authenticated through your session). But through an attack known as parameter mining, you discover a parameter called user_id that you can use to display other users' information, for example, /user/details?user_id=123.
+
+
+### PRACTICAL EXAM 
+
+I sign up an account 
+logged in as the user
+check the accounts page
+inspect element. checked the get account api 
+copy as curl 
+changed the from id=15 to 1 and 3 
+
+![idor-exam](./media/5-idor-exam.png)
 
 
 ## FILE INCLUSION
@@ -335,6 +362,12 @@ Content can be many things, a file, video, picture, backup, a website feature.
 
 **SUBDOMAIN ENUMERATION**
 
+
+**IDORS**
+
+- create 2 accounts, and try to access each other just by changing ids or some values in the APIs
+- Try looking at the encoded or hashed values in header if you can manipulate it 
+- basically, inspect element check the apis, copy as curl and change some ids or identity, try to access other ids from your cookie 
 
 
 
