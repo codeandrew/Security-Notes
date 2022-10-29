@@ -272,7 +272,7 @@ We see one cookie (logged_in), which appears to control whether the user is curr
 First, we'll start just by requesting the target page:
 
 Here's an example scenario of modifying the cookie header and gaining access as an admin
-![cookie_tamper](./5-cookie-tamper.png)
+![cookie_tamper](./media/5-cookie-tamper.png)
 
 
 Hashing
