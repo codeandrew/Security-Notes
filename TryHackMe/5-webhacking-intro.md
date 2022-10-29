@@ -443,14 +443,24 @@ By adding the Null Byte at the end of the payload, we tell the  `include` functi
 If we check the warning message in the `include(languages/etc/passwd)` section, we know that the web application replaces the ../ with the empty string. There are a couple of techniques we can use to bypass this.
 
 First, we can send the following payload to bypass it: `....//....//....//....//....//etc/passwd`
+
+Why This Works: 
 ![lfi](./media/5-lfi-lab5.png)
 
 
 
+**LAB3** 
+reading `/etc/passwd` using nullbyte method
+
 ![lfi](./media/5-lfi-lab3.png)
+
+**LAB6** 
+In this case there is path first you have to enter. 
+this path gives you admin access 
 ![lfi](./media/5-lfi-lab6.png)
 
-My Answers 
+**My Answers**  
+Summary
 ![lfi](./media/5-lfi-2-answers.png)
 
 
