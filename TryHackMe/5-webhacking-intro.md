@@ -519,7 +519,10 @@ POST data using parameter escaped the filter together with `NULL BYTE`
 ![flag](./media/5-challenge3.png)
 
 
-## My TakeAways
+
+---
+
+## MY TAKEAWAYS
 
 **WALKING APPLICATION**
 - Look at comments
@@ -542,6 +545,15 @@ Content can be many things, a file, video, picture, backup, a website feature.
 
 
 **SUBDOMAIN ENUMERATION**
+- sublist3r.py -d $url # OSINT Subdomain discovery 
+- check at `https://crt.sh` good for history tracking also 
+- dnsrecon -t brt -d $url #   Bruteforce with list
+
+For private subdomains, (using vhost,dns revolve in development)
+
+`ffuf -w /usr/share/wordlists/SecLists/Discovery/DNS/namelist.txt -H "Host: FUZZ.acmeitsupport.thm" -u $url`
+> FUZZ will be replaced by wordlist
+> Will use header host for redirection 
 
 
 **IDORS**
@@ -557,5 +569,17 @@ Study
 Null Bytes
 ENCODING 
 
+Study how the server receives the requests. 
+what function are they using. 
+do they store it in a variable. 
+can it be overridden? 
+can you pollute it? 
 
- 
+In this example in PHP  `$_REQUEST`, `function.inclue` and `file_get_contents` 
+are the functions that got exploited. 
+
+
+
+
+
+
