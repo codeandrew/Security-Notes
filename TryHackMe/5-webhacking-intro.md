@@ -499,15 +499,24 @@ As a developer, it's important to be aware of web application vulnerabilities, h
 
 ### CHALLENGE 
 
-**Flag1**
+**Flag1**  
 GET Method is not working I created a script that uses post method with a parameter 
-![flag](./meia/5-challenge1.png)
+![flag](./media/5-challenge1.png)
 
 
-**Flag2**
+**Flag2**  
 Changed the cookie value to `THM=../../../../etc/flag2`
 then refreshed 
-![flag](./meia/5-challenge2.png)
+![flag](./media/5-challenge2.png)
+
+
+**Flag3**  
+Change the method from `GET` to `POST` 
+GET parameter was being filtered
+POST data using parameter escaped the filter together with `NULL BYTE`
+
+`../../../../etc/flag3%00`
+![flag](./media/5-challenge3.png)
 
 
 ## My TakeAways
