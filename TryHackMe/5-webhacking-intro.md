@@ -554,6 +554,23 @@ A successful SSRF attack can result in any of the following:
 - Ability to Scale to internal networks.
 - Reveal authentication tokens/credentials.
 
+### SSRF EXAMPLES 
+
+The below example shows how the attacker can have complete control over the page requested by the webserver.
+The Expected Request is what the website.thm server is expecting to receive, with the section in red being the URL that the website will fetch for the information.
+The attacker can modify the area in red to an URL of their choice. 
+
+![ssrf](./media/5-ssrf-ex1.png)
+
+The below example shows how an attacker can still reach the /api/user page with only having control over the path by utilising directory traversal. When website.thm receives ../ this is a message to move up a directory which removes the /stock portion of the request and turns the final request into /api/user
+
+![ssrf](./media/5-ssrf-ex2.png)
+
+In this example, the attacker can control the server's subdomain to which the request is made. Take note of the payload ending in &x= being used to stop the remaining path from being appended to the end of the attacker's URL and instead turns it into a parameter (?x=) on the query string.
+
+![ssrf](./media/5-ssrf-ex3.png)
+
+
 
 
 ---
