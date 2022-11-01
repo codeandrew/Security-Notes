@@ -563,7 +563,9 @@ The attacker can modify the area in red to an URL of their choice.
 **EX1**  
 ![ssrf](./media/5-ssrf-ex1.png)
 
+```bash
 http://website.thm/stock?url=`http://api.website.thm/api/user`
+```
 
 
 
