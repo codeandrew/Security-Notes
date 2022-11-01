@@ -569,19 +569,27 @@ http://website.thm/stock?url=`http://api.website.thm/api/user`
 
 
 
-**EX2**
+**EX2**  
 The below example shows how an attacker can still reach the /api/user page with only having control over the path by utilising directory traversal. When website.thm receives ../ this is a message to move up a directory which removes the /stock portion of the request and turns the final request into /api/user
 
 ![ssrf](./media/5-ssrf-ex2.png)
 
+```bash
+http://website.thm/stock?url=`/item?id=123`
+```
 
-**EX3**
+
+**EX3**  
 In this example, the attacker can control the server's subdomain to which the request is made. Take note of the payload ending in &x= being used to stop the remaining path from being appended to the end of the attacker's URL and instead turns it into a parameter (?x=) on the query string.
 
 ![ssrf](./media/5-ssrf-ex3.png)
 
+```bash
+http://website.thm/stock?server=`api.website.thm/api/user&x=`&id=123
+```
 
-Try this
+
+Summary
 ```
 http://website.thm/stock?url=http://api.website.thm/api/user
 http://website.thm/stock?url=/../user
