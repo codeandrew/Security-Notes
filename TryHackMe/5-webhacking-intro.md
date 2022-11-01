@@ -655,9 +655,12 @@ that section tried to request to '/private'
 ![ssrf](./media/5-ssrf-practical-3.png)
 
 
-now here's what i did 
+now I change the value to `x/../private`
 ![ssrf](./media/5-ssrf-challenge-1.png)
+
+And got the encoded base64 of the /private response. 
 ![ssrf](./media/5-ssrf-challenge-2.png)
+now decoded the flag 
 
 
 ---
