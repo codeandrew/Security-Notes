@@ -74,6 +74,26 @@ then i switched to the `HTTP HISTORY` Sub Tab and viewed all the request/respons
 
 THM{NmNlZTliNGE1MWU1ZTQzMzgzNmFiNWVk} 
 
+### EXAMPLE ATTACK 
+Trying to type `<script>alert("Succ3ssful XSS")</script> `
+
+![burp](./media/6-burp-ex-1.gif)
+BUT Front end side has a filter
+
+With the request captured in the proxy, we can now change the email field to be our very simple payload from above: <script>alert("Succ3ssful XSS")</script>. After pasting in the payload, we need to select it, then URL encode it with the Ctrl + U shortcut to make it safe to send. This process is shown in the GIF below:
+![burp](./media/6-burp-ex-2.gif)
+
+Finally, press the "Forward" button to send the request.
+
+You should find that you get an alert box from the site indicating a successful XSS attack!
+![burp](./media/6-burp-ex-3.gif)
+
+
+
+    
+
+
+
 
 
 
