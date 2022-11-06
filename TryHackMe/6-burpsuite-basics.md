@@ -11,7 +11,7 @@ Whilst Burp Community has a relatively limited feature-set compared to the Profe
 - Comparer: As the name suggests, Comparer allows us to compare two pieces of data at either word or byte level. Again, this is not something that is unique to Burp Suite, but being able to send (potentially very large) pieces of data directly into a comparison tool with a single keyboard shortcut can speed things up considerably.
 - Sequencer: We usually use Sequencer when assessing the randomness of tokens such as session cookie values or other supposedly random generated data. If the algorithm is not generating secure random values, then this could open up some devastating avenues for attack.
 
-### PROXY
+## PROXY
 
 Burp Proxy is the most fundamental (and most important!) of the tools available in Burp Suite. It allows us to capture requests and responses between ourselves and our target. These can then be manipulated or sent to other tools for further processing before being allowed to continue to their destination
 
@@ -88,6 +88,9 @@ Finally, press the "Forward" button to send the request.
 You should find that you get an alert box from the site indicating a successful XSS attack!
 ![burp](./media/6-burp-ex-3.png)
 
+## REPEATER 
+
+Burp Suite Repeater allows us to craft and/or relay intercepted requests to a target at will. In layman's terms, it means we can take a request captured in the Proxy, edit it, and send the same request repeatedly as many times as we wish. Alternatively, we could craft requests by hand, much as we would from the CLI (Command Line Interface), using a tool such as cURL to build and send requests
 
 
     
