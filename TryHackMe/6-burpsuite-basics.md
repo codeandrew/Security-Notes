@@ -86,7 +86,7 @@ With the request captured in the proxy, we can now change the email field to be 
 Finally, press the "Forward" button to send the request.
 
 You should find that you get an alert box from the site indicating a successful XSS attack!
-![burp](./media/6-burp-ex-3.gif)
+![burp](./media/6-burp-ex-3.png)
 
 
 
