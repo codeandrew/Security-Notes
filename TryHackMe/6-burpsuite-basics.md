@@ -42,4 +42,10 @@ We should now be free to visit any TLS enabled sites that we wish!
 ![https](./media/6-burp-https-proxy.gif)
 
 
+### SCOPING AND TARGETING 
+
+It can get extremely tedious having Burp capturing all of our traffic. When it logs everything (including traffic to sites we aren't targeting), it muddies up logs we may later wish to send to clients. In short, allowing Burp to capture everything can quickly become a massive pain.
+
+![https](./media/6-burp-scoping.gif)
+
 
