@@ -94,6 +94,7 @@ Burp Suite Repeater allows us to craft and/or relay intercepted requests to a ta
 
 
     
+## INTRUDER 
 
 
 
