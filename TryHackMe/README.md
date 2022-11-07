@@ -19,3 +19,11 @@ SSRF - Not yet 100% clear and absorbed
 SQL INJECTION 
 - Go back in band SQLi Task 5 Redo 
 Finished the task but not 100% clear 
+
+BURP REPEATER   
+- Go back final challenge with SQLi Union 
+- Try to use BURP INTRUDER in the Extra mile Challenge 
+
+
+
+
