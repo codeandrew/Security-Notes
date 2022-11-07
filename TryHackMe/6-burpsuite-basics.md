@@ -232,6 +232,34 @@ get the lowest value
 refresh before trying to log manually
 
 
+## OTHER MODULES
+
+### DECODER
+Good for encoding, decoding and hasing. 
+very convinient
+
+### Comparer
+
+in proxy intercept. after making the request.
+you can right click the **response** then send to **COMPARER**
+if you have two different response now you can view the difference. 
+
+usually look at the length 
+
+### Sequencer 
+
+Sequencer is one of those tools that rarely ever gets used in CTFs and other lab environments but is an essential part of a real-world web app penetration test.
+
+In short, Sequencer allows us to measure the entropy (or randomness, in other words) of "tokens" -- strings that are used to identify something and should, in theory, be generated in a cryptographically secure manner. For example, we may wish to analyse the randomness of a session cookie or a Cross-Site Request Forgery (CSRF) token protecting a form submission. If it turns out that these tokens are not generated securely, then we can (in theory) predict the values of upcoming tokens. Just imagine the implications of this if the token in question is used for password resets...
+There are two main methods we can use to perform token analysis with Sequencer:
+
+- **Live capture** is the more common of the two methods -- this is the default sub-tab for Sequencer. Live capture allows us to pass a request to Sequencer, which we know will create a token for us to analyse. For example, we may wish to pass a POST request to a login endpoint into Sequencer, as we know that the server will respond by giving us a cookie. With the request passed in, we can tell Sequencer to start a live capture: it will then make the same request thousands of times automatically, storing the generated token samples for analysis. Once we have accumulated enough samples, we stop Sequencer and allow it to analyse the captured tokens.
+- **Manual load** allows us to load a list of pre-generated token samples straight into Sequencer for analysis. Using Manual Load means we don't have to make thousands of requests to our target (which is both loud and resource intensive), but it does mean that we need to obtain a large list of pre-generated tokens!
+
+## Extender
+
+To add other modules 
+![extender](./media/6-burp-extender.gif)
 
 
 
