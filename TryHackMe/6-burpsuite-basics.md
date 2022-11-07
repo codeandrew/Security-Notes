@@ -96,6 +96,16 @@ Burp Suite Repeater allows us to craft and/or relay intercepted requests to a ta
     
 ## INTRUDER 
 
+On the right-hand side of the interface, we have the buttons labelled "Add §", "Clear §", and "Auto §":
+
+- Add lets us define new positions by highlighting them in the editor and clicking the button.
+- Clear removes all defined positions, leaving us with a blank canvas to define our own.
+- Auto attempts to select the most likely positions automatically; this is useful if we cleared the default positions and want them back.
+
+Here is a GIF demonstrating the process of adding, clearing, and automatically reselecting positions:
+![burp](./media/6-burp-positions.gif)
+
+
 
 
 
