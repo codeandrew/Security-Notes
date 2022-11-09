@@ -66,6 +66,7 @@ Find the IP address of a domain name using `nslookup`, which stands for Name Ser
 For instance, nslookup -type=A tryhackme.com 1.1.1.1 (or nslookup -type=a tryhackme.com 1.1.1.1 as it is case-insensitive) can be used to return all the IPv4 addresses used by tryhackme.com.
  
 ### Conclusion 
+
 |         Lookup WHOIS record         |           whois tryhackme.com           |
 |:-----------------------------------:|:---------------------------------------:|
 |         Lookup DNS A records        |      nslookup -type=A tryhackme.com     |
@@ -74,5 +75,61 @@ For instance, nslookup -type=A tryhackme.com 1.1.1.1 (or nslookup -type=a tryhac
 |         Lookup DNS A records        |           dig tryhackme.com A           |
 | Lookup DNS MX records at DNS server |      dig @1.1.1.1 tryhackme.com MX      |
 |        Lookup DNS TXT records       |          dig tryhackme.com TXT          |
+
+## ACTIVE RECONNAISSANCE
+
+Active reconnaissance requires you to make some kind of contact with your target. This contact can be a phone call or a visit to the target company under some pretence to gather more information, usually as part of social engineering. Alternatively, it can be a direct connection to the target system, whether visiting their website or checking if their firewall has an SSH port open. Think of it like you are closely inspecting windows and door locks. Hence, it is essential to remember not to engage in active reconnaissance work before getting signed legal authorization from the client.
+
+There are also plenty of add-ons for Firefox and Chrome that can help in penetration testing. Here are a few examples:
+
+- **FoxyProxy** lets you quickly change the proxy server you are using to access the target website. This browser extension is convenient when you are using a tool such as Burp Suite or if you need to switch proxy servers regularly. You can get FoxyProxy for Firefox from here.
+- **User-Agent Switcher and Manager** gives you the ability to pretend to be accessing the webpage from a different operating system or different web browser. In other words, you can pretend to be browsing a site using an iPhone when in fact, you are accessing it from Mozilla Firefox. You can download User-Agent Switcher and Manager for Firefox here.
+- **Wappalyzer** provides insights about the technologies used on the visited websites. Such extension is handy, primarily when you collect all this information while browsing the website like any other user. A screenshot of Wappalyzer is shown below. You can find Wappalyzer for Firefox here.
+
+**PING**
+-c count
+-s packet size 
+
+
+**telnet**
+telnet $IP $PORT 
+(once connected)
+GET / HTTP/1.1
+host: example 
+( double enter)
+
+
+### Conclusion 
+
+|      Command     |                   Example                  |
+|:----------------:|:------------------------------------------:|
+|       ping       | ping -c 10 10.10.235.164 on Linux or macOS |
+|       ping       |   ping -n 10 10.10.235.164 on MS Windows   |
+|    traceroute    | traceroute 10.10.235.164 on Linux or macOS |
+|      tracert     |     tracert 10.10.235.164 on MS Windows    |
+|      telnet      |      telnet 10.10.235.164 PORT_NUMBER      |
+| netcat as client |        nc 10.10.235.164 PORT_NUMBER        |
+| netcat as server |            nc -lvnp PORT_NUMBER            | 
+
+
+
+
+
+
+## MY NOTES 
+
+
+```bash
+#PASSIVE RECON - Public info
+
+nslookup -type=A tryhackme.com     # IPv4 Address
+nslookup -type=MX tryhackme.com 1.1.1.1  # Mail Servers
+nslookup -type=TXT tryhackme.com     # Txt records
+
+```
+
+other useful sites 
+- DNSDumpster 
+- shodan.io
 
 
