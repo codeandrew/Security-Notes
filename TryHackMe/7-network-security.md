@@ -113,7 +113,25 @@ host: example
 
 
 
+##  NMAP LIVE HOST DICOVERY 
 
+This room is the first of four in this Nmap series 
+
+- Nmap Live Host Discovery
+- Nmap Basic Port Scans
+- Nmap Advanced Port Scans
+- Nmap Post Port Scans
+
+We present the different approaches that Nmap uses to discover live hosts. In particular, we cover:
+
+- **ARP scan**: This scan uses ARP requests to discover live hosts
+- **ICMP scan**: This scan uses ICMP requests to identify live hosts
+- **TCP/UDP ping scan**: This scan sends packets to TCP ports and UDP ports to determine live hosts.
+
+ Nmap was created by Gordon Lyon (Fyodor), a network security expert and open source programmer. It was released in 1997 
+A Nmap scan usually goes through the steps shown in the figure below, although many are optional and depend on the command-line arguments you provide.
+
+![nmap](./media/7-nmap.png)
 
 
 ## MY NOTES 
