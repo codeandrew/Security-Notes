@@ -32,6 +32,6 @@ https://tryhackme.com/room/introtolan
 
 ## CHALLENGES
 
-Easy https://tryhackme.com/room/basicpentestingjt
-EASY https://tryhackme.com/room/picklerick
-EASY https://tryhackme.com/room/rrootme 
+- EASY https://tryhackme.com/room/basicpentestingjt
+- EASY https://tryhackme.com/room/picklerick
+- EASY https://tryhackme.com/room/rrootme 
