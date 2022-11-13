@@ -309,6 +309,176 @@ These scan types should get you started discovering running TCP and UDP services
 | --min-parallelism 100 |      at least 100 probes in parallel     |
 
 
+## NMAP ADVANCE PORT SCANS 
+
+This room explains advanced types of scans and scan options. Some of these scan types can be useful against specific systems, while others are useful in particular network setups. We will cover the following types of port scans:
+
+- Null Scan
+- FIN Scan
+- Xmas Scan
+- Maimon Scan
+- ACK Scan
+- Window Scan
+- Custom Scan
+
+Moreover, we will cover the following:
+
+- Spoofing IP
+- Spoofing MAC
+- Decoy Scan
+- Fragmented Packets
+- Idle/Zombie Scan
+- We will discuss options and techniques to evade firewalls and IDS systems. We also cover options to get more verbose details from Nmap.
+
+### TCP - NULL SCAN, FIN SCAN, and XMAS SCAN
+
+
+**NULL SCAN**
+
+The null scan does not set any flag; all six flag bits are set to zero.
+You can choose this scan using the `-sN` option.
+A TCP packet with no flags set will not trigger any response when it reaches an open port, as shown in the figure below.
+Therefore, from Nmap’s perspective, a `lack of reply in a null scan` indicates that either the `port is open or a firewall is blocking the packet`.
+![null_scan](./media/7-null-scan.png)
+
+However, we expect the target server to respond with an RST packet if the port is closed. Consequently, we can use the lack of RST response to figure out the ports that are not closed: open or filtered.
+![null_scan](./media/7-null-scan-close.png)
+
+**FIN Scan**
+The FIN scan sends a TCP packet with the FIN flag set.
+You can choose this scan type using the `-sF` option. Similarly, no response will be sent if the TCP port is open. Again, Nmap cannot be sure if the port is open or if a firewall is blocking the traffic related to this TCP port.
+
+**XMAS SCAN**
+
+The Xmas scan gets its name after Christmas tree lights. An Xmas scan sets the FIN, PSH, and URG flags simultaneously. 
+You can select Xmas scan with the option `-sX`.
+Like the Null scan and FIN scan, if an RST packet is received, it means that the port is closed. Otherwise, it will be reported as open|filtered.
+
+
+- Null Scan
+- FIN Scan
+- Xmas Scan
+
+They have a similar results but their difference is:
+- Null scan sends `0 Flags`
+- FIN Scan sends `1 Flags`
+- XMAS scan sends `3 Flags`
+
+### TCP MAIMON SCAN
+
+RARE 
+Uriel Maimon first described this scan in 1996. In this scan, the FIN and ACK bits are set. The target should send an RST packet as a response. 
+However, certain BSD-derived systems drop the packet if it is an open port exposing the open ports.
+This scan won’t work on most targets encountered in modern networks; however, we include it in this room to better understand the port scanning mechanism and the hacking mindset. 
+To select this scan type, use the `-sM` option.
+
+sudo nmap -sM 10.10.252.27 
+
+Most target systems respond with an RST packet regardless of whether the TCP port is open. In such a case, we won’t be able to discover the open ports. The figure below shows the expected behaviour in the cases of both open and closed TCP ports
+
+
+### TCP - ACK, WINDOWS and CUSTOM SCAM 
+
+**ACK SCAN**
+
+Let’s start with the TCP ACK scan. As the name implies, an ACK scan will send a TCP packet with the ACK flag set. Use the -sA option to choose this scan. As we show in the figure below, the target would respond to the ACK with RST regardless of the state of the port. This behaviour happens because a TCP packet with the ACK flag set should be sent only in response to a received TCP packet to acknowledge the receipt of some data, unlike our case. Hence, this scan won’t tell us whether the target port is open in a simple setup.
+
+with a firewall, we repeated the ACK scan. This time, we received some interesting results.
+As seen in the console output below, we have three ports that aren't being blocked by the firewall.
+This result indicates that the firewall is blocking all other ports except for these three ports.
+
+```
+sudo nmap -sA 10.10.235.34
+
+Starting Nmap 7.60 ( https://nmap.org ) at 2021-09-07 11:34 BST
+Nmap scan report for 10.10.235.34
+Host is up (0.00046s latency).
+Not shown: 997 filtered ports
+PORT    STATE      SERVICE
+22/tcp  unfiltered ssh
+25/tcp  unfiltered smtp
+80/tcp  unfiltered http
+MAC Address: 02:78:C0:D0:4E:E9 (Unknown)
+
+Nmap done: 1 IP address (1 host up) scanned in 15.45 seconds
+```
+
+**WINDOW SCAN**
+
+Another similar scan is the TCP window scan. The TCP window scan is almost the same as the ACK scan; however, it examines the TCP Window field of the RST packets returned. On specific systems, this can reveal that the port is open. You can select this scan type with the option -sW. As shown in the figure below, we expect to get an RST packet in reply to our “uninvited” ACK packets, regardless of whether the port is open or closed.
+
+However, as you would expect, if we repeat our TCP window scan against a server behind a firewall, we expect to get more satisfying results. In the console output shown below, the TCP window scan pointed that three ports are detected as closed. (This is in contrast with the ACK scan that labelled the same three ports as unfiltered.) Although we know that these three ports are not closed, we realize they responded differently, indicating that the firewall does not block them.
+```
+sudo nmap -sW 10.10.235.34
+
+Starting Nmap 7.60 ( https://nmap.org ) at 2021-09-07 11:39 BST
+Nmap scan report for 10.10.235.34
+Host is up (0.00040s latency).
+Not shown: 997 filtered ports
+PORT    STATE  SERVICE
+22/tcp  closed ssh
+25/tcp  closed smtp
+80/tcp  closed http
+MAC Address: 02:78:C0:D0:4E:E9 (Unknown)
+
+Nmap done: 1 IP address (1 host up) scanned in 14.84 seconds
+```
+
+
+
+**CUSTOM SCAN**
+If you want to experiment with a new TCP flag combination beyond the built-in TCP scan types, you can do so using --scanflags. For instance, if you want to set SYN, RST, and FIN simultaneously, you can do so using --scanflags RSTSYNFIN. As shown in the figure below, if you develop your custom scan, you need to know how the different ports will behave to interpret the results in different scenarios correctly.
+![custom](./media/7-nmap-custom.png)
+
+Finally, it is essential to note that the ACK scan and the window scan were very efficient at helping us map out the firewall rules.
+However, it is vital to remember that just because a firewall is not blocking a specific port, it does not necessarily mean that a service is listening on that port.
+For example, there is a possibility that the firewall rules need to be updated to reflect recent service changes.
+**Hence, ACK and window scans are exposing the firewall rules, not the services.**
+
+### NMAP SPOOFING AND DECOYS 
+In some network setups, you will be able to scan a target system using a spoofed IP address and even a spoofed MAC address. Such a scan is only beneficial in a situation where you can guarantee to capture the response. If you try to scan a target from some random network using a spoofed IP address, chances are you won’t have any response routed to you, and the scan results could be unreliable.
+
+The following figure shows the attacker launching the command nmap -S SPOOFED_IP 10.10.235.34. Consequently, Nmap will craft all the packets using the provided source IP address SPOOFED_IP. The target machine will respond to the incoming packets sending the replies to the destination IP address SPOOFED_IP. For this scan to work and give accurate results, the attacker needs to monitor the network traffic to analyze the replies.
+
+![spoof](./media/7-nmap-spoof.png)
+
+In brief, scanning with a spoofed IP address is three steps:
+
+- Attacker sends a packet with a spoofed source IP address to the target machine.
+- Target machine replies to the spoofed IP address as the destination.
+- Attacker captures the replies to figure out open ports.
+
+In general, you expect to specify the network interface using -e and to explicitly disable ping scan -Pn. Therefore, instead of nmap -S SPOOFED_IP 10.10.235.34, you will need to issue nmap -e NET_INTERFACE -Pn -S SPOOFED_IP 10.10.235.34 to tell Nmap explicitly which network interface to use and not to expect to receive a ping reply. It is worth repeating that this scan will be useless if the attacker system cannot monitor the network for responses.
+
+When you are on the same subnet as the target machine, you would be able to spoof your MAC address as well. You can specify the source MAC address using --spoof-mac SPOOFED_MAC. This address spoofing is only possible if the attacker and the target machine are on the same Ethernet (802.3) network or same WiFi (802.11).
+
+Spoofing only works in a minimal number of cases where certain conditions are met. Therefore, the attacker might resort to using decoys to make it more challenging to be pinpointed. The concept is simple, make the scan appears to be coming from many IP addresses so that the attacker’s IP address would be lost among them. As we see in the figure below, the scan of the target machine will appear to be coming from 3 different sources, and consequently, the replies will go the decoys as well.
+
+![decoy](./media/7-nmap-decoy.png)
+
+You can launch a decoy scan by specifying a specific or random IP address after -D. For example, nmap -D 10.10.0.1,10.10.0.2,ME 10.10.235.34 will make the scan of 10.10.235.34 appear as coming from the IP addresses 10.10.0.1, 10.10.0.2, and then ME to indicate that your IP address should appear in the third order. Another example command would be nmap -D 10.10.0.1,10.10.0.2,RND,RND,ME 10.10.235.34, where the third and fourth source IP addresses are assigned randomly, while the fifth source is going to be the attacker’s IP address. In other words, each time you execute the latter command, you would expect two new random IP addresses to be the third and fourth decoy sources.
+
+### FRAGMENTED PACKETS
+
+**Firewall**  
+A firewall is a piece of software or hardware that permits packets to pass through or blocks them. It functions based on firewall rules, summarized as blocking all traffic with exceptions or allowing all traffic with exceptions. For instance, you might block all traffic to your server except those coming to your web server. A traditional firewall inspects, at least, the IP header and the transport layer header. A more sophisticated firewall would also try to examine the data carried by the transport layer.
+
+**IDS**  
+An intrusion detection system (IDS) inspects network packets for select behavioural patterns or specific content signatures. It raises an alert whenever a malicious rule is met. In addition to the IP header and transport layer header, an IDS would inspect the data contents in the transport layer and check if it matches any malicious patterns. How can you make it less likely for a traditional firewall/IDS to detect your Nmap activity? It is not easy to answer this; however, depending on the type of firewall/IDS, you might benefit from dividing the packet into smaller packets.
+
+**Fragmented Packets**
+Nmap provides the option `-f` to fragment packets. Once chosen, the IP data will be divided into 8 bytes or less.
+Adding another `-f (-f -f or -ff)` will split the data into 16 byte-fragments instead of 8.
+You can change the default value by using the `--mtu`;
+however, you should always choose a multiple of 8.
+
+To properly understand fragmentation, we need to look at the IP header in the figure below. It might look complicated at first, but we notice that we know most of its fields. In particular, notice the source address taking 32 bits (4 bytes) on the fourth row, while the destination address is taking another 4 bytes on the fifth row. The data that we will fragment across multiple packets is highlighted in red. To aid in the reassembly on the recipient side, IP uses the identification (ID) and fragment offset, shown on the second row of the figure below.
+
+![ip_header](./media/7-ip-header.png)
+
+> return to this part Task 6 Fragmented Packets
+> https://tryhackme.com/room/nmap03
+
 
 
 
@@ -332,5 +502,6 @@ nslookup -type=TXT tryhackme.com     # Txt records
 other useful sites 
 - DNSDumpster 
 - shodan.io
+
 
 
