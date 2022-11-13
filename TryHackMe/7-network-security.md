@@ -158,6 +158,25 @@ If you want to use a specific DNS server `--dns-servers DNS_SERVER`
 > return to finish notes. https://tryhackme.com/room/nmap01 
 
 
+## NMAP BASIC PORT SCANS
+
+In the previous room, we focused on discovering online systems. So far, we have covered three steps of a Nmap scan:
+
+- Enumerate targets
+- Discover live hosts
+- Reverse-DNS lookup
+
+![nmap](./media/7-nmap-room2.png)
+
+The next step would be checking which ports are open and listening and which ports are closed. Therefore, in this room and the next one, we focus on port scanning and the different types of port scans used by nmap. This room explains:
+
+- TCP connect port scan
+- TCP SYN port scan
+- UDP port scan
+
+
+
+
 ## MY NOTES 
 
 
