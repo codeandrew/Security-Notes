@@ -138,13 +138,19 @@ A Nmap scan usually goes through the steps shown in the figure below, although m
 To visualize an ARP and PING to subnetworks
 ![site](./media/7-network-subnet.png)
 
-Same subnet 
+**Same subnet**
 ![same_subnet](./media/ping-same-subnet.gif)
 
-Different subnet 
+The first ping will require to make an ARP request first to know where is the location of the target.
+the second request is will no longer require an ARP request because the address is cached
+
+**Different subnet**
 ![dif_subnet](./media/ping-different-subnet.gif)
+same from top, will first request an ARP then if it's not on the same subnet. 
+the router will send another arp request to the Different subnet. 
+before the ping request is received.
 
-
+the second request no longer requires ARP request because address is cached 
 
 ### SUMMARY 
 
