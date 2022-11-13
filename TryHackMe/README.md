@@ -25,7 +25,13 @@ BURP REPEATER
 
 
 
-## UNFINISHED
+## UNFINISHED ROOMS
 
-Intro to Lan
+Intro to Lan. 
 https://tryhackme.com/room/introtolan 
+
+## CHALLENGES
+
+- EASY https://tryhackme.com/room/basicpentestingjt
+- EASY https://tryhackme.com/room/picklerick
+- EASY https://tryhackme.com/room/rrootme 
