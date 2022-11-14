@@ -28,8 +28,8 @@ BURP REPEATER
 ## UNFINISHED ROOMS
 
 Intro to Lan. 
-https://tryhackme.com/room/introtolan 
-https://tryhackme.com/room/osimodelzi
+- https://tryhackme.com/room/introtolan 
+- https://tryhackme.com/room/osimodelzi
 
 ## CHALLENGES
 
