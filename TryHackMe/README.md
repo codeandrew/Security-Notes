@@ -29,6 +29,7 @@ BURP REPEATER
 
 Intro to Lan. 
 https://tryhackme.com/room/introtolan 
+https://tryhackme.com/room/osimodelzi
 
 ## CHALLENGES
 
