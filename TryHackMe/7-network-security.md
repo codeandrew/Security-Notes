@@ -480,7 +480,145 @@ To properly understand fragmentation, we need to look at the IP header in the fi
 > https://tryhackme.com/room/nmap03
 
 
+### ZOMBIE SCAN / IDLE
 
+Spoofing the source IP address can be a great approach to scanning stealthily. However, spoofing will only work in specific network setups. It requires you to be in a position where you can monitor the traffic. Considering these limitations, spoofing your IP address can have little use; however, we can give it an upgrade with the idle scan.
+The idle scan, or zombie scan, requires an idle system connected to the network that you can communicate with. Practically, Nmap will make each probe appear as if coming from the idle (zombie) host, then it will check for indicators whether the idle (zombie) host received any response to the spoofed probe. This is accomplished by checking the IP identification (IP ID) value in the IP header. You can run an idle scan using nmap -sI ZOMBIE_IP 10.10.32.225, where ZOMBIE_IP is the IP address of the idle host (zombie) 
+
+nmap -sI ZOMBIE_IP 10.10.32.225 
+
+The idle (zombie) scan requires the following three steps to discover whether a port is open:
+
+- Trigger the idle host to respond so that you can record the current IP ID on the idle host.
+- Send a SYN packet to a TCP port on the target. The packet should be spoofed to appear as if it was coming from the idle host (zombie) IP address.
+- Trigger the idle machine again to respond so that you can compare the new IP ID with the one received earlier.
+
+
+### SUMMARY 
+
+|         Port Scan Type         |                    Example Command                    |
+|:------------------------------:|:-----------------------------------------------------:|
+|          TCP Null Scan         |               sudo nmap -sN 10.10.32.225              |
+|          TCP FIN Scan          |               sudo nmap -sF 10.10.32.225              |
+|          TCP Xmas Scan         |               sudo nmap -sX 10.10.32.225              |
+|         TCP Maimon Scan        |               sudo nmap -sM 10.10.32.225              |
+|          TCP ACK Scan          |               sudo nmap -sA 10.10.32.225              |
+|         TCP Window Scan        |               sudo nmap -sW 10.10.32.225              |
+|         Custom TCP Scan        | sudo nmap --scanflags URGACKPSHRSTSYNFIN 10.10.32.225 |
+|        Spoofed Source IP       |          sudo nmap -S SPOOFED_IP 10.10.32.225         |
+|       Spoofed MAC Address      |                --spoof-mac SPOOFED_MAC                |
+|           Decoy Scan           |            nmap -D DECOY_IP,ME 10.10.32.225           |
+|       Idle (Zombie) Scan       |          sudo nmap -sI ZOMBIE_IP 10.10.32.225         |
+|  Fragment IP data into 8 bytes |                           -f                          |
+| Fragment IP data into 16 bytes |                          -ff                          |
+
+
+|         Option         |                  Purpose                 |
+|:----------------------:|:----------------------------------------:|
+| --source-port PORT_NUM |        specify source port number        |
+|    --data-length NUM   | append random data to reach given length |
+
+These scan types rely on setting TCP flags in unexpected ways to prompt ports for a reply. Null, FIN, and Xmas scan provoke a response from closed ports, while Maimon, ACK, and Window scans provoke a response from open and closed ports.
+
+ |  Option  |                Purpose                |
+|:--------:|:-------------------------------------:|
+| --reason | explains how Nmap made its conclusion |
+|    -v    |                verbose                |
+|    -vv   |              very verbose             |
+|    -d    |               debugging               |
+|    -dd   |       more details for debugging      | 
+
+## NMAP POST PORT SCANS 
+
+![nmap](./media/7-nmap-post.png )
+
+### Service Detection 
+
+sudo nmap -sV 10.10.18.246
+nmap -sV --version-light 10.10.18.246
+
+The console output below shows a simple Nmap stealth SYN scan with the -sV option. Adding the -sV option leads to a new column in the output showing the version for each detected service. For instance, in the case of TCP port 22 being open, instead of 22/tcp open ssh, we obtain 22/tcp open ssh OpenSSH 6.7p1 Debian 5+deb8u8 (protocol 2.0). Notice that the SSH protocol is guessed as the service because TCP port 22 is open; Nmap didn’t need to connect to port 22 to confirm. However, -sV required connecting to this open port to grab the service banner and any version information it can get, such as nginx 1.6.2. Hence, unlike the service column, the version column is not a guess
+```
+pentester@TryHackMe$ sudo nmap -sV 10.10.18.246
+
+Starting Nmap 7.60 ( https://nmap.org ) at 2021-09-10 05:03 BST
+Nmap scan report for 10.10.18.246
+Host is up (0.0040s latency).
+Not shown: 995 closed ports
+PORT    STATE SERVICE VERSION
+22/tcp  open  ssh     OpenSSH 6.7p1 Debian 5+deb8u8 (protocol 2.0)
+25/tcp  open  smtp    Postfix smtpd
+80/tcp  open  http    nginx 1.6.2
+110/tcp open  pop3    Dovecot pop3d
+111/tcp open  rpcbind 2-4 (RPC #100000)
+MAC Address: 02:A0:E7:B5:B6:C5 (Unknown)
+Service Info: Host:  debra2.thm.local; OS: Linux; CPE: cpe:/o:linux:linux_kernel
+
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 8.40 seconds
+
+```
+
+### OS DETECTION AND TRACEROUTE
+
+
+**OS DETECTION** 
+Nmap can detect the Operating System (OS) based on its behaviour and any telltale signs in its responses. OS detection can be enabled using -O; this is an uppercase O as in OS. In this example, we ran nmap -sS -O 10.10.18.246 on the AttackBox. Nmap detected the OS to be Linux 3.X, and then it guessed further that it was running kernel 3.13.
+
+```
+pentester@TryHackMe$ sudo nmap -sS -O 10.10.18.246
+
+Starting Nmap 7.60 ( https://nmap.org ) at 2021-09-10 05:04 BST
+Nmap scan report for 10.10.18.246
+Host is up (0.00099s latency).
+Not shown: 994 closed ports
+PORT    STATE SERVICE
+22/tcp  open  ssh
+25/tcp  open  smtp
+80/tcp  open  http
+110/tcp open  pop3
+111/tcp open  rpcbind
+143/tcp open  imap
+MAC Address: 02:A0:E7:B5:B6:C5 (Unknown)
+Device type: general purpose
+Running: Linux 3.X
+OS CPE: cpe:/o:linux:linux_kernel:3.13
+OS details: Linux 3.13
+Network Distance: 1 hop
+
+OS detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 3.91 seconds
+
+```
+
+**TRACEROUTE**
+
+If you want Nmap to find the routers between you and the target, just add --traceroute. In the following example, Nmap appended a traceroute to its scan results. Note that Nmap’s traceroute works slightly different than the traceroute command found on Linux and macOS or tracert found on MS Windows. Standard traceroute starts with a packet of low TTL (Time to Live) and keeps increasing until it reaches the target. Nmap’s traceroute starts with a packet of high TTL and keeps decreasing it.
+
+In the following example, we executed nmap -sS --traceroute 10.10.18.246 on the AttackBox. We can see that there are no routers/hops between the two as they are connected directly.
+
+```
+pentester@TryHackMe$ sudo nmap -sS --traceroute 10.10.18.246
+
+Starting Nmap 7.60 ( https://nmap.org ) at 2021-09-10 05:05 BST
+Nmap scan report for 10.10.18.246
+Host is up (0.0015s latency).
+Not shown: 994 closed ports
+PORT    STATE SERVICE
+22/tcp  open  ssh
+25/tcp  open  smtp
+80/tcp  open  http
+110/tcp open  pop3
+111/tcp open  rpcbind
+143/tcp open  imap
+MAC Address: 02:A0:E7:B5:B6:C5 (Unknown)
+
+TRACEROUTE
+HOP RTT     ADDRESS
+1   1.48 ms MACHINE_IP
+
+Nmap done: 1 IP address (1 host up) scanned in 1.59 seconds
+```
 
 
 
@@ -504,4 +642,7 @@ other useful sites
 - shodan.io
 
 
+
+NMAP NULL SCAN - lack of reply either port is open or firewall is blocking 
+NMAP ACK SCAN - scan twice if there's a firewall 
 
