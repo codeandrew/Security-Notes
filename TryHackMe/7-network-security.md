@@ -685,11 +685,155 @@ The third format is XML. You can save the scan results in XML format using -oX F
 |           vuln          | Checks for vulnerabilities or exploit vulnerable services |
 
 
+## PROTOCOL AND SERVERS 
+
+
+TELNET 
+
+Using telnet as HTTP 
+![telnet](./media/7-telnet-flag.png)
+
+**Using FTP**
+![ftp](./media/7-ftp-flag.png)
+
+Because FTP sends the login credentials along with the commands and files in cleartext, FTP traffic can be an easy target for attackers
+
+**SMTP**
+Email delivery over the Internet requires the following components:
+- Mail Submission Agent (MSA)
+- Mail Transfer Agent (MTA)
+- Mail Delivery Agent (MDA)
+- Mail User Agent (MUA)
+
+![smtp](./media/7-smtp.png)
+
+The figure shows the following five steps that an email needs to go through to reach the recipient’s inbox:
+- A Mail User Agent (MUA), or simply an email client, has an email message to be sent. The MUA connects to a Mail Submission Agent (MSA) to send its message.
+- The MSA receives the message, checks for any errors before transferring it to the Mail Transfer Agent (MTA) server, commonly hosted on the same server.
+- The MTA will send the email message to the MTA of the recipient. The MTA can also function as a Mail Submission Agent (MSA).
+- A typical setup would have the MTA server also functioning as a Mail Delivery Agent (MDA).
+- The recipient will collect its email from the MDA using their email client.
+
+If the above steps sound confusing, consider the following analogy:
+- You (MUA) want to send postal mail.
+- The post office employee (MSA) checks the postal mail for any issues before your local post office (MTA) accepts it.
+- The local post office checks the mail destination and sends it to the post office (MTA) in the correct country.
+- The post office (MTA) delivers the mail to the recipient mailbox (MDA).
+- The recipient (MUA) regularly checks the mailbox for new mail. They notice the new mail, and they take it.
+
+the same way, we need to follow a protocol to communicate with an HTTP server, and we need to rely on email protocols to talk with an MTA and an MDA. The protocols are:
+
+- Simple Mail Transfer Protocol (SMTP)
+- Post Office Protocol version 3 (POP3) or Internet Message Access Protocol (IMAP)
+
+
+### SUMMARY 
+| Protocol | TCP Port | Application(s) | Data Security |
+|:--------:|:--------:|:--------------:|:-------------:|
+|    FTP   |    21    |  File Transfer |   Cleartext   |
+|   HTTP   |    80    |  Worldwide Web |   Cleartext   |
+|   IMAP   |    143   |   Email (MDA)  |   Cleartext   |
+|   POP3   |    110   |   Email (MDA)  |   Cleartext   |
+|   SMTP   |    25    |   Email (MTA)  |   Cleartext   |
+|  Telnet  |    23    |  Remote Access |   Cleartext   |
+
+
+## SERVERS AND PROTOCOL 2
+
+Servers implementing these protocols are subject to different kinds of attacks. To name a few, consider:
+
+- Sniffing Attack (Network Packet Capture)
+- Man-in-the-Middle (MITM) Attack
+- Password Attack (Authentication Attack)
+- Vulnerabilities
+
+From a security perspective, we always need to think about what we aim to protect; consider the security triad: Confidentiality, Integrity, and Availability (CIA). Confidentiality refers to keeping the contents of the communications accessible to the intended parties. Integrity is the idea of assuring any data sent is accurate, consistent, and complete when reaching its destination. Finally, availability refers to being able to access the service when we need it. Different parties will put varying emphasis on these three. For instance, confidentiality would be the highest priority for an intelligence agency. Online banking will put most emphasis on the integrity of transactions. Availability is of the highest importance for any platform making money by serving ads.
+
+Knowing that we are protecting the Confidentiality, Integrity, and Availability (CIA), an attack aims to cause Disclosure, Alternation, and Destruction (DAD). The figures below reflect this.
+
+
+### MAN IN THE MIDDLE 
+
+A Man-in-the-Middle (MITM) attack occurs when a victim (A) believes they are communicating with a legitimate destination (B) but is unknowingly communicating with an attacker (E). In the figure below, we have A requesting the transfer of $20 to M; however, E altered this message and replaced the original value with a new one. B received the modified messaged and acted on it.
+
+![mitm](./media/7-mitm.png)
+
+
+
+### PASSWORD ATTACK
+
+want an automated way to try the common passwords or the entries from a word list; here comes THC Hydra. Hydra supports many protocols, including FTP, POP3, IMAP, SMTP, SSH, and all methods related to HTTP. 
+The general command-line syntax is: `hydra -l username -P wordlist.txt` server service where we specify the following options:
+
+- -l username: -l should precede the username, i.e. the login name of the target.
+- -P wordlist.txt: -P precedes the wordlist.txt file, which is a text file containing the list of passwords you want to try with the provided username.
+- server is the hostname or IP address of the target server.
+- service indicates the service which you are trying to launch the dictionary attack.
+
+Consider the following concrete examples:
+
+- hydra -l mark -P /usr/share/wordlists/rockyou.txt 10.10.70.212 ftp will use mark as the username as it iterates over the provided passwords against the FTP server.
+- hydra -l mark -P /usr/share/wordlists/rockyou.txt ftp://10.10.70.212 is identical to the previous example. 10.10.70.212 ftp is the same as ftp://10.10.70.212.
+- hydra -l frank -P /usr/share/wordlists/rockyou.txt 10.10.70.212 ssh will use frank as the user name as it tries to login via SSH using the different passwords.
+
+There are some extra optional arguments that you can add:
+
+- -s PORT to specify a non-default port for the service in question.
+- -V or -vV, for verbose, makes Hydra show the username and password combinations that are being tried. This verbosity is very convenient to see the progress, especially if you are still not confident of your command-line syntax.
+- -t n where n is the number of parallel connections to the target. -t 16 will create 16 threads used to connect to the target.
+- -d, for debugging, to get more detailed information about what’s going on. The debugging output can save you much frustration; for instance, if Hydra tries to connect to a closed port and timing out, -d will reveal this right away.
+
+**CHALLENGE**  
+![hydra](./media/7-hydra.png)
 
 
 
 
 
+
+
+### SUMMARY 
+
+This room covered various protocols, their usage, and how they work under the hood. Three common attacks are:
+
+Sniffing Attack
+MITM Attack
+Password Attack
+For each of the above, we focused both on the attack details and the mitigation steps.
+
+Many other attacks can be conducted against specific servers and protocols. We will provide a list of some related modules.
+
+- Vulnerability Research: This module provides more information about vulnerabilities and exploits.
+- Metasploit: This module trains you on how to use Metasploit to exploit target systems.
+- Burp Suite: This module teaches you how to use Burp Suite to intercept HTTP traffic and launch attacks related to the web.
+It is good to remember the default port number for common protocols. For convenience, the services we covered are listed in the following table sorted by alphabetical order.
+
+| Protocol | TCP Port |          Application(s)         | Data Security |
+|:--------:|:--------:|:-------------------------------:|:-------------:|
+|    FTP   |    21    |          File Transfer          |   Cleartext   |
+|   FTPS   |    990   |          File Transfer          |   Encrypted   |
+|   HTTP   |    80    |          Worldwide Web          |   Cleartext   |
+|   HTTPS  |    443   |          Worldwide Web          |   Encrypted   |
+|   IMAP   |    143   |           Email (MDA)           |   Cleartext   |
+|   IMAPS  |    993   |           Email (MDA)           |   Encrypted   |
+|   POP3   |    110   |           Email (MDA)           |   Cleartext   |
+|   POP3S  |    995   |           Email (MDA)           |   Encrypted   |
+|   SFTP   |    22    |          File Transfer          |   Encrypted   |
+|    SSH   |    22    | Remote Access and File Transfer |   Encrypted   |
+|   SMTP   |    25    |           Email (MTA)           |   Cleartext   |
+|   SMTPS  |    465   |           Email (MTA)           |   Encrypted   |
+|  Telnet  |    23    |          Remote Access          |   Cleartext   |
+
+Hydra remains a very efficient tool that you can launch from the terminal to try the different passwords. We summarize its main options in the following table.
+
+|      Option     |                          Explanation                          |
+|:---------------:|:-------------------------------------------------------------:|
+|   -l username   |                     Provide the login name                    |
+| -P WordList.txt |                Specify the password list to use               |
+|  server service |          Set the server address and service to attack         |
+|     -s PORT     |         Use in case of non-default service port number        |
+|    -V or -vV    |    Show the username and password combinations being tried    |
+|        -d       | Display debugging output if the verbose output is not helping | 
 
 
 
