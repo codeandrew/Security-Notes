@@ -857,6 +857,125 @@ Answer the questions below
 
 ```
 sudo nmap -sC -sV -p- -T4 --min-rate 8888 -vv 10.10.220.100 
+root@ip-10-10-212-73: nmap -sC -sV -p- -T4 -min-rate 8888 -vv 10.10.220.100
+
+Starting Nmap 7.60 ( https://nmap.org ) at 2022-11-19 08:27 GMT
+NSE: Loaded 146 scripts for scanning.
+NSE: Script Pre-scanning.
+NSE: Starting runlevel 1 (of 2) scan.
+Initiating NSE at 08:27
+Completed NSE at 08:27, 0.00s elapsed
+NSE: Starting runlevel 2 (of 2) scan.
+Initiating NSE at 08:27
+Completed NSE at 08:27, 0.00s elapsed
+Initiating ARP Ping Scan at 08:27
+Scanning 10.10.220.100 [1 port]
+Completed ARP Ping Scan at 08:27, 0.23s elapsed (1 total hosts)
+Initiating Parallel DNS resolution of 1 host. at 08:27
+Completed Parallel DNS resolution of 1 host. at 08:27, 0.00s elapsed
+Initiating SYN Stealth Scan at 08:27
+Scanning ip-10-10-220-100.eu-west-1.compute.internal (10.10.220.100) [65535 ports]
+Discovered open port 445/tcp on 10.10.220.100
+Discovered open port 8080/tcp on 10.10.220.100
+Discovered open port 139/tcp on 10.10.220.100
+Discovered open port 22/tcp on 10.10.220.100
+Discovered open port 80/tcp on 10.10.220.100
+Increasing send delay for 10.10.220.100 from 0 to 5 due to max_successful_tryno increase to 5
+Increasing send delay for 10.10.220.100 from 5 to 10 due to max_successful_tryno increase to 6
+Warning: 10.10.220.100 giving up on port because retransmission cap hit (6).
+Discovered open port 10021/tcp on 10.10.220.100
+Completed SYN Stealth Scan at 08:27, 10.74s elapsed (65535 total ports)
+Initiating Service scan at 08:27
+Scanning 6 services on ip-10-10-220-100.eu-west-1.compute.internal (10.10.220.100)
+Completed Service scan at 08:29, 121.16s elapsed (6 services on 1 host)
+NSE: Script scanning 10.10.220.100.
+NSE: Starting runlevel 1 (of 2) scan.
+Initiating NSE at 08:29
+Completed NSE at 08:29, 3.27s elapsed
+NSE: Starting runlevel 2 (of 2) scan.
+Initiating NSE at 08:29
+Completed NSE at 08:29, 1.02s elapsed
+Nmap scan report for ip-10-10-220-100.eu-west-1.compute.internal (10.10.220.100)
+Host is up, received arp-response (0.00051s latency).
+Scanned at 2022-11-19 08:27:40 GMT for 137s
+Not shown: 65529 closed ports
+Reason: 65529 resets
+PORT      STATE SERVICE       REASON         VERSION
+22/tcp    open  ssh           syn-ack ttl 64 (protocol 2.0)
+| fingerprint-strings:
+|   NULL:
+|_    SSH-2.0-OpenSSH_8.2p1 THM{946219583339}
+80/tcp    open  http          syn-ack ttl 64 lighttpd
+| http-methods:
+|_  Supported Methods: OPTIONS GET HEAD POST
+|_http-server-header: lighttpd THM{web_server_25352}
+|_http-title: Hello, world!
+139/tcp   open  netbios-ssn?  syn-ack ttl 64
+| fingerprint-strings:
+|   SMBProgNeg:
+|_    SMBr
+445/tcp   open  microsoft-ds? syn-ack ttl 64
+| fingerprint-strings:
+|   SMBProgNeg:
+|_    SMBr
+8080/tcp  open  http          syn-ack ttl 64 Node.js (Express middleware)
+| http-methods:
+|_  Supported Methods: GET HEAD POST OPTIONS
+|_http-open-proxy: Proxy might be redirecting requests
+|_http-title: Site doesn't have a title (text/html; charset=utf-8).
+10021/tcp open  ftp           syn-ack ttl 64 vsftpd 3.0.3
+3 services unrecognized despite returning data. If you know the service/version, please submit the following fingerprints at https://nmap.org/cgi-bin/submit.cgi?new-service :
+==============NEXT SERVICE FINGERPRINT (SUBMIT INDIVIDUALLY)==============
+SF-Port22-TCP:V=7.60%I=7%D=11/19%Time=6378938D%P=x86_64-pc-linux-gnu%r(NUL
+SF:L,29,"SSH-2\.0-OpenSSH_8\.2p1\x20THM{946219583339}\r\n");
+==============NEXT SERVICE FINGERPRINT (SUBMIT INDIVIDUALLY)==============
+SF-Port139-TCP:V=7.60%I=7%D=11/19%Time=63789392%P=x86_64-pc-linux-gnu%r(SM
+SF:BProgNeg,29,"\0\0\0%\xffSMBr\0\0\0\0\x88\x03@\0\0\0\0\0\0\0\0\0\0\0\0\0
+SF:\0@\x06\0\0\x01\0\x01\xff\xff\0\0");
+==============NEXT SERVICE FINGERPRINT (SUBMIT INDIVIDUALLY)==============
+SF-Port445-TCP:V=7.60%I=7%D=11/19%Time=6378938D%P=x86_64-pc-linux-gnu%r(SM
+SF:BProgNeg,29,"\0\0\0%\xffSMBr\0\0\0\0\x88\x03@\0\0\0\0\0\0\0\0\0\0\0\0\0
+SF:\0@\x06\0\0\x01\0\x01\xff\xff\0\0");
+MAC Address: 02:94:F9:DA:5B:4D (Unknown)
+Service Info: OS: Unix
+
+Host script results:
+| nbstat: NetBIOS name: NETSEC-CHALLENG, NetBIOS user: <unknown>, NetBIOS MAC: <unknown> (unknown)
+| Names:
+|   NETSEC-CHALLENG<00>  Flags: <unique><active>
+|   NETSEC-CHALLENG<03>  Flags: <unique><active>
+|   NETSEC-CHALLENG<20>  Flags: <unique><active>
+|   WORKGROUP<00>        Flags: <group><active>
+|   WORKGROUP<1e>        Flags: <group><active>
+| Statistics:
+|   00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+|   00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+|_  00 00 00 00 00 00 00 00 00 00 00 00 00 00
+| p2p-conficker:
+|   Checking for Conficker.C or higher...
+|   Check 1 (port 53513/tcp): CLEAN (Couldn't connect)
+|   Check 2 (port 36709/tcp): CLEAN (Couldn't connect)
+|   Check 3 (port 57810/udp): CLEAN (Failed to receive data)
+|   Check 4 (port 11635/udp): CLEAN (Failed to receive data)
+|_  0/4 checks are positive: Host is CLEAN or ports are blocked
+| smb2-security-mode:
+|   2.02:
+|_    Message signing enabled but not required
+| smb2-time:
+|   date: 2022-11-19 08:29:53
+|_  start_date: 1600-12-31 23:58:45
+
+NSE: Script Post-scanning.
+NSE: Starting runlevel 1 (of 2) scan.
+Initiating NSE at 08:29
+Completed NSE at 08:29, 0.00s elapsed
+NSE: Starting runlevel 2 (of 2) scan.
+Initiating NSE at 08:29
+Completed NSE at 08:29, 0.00s elapsed
+Read data files from: /usr/bin/../share/nmap
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 136.93 seconds
+           Raw packets sent: 92287 (4.061MB) | Rcvd: 92287 (3.691MB)
 
 ```
 
