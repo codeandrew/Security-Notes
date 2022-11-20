@@ -13,33 +13,33 @@ Before diving into modules, it would be helpful to clarify a few recurring conce
 Modules and categories under each one are listed below. These are given for reference purposes, but you will interact with them through the Metasploit console (msfconsole).
 
 **Auxiliary: Any supporting module, such as scanners, crawlers and fuzzers, can be found here.**  
-![aux](./media/8-metasploit-aux.png)
+![aux](./media/9-metasploit-aux.png)
 
 
 **Encoders: Encoders will allow you to encode the exploit and payload in the hope that a signature-based antivirus solution may miss them.**
 
 Signature-based antivirus and security solutions have a database of known threats. They detect threats by comparing suspicious files to this database and raise an alert if there is a match. Thus encoders can have a limited success rate as antivirus solutions can perform additional checks.
-![encoders](./media/8-metasploit-encoders.png)
+![encoders](./media/9-metasploit-encoders.png)
 
 
 **Evasion: While encoders will encode the payload, they should not be considered a direct attempt to evade antivirus software.**
 On the other hand, “evasion” modules will try that, with more or less success.
 
-![evasion](./media/8-metasploit-evasion.png)
+![evasion](./media/9-metasploit-evasion.png)
 
 **Exploits: Exploits, neatly organized by target system.** 
 
-![exploit](./media/8-metasploit-exploit.png)
+![exploit](./media/9-metasploit-exploit.png)
 
 **NOPs: NOPs (No OPeration) do nothing, literally.**
 They are represented in the Intel x86 CPU family they are represented with 0x90, following which the CPU will do nothing for one cycle. They are often used as a buffer to achieve consistent payload sizes.
-![nops](./media/8-metasploit-nops.png)
+![nops](./media/9-metasploit-nops.png)
 
 **Payloads: Payloads are codes that will run on the target system.**
 Exploits will leverage a vulnerability on the target system, but to achieve the desired result, we will need a payload. Examples could be; getting a shell, loading a malware or backdoor to the target system, running a command, or launching calc.exe as a proof of concept to add to the penetration test report. Starting the calculator on the target system remotely by launching the calc.exe application is a benign way to show that we can run commands on the target system.
 Running command on the target system is already an important step but having an interactive connection that allows you to type commands that will be executed on the target system is better. Such an interactive command line is called a "shell". Metasploit offers the ability to send different payloads that can open shells on the target system.
 
-![payloads](./media/8-metasploit-payloads.png)
+![payloads](./media/9-metasploit-payloads.png)
 
 You will see three different directories under payloads: singles, stagers and stages.
 - Singles: Self-contained payloads (add user, launch notepad.exe, etc.) that do not need to download an additional component to run.
@@ -52,7 +52,7 @@ Metasploit has a subtle way to help you identify single (also called “inline�
 Both are reverse Windows shells. The former is an inline (or single) payload, as indicated by the “_” between “shell” and “reverse”. While the latter is a staged payload, as indicated by the “/” between “shell” and “reverse”.
 
 **Post: Post modules will be useful on the final stage of the penetration testing process listed above, post-exploitation.** 
-![post](./media/8-metasploit-post.png)
+![post](./media/9-metasploit-post.png)
 
 If you wish to familiarize yourself further with these modules, you can find them under the modules folder of your Metasploit installation. For the AttackBox these are under `/opt/metasploit-framework-5101/modules`
 
@@ -114,7 +114,7 @@ msf6 >
 ```
 
 Another essential piece of information returned is in the “rank” column. Exploits are rated based on their reliability. The table below provides their respective descriptions.
-![rank](./media/8-msf-ranking.png)
+![rank](./media/9-msf-ranking.png)
 
 > RETURN TO THIS TASK. a lot has not been noted 
 **REFERENCES**
