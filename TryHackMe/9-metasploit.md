@@ -880,7 +880,127 @@ You may want to look for low-hanging fruits such as:
 > return to this section for notes 
 
 
-### 
+### EXPLOITATION 
+
+run nmap first 
+```
+PORT      STATE    SERVICE      REASON          VERSION
+135/tcp   open     msrpc        syn-ack ttl 128 Microsoft Windows RPC
+139/tcp   open     netbios-ssn  syn-ack ttl 128 Microsoft Windows netbios-ssn
+445/tcp   open     microsoft-ds syn-ack ttl 128 Microsoft Windows 7 - 10 microsoft-ds (workgroup: WORKGROUP)
+3389/tcp  open     tcpwrapped   syn-ack ttl 128
+8107/tcp  filtered unknown      no-response
+10580/tcp filtered unknown      no-response
+30257/tcp filtered unknown      no-response
+45628/tcp filtered unknown      no-response
+47900/tcp filtered unknown      no-response
+49152/tcp open     msrpc        syn-ack ttl 128 Microsoft Windows RPC
+49153/tcp open     msrpc        syn-ack ttl 128 Microsoft Windows RPC
+49154/tcp open     msrpc        syn-ack ttl 128 Microsoft Windows RPC
+49158/tcp open     msrpc        syn-ack ttl 128 Microsoft Windows RPC
+49159/tcp open     msrpc        syn-ack ttl 128 Microsoft Windows RPC
+58420/tcp filtered unknown      no-response
+59137/tcp filtered unknown      no-response
+61916/tcp filtered unknown      no-response
+MAC Address: 02:0A:AC:E1:AD:4F (Unknown)
+Service Info: Host: JON-PC; OS: Windows; CPE: cpe:/o:microsoft:windows
+
+sudo nmap -sS -sV -p- -T4 --min-rate 8888 10.10.68.133 -vv -sC
+Not shown: 59181 closed tcp ports (reset), 6345 filtered tcp ports (no-response)
+PORT      STATE SERVICE        REASON          VERSION
+135/tcp   open  msrpc          syn-ack ttl 128 Microsoft Windows RPC
+139/tcp   open  netbios-ssn    syn-ack ttl 128 Microsoft Windows netbios-ssn
+445/tcp   open  microsoft-ds   syn-ack ttl 128 Windows 7 Professional 7601 Service Pack 1 microsoft-ds (workgroup: WORKGROUP)
+3389/tcp  open  ms-wbt-server? syn-ack ttl 128
+| rdp-ntlm-info:
+|   Target_Name: JON-PC
+|   NetBIOS_Domain_Name: JON-PC
+|   NetBIOS_Computer_Name: JON-PC
+|   DNS_Domain_Name: Jon-PC
+|   DNS_Computer_Name: Jon-PC
+|   Product_Version: 6.1.7601
+|_  System_Time: 2022-11-22T13:28:09+00:00
+| ssl-cert: Subject: commonName=Jon-PC
+| Issuer: commonName=Jon-PC
+| Public Key type: rsa
+| Public Key bits: 2048
+| Signature Algorithm: sha1WithRSAEncryption
+| Not valid before: 2022-11-21T13:18:28
+| Not valid after:  2023-05-23T13:18:28
+| MD5:   34d2c3151d42e93c5ffd1d1f0fbe7535
+| SHA-1: 873a2ef0e076e45427759b628507c7705f33e362
+| -----BEGIN CERTIFICATE-----
+| MIIC0DCCAbigAwIBAgIQa59ff5n42axPJDwNL9CkPjANBgkqhkiG9w0BAQUFADAR
+| MQ8wDQYDVQQDEwZKb24tUEMwHhcNMjIxMTIxMTMxODI4WhcNMjMwNTIzMTMxODI4
+| WjARMQ8wDQYDVQQDEwZKb24tUEMwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEK
+| AoIBAQC2Zz3fTuvpH+9FePTozy3T+yoMEbcFGc990PBqOb4qZUlNaQ289VWaUzo3
+| ChGG4LmoX0e/dMOkVWeVBZdndASLKA2CnTXAKbYZ9i+m0ujVpIQQMHbwr/BFTOgz
+| aAfiR9CUJg8YVIJn8UzcKhpOMN2SGxdglBvr/ZAR6lgAnliy7ML6VOov6bZzOHVp
+| DaX1rZYl+H7QXWguQTz0fxK7Do9oad+Vyiagnfs9X3Vv7WzUZxiJID5WfVCzgDl/
+| 8RtSZ70WcX3TYdVOK27NnP6pitBXtLeWuY1/rL90TX3dCi/YWe1Z5osFKkaHdv7W
+| mg6aKirqaEa1QGH9klelwzxpKGxZAgMBAAGjJDAiMBMGA1UdJQQMMAoGCCsGAQUF
+| BwMBMAsGA1UdDwQEAwIEMDANBgkqhkiG9w0BAQUFAAOCAQEAcAai270smTRJH9vd
+| ox+R2t41OCUBGIZfuKBGqf+sfprZCim1fvlXN7aZ33a0LNSH/1UDpeRf+xKy5IkM
+| Te45S1jhFDI0eIZBIQ/dm7z4SBTRs44CEVnTU9aS4kMJCDLwgN6hdjqyqAEOYRq1
+| utwoDEXAsby/jN+eHTPNMNWq1aSv5tHeDLSKkL6WrksqNw+uuf8Ti6L6EqpEkt5o
+| jGArXHJC854KfBbyw4SGAY/EnXWeg1Mn+Pj9EEl/sfrDU5jD8kFlDbgHxPyUylTy
+| 222CD5JRQA6QpFWRrG4uDjhxXjMSEKs951IgYxHp852MTemb3UmV7mgctkaIAfh0
+| S0Ue+A==
+|_-----END CERTIFICATE-----
+|_ssl-date: 2022-11-22T13:28:14+00:00; +1s from scanner time.
+49152/tcp open  msrpc          syn-ack ttl 128 Microsoft Windows RPC
+49153/tcp open  msrpc          syn-ack ttl 128 Microsoft Windows RPC
+49154/tcp open  msrpc          syn-ack ttl 128 Microsoft Windows RPC
+49158/tcp open  msrpc          syn-ack ttl 128 Microsoft Windows RPC
+49159/tcp open  msrpc          syn-ack ttl 128 Microsoft Windows RPC
+MAC Address: 02:0A:AC:E1:AD:4F (Unknown)
+Service Info: Host: JON-PC; OS: Windows; CPE: cpe:/o:microsoft:windows
+
+Host script results:
+| smb-security-mode: 
+|   account_used: guest
+|   authentication_level: user
+|   challenge_response: supported
+|_  message_signing: disabled (dangerous, but default)
+| p2p-conficker: 
+|   Checking for Conficker.C or higher...
+|   Check 1 (port 32054/tcp): CLEAN (Couldn't connect)
+|   Check 2 (port 32578/tcp): CLEAN (Couldn't connect)
+|   Check 3 (port 31087/udp): CLEAN (Timeout)
+|   Check 4 (port 60043/udp): CLEAN (Failed to receive data)
+|_  0/4 checks are positive: Host is CLEAN or ports are blocked
+|_clock-skew: mean: 1h12m00s, deviation: 2h40m59s, median: 0s
+| nbstat: NetBIOS name: JON-PC, NetBIOS user: <unknown>, NetBIOS MAC: 020aace1ad4f (unknown)
+| Names:
+|   JON-PC<00>           Flags: <unique><active>
+|   WORKGROUP<00>        Flags: <group><active>
+|   JON-PC<20>           Flags: <unique><active>
+|   WORKGROUP<1e>        Flags: <group><active>
+|   WORKGROUP<1d>        Flags: <unique><active>
+|   \x01\x02__MSBROWSE__\x02<01>  Flags: <group><active>
+| Statistics:
+|   020aace1ad4f0000000000000000000000
+|   0000000000000000000000000000000000
+|_  0000000000000000000000000000
+| smb2-security-mode: 
+|   210: 
+|_    Message signing enabled but not required
+| smb2-time: 
+|   date: 2022-11-22T13:28:09
+|_  start_date: 2022-11-22T13:18:23
+| smb-os-discovery: 
+|   OS: Windows 7 Professional 7601 Service Pack 1 (Windows 7 Professional 6.1)
+|   OS CPE: cpe:/o:microsoft:windows_7::sp1:professional
+|   Computer name: Jon-PC
+|   NetBIOS computer name: JON-PC\x00
+|   Workgroup: WORKGROUP\x00
+|_  System time: 2022-11-22T07:28:09-06:00
+
+
+```
+
+next msfconsole. the target is running a windows. 
+we could try to use the eternal blue vulnerability 
 
 
 
