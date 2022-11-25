@@ -9,7 +9,21 @@ sudo nmap -sS -sV -sC -T4 --min-rate 8888 $TARGET -vv
 # -T4: aggresiveness
 # --min-rate: packet strength 
 ```
+## NETCAT 
+```
+#REVERSE SHELL 
+nc -lvnp <port-number>
+# -l: listen
+# -v: verbose
+# -n: no dns resolve
+# -p: specify port
+nc -lvnp 4444
 
+#BIND SHELL
+nc <target-ip> <port-number>
+# This will connect to the listener
+nc 10.10.10.10 4444
+```
 
 ## SOCAT ENCRYPTED SHELLS
 ```
