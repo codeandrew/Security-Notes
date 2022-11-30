@@ -1265,6 +1265,12 @@ Find can be searched now
 [leonard@ip-10-10-4-59 ~]$ base64 "$LFILE" | base64 --decode
 THM-42828719920544
 
+
+[leonard@ip-10-10-4-59 ~]$ LFILE=/home/rootflag/flag2.txt
+[leonard@ip-10-10-4-59 ~]$ base64 "$LFILE" | base64 --decode
+THM-168824782390238
+
+ 
 ```
 
 
