@@ -2,6 +2,7 @@
 
 ## CERTIFICATES
 
+![JR Pentester](./media/THM-JAF-JR-PENETRATION-TESTER.png media/THM-intro-cybersecurity.png)
 ![intro to cybersec](./media/THM-intro-cybersecurity.png)
 
 ## PATHS
@@ -9,7 +10,7 @@
 - https://tryhackme.com/paths # INTRODUCTION
 > Done
 - https://tryhackme.com/path/outline/jrpenetrationtester 
-> In Progress 
+> Done
 - https://tryhackme.com/room/uploadvulns 
 > Fundamentals
 - https://tryhackme.com/module/windows-fundamentals
