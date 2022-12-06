@@ -1325,15 +1325,24 @@ cd /tmp/hvck
 
 # Linux Smart Enumeration 
 wget "https://github.com/diego-treitos/linux-smart-enumeration/releases/latest/download/lse.sh" -O lse.sh;chmod 700 lse.sh 
-echo "Enumerating"
+echo "[+] Enumerating"
 bash lse.sh
 
 
 # LINUX EXPLOIT SUGGESTER 
 wget https://raw.githubusercontent.com/mzet-/linux-exploit-suggester/master/linux-exploit-suggester.sh -O les.sh
+echo "[+] Checking for Common Exploits" 
 bash les.sh > exploits.txt 
 cat exploits.txt | grep "high" -B3 -A3
 
+# Check SUID 
+echo "[+] Checking for SUID"
+find / type f -perm -0400 -ls 2>/dev/null | grep rwsr
+echo "[+] Check here: https://gtfobins.github.io/"
+
+# Check Capabilities 
+echo "[+] Checking for Root Capabilities"
+getcap -r / 2>/dev/null 
 
 
 
