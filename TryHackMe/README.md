@@ -59,3 +59,10 @@ https://tryhackme.com/room/owasptop10
 - EASY https://tryhackme.com/room/basicpentestingjt
 - EASY https://tryhackme.com/room/picklerick
 - EASY https://tryhackme.com/room/rrootme 
+
+
+## Repositories for Hacking 
+> Collation of Repositories in CyberSecurity
+
+- https://github.com/samratashok/nishang 
+>  Nishang - Offensive PowerShell for red team, penetration testing and offensive security.
