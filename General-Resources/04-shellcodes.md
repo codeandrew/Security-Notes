@@ -14,7 +14,7 @@ Some common purposes of shellcodes include:
 
 Here's a simple example of a shellcode that spawns a shell (/bin/sh) on a Unix-like system:
 
-```assm
+```asm
 xor eax, eax
 push eax
 push 0x68732f2f
@@ -26,3 +26,9 @@ mov ecx, esp
 mov al, 11
 int 0x80
 ```
+
+This shellcode sets up the required arguments for the execve system call to execute "/bin/sh" and then triggers the system call using int 0x80. Please note that the provided example is for educational purposes only and should not be used for malicious activities.
+
+
+
+
