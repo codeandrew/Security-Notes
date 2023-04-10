@@ -29,6 +29,19 @@ int 0x80
 
 This shellcode sets up the required arguments for the execve system call to execute "/bin/sh" and then triggers the system call using int 0x80. Please note that the provided example is for educational purposes only and should not be used for malicious activities.
 
+Let's break down the assembly code I provided earlier, which spawns a shell (/bin/sh) on Unix-like systems:
+
+```asm
+xor eax, eax         ; Clear the eax register by XORing it with itself
+push eax            ; Push a null byte (0x00) onto the stack as a string terminator
+push 0x68732f2f     ; Push the string "//sh" onto the stack in little-endian format
+push 0x6e69622f     ; Push the string "/bin" onto the stack in little-endian format
+mov ebx, esp        ; Move the stack pointer (esp) to ebx, pointing it to the string "/bin//sh"
+push eax            ; Push a null byte (0x00) onto the stack as the argv terminator
+push ebx            ; Push the address of the "/bin//sh" string onto the stack
+mov ecx, esp        ; Move the stack pointer (esp) to ecx, pointing it to the argv array
+mov al,
+```
 
 
 
