@@ -60,6 +60,11 @@ https://tryhackme.com/room/owasptop10
 - EASY https://tryhackme.com/room/picklerick
 - EASY https://tryhackme.com/room/rrootme 
 
+## Security Awareness Trainings
+> Trainings for Security Awareness
+https://tryhackme.com/room/securityawarenessintro
+https://tryhackme.com/room/commonattacks
+
 
 ## Repositories for Hacking 
 > Collation of Repositories in CyberSecurity
