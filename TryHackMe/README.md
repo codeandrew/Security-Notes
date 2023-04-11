@@ -70,9 +70,9 @@ https://tryhackme.com/room/commonattacks
 > Collation of Repositories in CyberSecurity
 
 - https://github.com/samratashok/nishang 
->  Nishang - Offensive PowerShell for red team, penetration testing and offensive security.
-> wget https://raw.githubusercontent.com/samratashok/nishang/master/Shells/Invoke-PowerShellTcp.ps1
+>  Nishang - Offensive PowerShell for red team, penetration testing and offensive security.  
+> `wget https://raw.githubusercontent.com/samratashok/nishang/master/Shells/Invoke-PowerShellTcp.ps1 `
 
 - https://github.com/codeandrew/static-binaries
-> Static Binaries for Linux, MacOs and Windows
-> wget https://github.com/codeandrew/static-binaries/raw/master/binaries/windows/x86/ncat.exe
+> Static Binaries for Linux, MacOs and Windows.  
+> `wget https://github.com/codeandrew/static-binaries/raw/master/binaries/windows/x86/ncat.exe`
