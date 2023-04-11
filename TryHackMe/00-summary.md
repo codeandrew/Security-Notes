@@ -8,6 +8,8 @@ sudo nmap -sS -sV -sC -T4 --min-rate 8888 $TARGET -vv
 # -sV: service detection
 # -T4: aggresiveness
 # --min-rate: packet strength 
+
+nmap -sV --script=http-enum $TARGET
 ```
 ## NETCAT 
 ```
@@ -136,8 +138,11 @@ after entering
 clone this 
 https://github.com/mzet-/linux-exploit-suggester and use it 
 
-a
-
-THM-28392872729920 
 
 
+## CMD
+
+search files in all directories and subdirectories of the current drive
+```
+dir /s root.txt
+```
