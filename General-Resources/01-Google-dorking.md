@@ -78,10 +78,13 @@ site:evilcorp.com inurl:"resources" filetype:properties intitle:"application"
 ## SQL Injection via Dorking
 
 using SQL errors Dork:
+```
 site:target.com intext:"sql syntax near" | intext:"incorrect syntax near"
-
+```
 indexed page with sql error
 
 SQL dork :
+```
 site:target.com intext:"sql syntax near" |
 intext:"syntax error has occurred" | intext:"incorrect syntax near" | intext:"unexpected end of SQL command" | intext:"Warning: mysql_connect()" | intext:"Warning: mysql_query()" | intext:"Warning: pg_connect()"
+```
