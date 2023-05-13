@@ -208,7 +208,13 @@ tcp   LISTEN     0      128    :::80                 :::*
 ```
 7 Connections, now check runnign services in the ports 
 
+### Enumeration
 
+LinEnum
+https://github.com/rebootuser/LinEnum/blob/master/LinEnum.sh
+```bash 
+wget https://raw.githubusercontent.com/rebootuser/LinEnum/master/LinEnum.sh
+```
 
 ## Operating Systems
 
