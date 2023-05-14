@@ -4,7 +4,7 @@ Documenting my journey in the world of CyberSecurity
 
 
 
-##  Reverse Conneciton Cheat Sheet
+##  Reverse Conneciton 
 
 ### Meterpreter
 **Windows**
