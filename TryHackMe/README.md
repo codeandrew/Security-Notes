@@ -8,20 +8,17 @@
 ## PATHS
 
 - https://tryhackme.com/paths # INTRODUCTION
-> Done
 - https://tryhackme.com/path/outline/jrpenetrationtester 
-> Done
 - https://tryhackme.com/room/uploadvulns 
-> Fundamentals
-- https://tryhackme.com/module/windows-fundamentals
-> fundamentals 
+- https://tryhackme.com/path/outline/pentesting 
+ 
+### modules
+- https://tryhackme.com/module/intro-to-networking
 - https://tryhackme.com/module/linux-fundamentals 
 - https://tryhackme.com/module/intro-to-networking 
 - https://tryhackme.com/module/cryptography
-- https://tryhackme.com/path/outline/pentesting 
-> Next Path 
-
-
+- https://tryhackme.com/module/windows-fundamentals
+- 
 ## WEAKNESSES
 
 Intro to Webhacking 
