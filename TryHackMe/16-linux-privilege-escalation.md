@@ -154,6 +154,35 @@ For Example,
 exploit if the executor of the cronjob is the root level, we can hijack the script that is pointed and put a reverse listener
 
 ### Exploiting PATH Variable
+What is PATH?
+
+PATH is an environmental variable in Linux and Unix-like operating systems which specifies directories that hold executable programs. When the user runs any command in the terminal, it searches for executable files with the help of the PATH Variable in response to commands executed by a user.
+
+How does this let us escalate privileges?
+
+Let's say we have an SUID binary. Running it, we can see that it’s calling the system shell to do a basic process like list processes with "ps". Unlike in our previous SUID example, in this situation we can't exploit it by supplying an argument for command injection, so what can we do to try and exploit this?
+
+We can re-write the PATH variable to a location of our choosing! So when the SUID binary calls the system shell to run an executable, it runs one that we've written instead!
+
+As with any SUID file, it will run this command with the same privileges as the owner of the SUID file! If this is root, using this method we can run whatever commands we like as root!
+
+
+Let's do it!
+
+in this exercise a $HOME/`script` file is executing the `ls` command with the root privilege, 
+let's try to over write the PATH file to overide command
+
+```
+cd /tmp
+echo "/bin/bash" > ls
+chmod +x ls
+export PATH=/tmp:$PATH
+$HOME/script
+
+$ id 
+uid=0(root)
+```
+
 
 ## Linux PrivEsc
 > https://tryhackme.com/room/linuxprivesc
