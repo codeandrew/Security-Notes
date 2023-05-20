@@ -80,6 +80,7 @@ username:passwordhash:0:0:root:/root:/bin/bash
 # our test 
 thm:$1$new$p7ptkEKU1HnaHpRtzNizS1:0:0:root:/bin/bash
 
+# su thm :with the password use added
 ```
 
 
