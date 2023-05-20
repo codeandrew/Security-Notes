@@ -183,6 +183,40 @@ $ id
 uid=0(root)
 ```
 
+### FURTHER LEARNING
+
+Below is a list of good checklists to apply to CTF or penetration test use cases.Although I encourage you to make your own using CherryTree or whatever notes application you prefer.
+
+- https://github.com/netbiosX/Checklists/blob/master/Linux-Privilege-Escalation.md
+- https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/Methodology%20and%20Resources/Linux%20-%20Privilege%20Escalation.md
+- https://sushant747.gitbooks.io/total-oscp-guide/privilege_escalation_-_linux.html
+- https://payatu.com/guide-linux-privilege-escalation
+
+
+**PayloadAllTheThings**
+Files containing passwords
+```
+grep --color=auto -rnw '/' -ie "PASSWORD" --color=always 2> /dev/null
+find . -type f -exec grep -i -I "PASSWORD" {} /dev/null \;
+```
+
+**sushant747**
+
+World writable scripts invoked as root .
+If you find a script that is owned by root but is writable by anyone you can add your own malicious code in that script that will escalate your privileges when the script is run as root. It might be part of a cronjob, or otherwise automatized, or it might be run by hand by a sysadmin. You can also check scripts that are called by these scripts.
+
+```
+#World writable files directories
+find / -writable -type d 2>/dev/null
+find / -perm -222 -type d 2>/dev/null
+find / -perm -o w -type d 2>/dev/null
+
+# World executable folder
+find / -perm -o x -type d 2>/dev/null
+
+# World writable and executable folders
+find / \( -perm -o w -perm -o x \) -type d 2>/dev/null
+```
 
 ## Linux PrivEsc
 > https://tryhackme.com/room/linuxprivesc
