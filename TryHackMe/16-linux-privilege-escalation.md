@@ -5,6 +5,7 @@ Important Tools
 wget https://raw.githubusercontent.com/diego-treitos/linux-smart-enumeration/master/lse.sh; chmod +x ./lse.sh
 # ./lse.sh : to look at overview
 # ./lse.sh -l 1 -i : to verbose
+# ./lse.sh -l 2 -i : to verbose
 wget https://raw.githubusercontent.com/rebootuser/LinEnum/master/LinEnum.sh; chmod +x ./LinEnum.sh
 # mkdir report
 # ./LinEnum.sh -k password -e report -t
