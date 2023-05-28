@@ -8,6 +8,7 @@ Windows Active Directory environments by and large dominate the corporate and go
 - Post exploitation tasks
 
 ## Active Directory Basics
+> https://tryhackme.com/room/winadbasics
 
 ## Breachin Active Directory
 
