@@ -21,7 +21,7 @@ Active Directory (AD) is a catalog of network "objects". It includes:
 3. **Security Groups**: Collections of users or machines. It's easier to manage permissions by assigning them to groups instead of individual users.
    Example: The "Domain Admins" group has administrative rights across the domain.
 
-### Delegating AD Users
+### Managing AD Users
 
 
 Open `Active Directory Users And Computer`
@@ -51,6 +51,7 @@ PS C:\Users\phillip> Set-ADUser -ChangePasswordAtLogon $true -Identity sophie -V
 VERBOSE: Performing the operation "Set" on target "CN=Sophie,OU=Sales,OU=THM,DC=thm,DC=local".
 ```
 
+### Managing AD Computers
 
 
 ## Breachin Active Directory
