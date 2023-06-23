@@ -18,7 +18,14 @@
 - https://tryhackme.com/module/intro-to-networking 
 - https://tryhackme.com/module/cryptography
 - https://tryhackme.com/module/windows-fundamentals
-- 
+
+## DevSecOps Path
+
+- https://tryhackme.com/room/sdlc
+- https://tryhackme.com/room/introductiontodevsecops
+- https://tryhackme.com/room/owaspapisecuritytop105w
+- https://tryhackme.com/room/sast
+
 ## WEAKNESSES
 
 Intro to Webhacking 
