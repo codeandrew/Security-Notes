@@ -281,3 +281,23 @@ Here's some things that might be useful to read after completing this room, if i
 - https://medium.com/@gregIT/exploiting-simple-network-services-in-ctfs-ec8735be5eef
 - https://attack.mitre.org/techniques/T1210/
 - https://www.nextgov.com/cybersecurity/2019/10/nsa-warns-vulnerabilities-multiple-vpn-services/160456/
+
+
+
+## REFERENCES
+
+- https://resources.infosecinstitute.com/topic/what-is-enumeration/
+```
+NetBios enumeration
+SNMP enumeration
+LDAP enumeration
+NTP enumeration
+SMTP enumeration
+DNS enumeration
+Windows enumeration
+UNIX/Linux enumeration
+```
+
+- https://resources.infosecinstitute.com/topic/how-ethical-hacking-and-pentesting-is-changing-in-2022/
+- https://resources.infosecinstitute.com/topic/red-teaming-main-tools-for-wireless-penetration-tests/
+> wireless pentest
