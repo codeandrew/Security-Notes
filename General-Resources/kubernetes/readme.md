@@ -60,5 +60,5 @@ grep -R "current-context" /root/
 
 
 ### References:
-https://github.com/BishopFox/badPods/tree/main/manifests/everything-allowed
-https://raesene.github.io/blog/2019/04/01/The-most-pointless-kubernetes-command-ever/
+- https://github.com/BishopFox/badPods/tree/main/manifests/everything-allowed
+- https://raesene.github.io/blog/2019/04/01/The-most-pointless-kubernetes-command-ever/
