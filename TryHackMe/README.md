@@ -19,6 +19,7 @@
 - https://tryhackme.com/module/cryptography
 - https://tryhackme.com/module/windows-fundamentals
 - https://tryhackme.com/module/software-security
+- https://tryhackme.com/module/endpoint-security-monitoring
 
 ## DevSecOps Path
 
