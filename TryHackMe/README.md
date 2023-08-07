@@ -18,6 +18,7 @@
 - https://tryhackme.com/module/intro-to-networking 
 - https://tryhackme.com/module/cryptography
 - https://tryhackme.com/module/windows-fundamentals
+- https://tryhackme.com/module/software-security
 
 ## DevSecOps Path
 
