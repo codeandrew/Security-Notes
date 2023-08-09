@@ -44,5 +44,81 @@ Notes:
 - Tactics, Techniques and Procedures - During a red team engagement, common methods used by attackers are emulated against the target
 
 
+## Teams and Functions of an Engagement 
+
+
+|    Team    |                                                                                                                                                                          Definition                                                                                                                                                                          |
+|:----------:|:------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
+| Red Cell   | A red cell is the component that makes up the offensive portion of a red team engagement that simulates a given target's strategic and tactical responses.                                                                                                                                                                                                   |
+| Blue Cell  | The blue cell is the opposite side of red. It includes all the components defending a target network. The blue cell is typically comprised of blue team members, defenders, internal staff, and an organisation's management.                                                                                                                                |
+| White Cell | Serves as referee between red cell activities and blue cell responses during an engagement. Controls the engagement environment/network. Monitors adherence to the ROE. Coordinates activities required to achieve engagement goals. Correlates red cell activities with defensive actions. Ensures the engagement is conducted without bias to either side. |
+
+
+
+Definitions are sourced from redteam.guide.
+![red_team](./media/22-red-team-cells.png )
+
+
+Since this is a red team-oriented room, we will focus on the responsibilities of the red cell. Below is a table outlining the roles and responsibilities of members of the red team.
+
+|           Role          |                                                                      Purpose                                                                      |
+|:-----------------------:|:-------------------------------------------------------------------------------------------------------------------------------------------------:|
+| Red Team Lead           | Plans and organises engagements at a high level—delegates, assistant lead, and operators engagement assignments.                                  |
+| Red Team Assistant Lead | Assists the team lead in overseeing engagement operations and operators. Can also assist in writing engagement plans and documentation if needed. |
+| Red Team Operator       | Executes assignments delegated by team leads. Interpret and analyse engagement plans from team leads.                                             |
+
+
+## Engagement Structure 
+
+A core function of the red team is adversary emulation. While not mandatory, it is commonly used to assess what a real adversary would do in an environment using their tools and methodologies. The red team can use various cyber kill chains to summarize and assess the steps and procedures of an engagement.
+
+The blue team commonly uses cyber kill chains to map behaviors and break down an adversaries movement. The red team can adapt this idea to map adversary TTPs (Tactics, Techniques, and Procedures) to components of an engagement.
+
+Many regulation and standardization bodies have released their cyber kill chain. Each kill chain follows roughly the same structure, with some going more in-depth or defining objectives differently. Below is a small list of standard cyber kill chains.
+
+- Lockheed Martin Cyber Kill Chain
+- Unified Kill Chain
+- Varonis Cyber Kill Chain
+- Active Directory Attack Cycle
+- MITRE ATT&CK Framework
+
+In this room, we will commonly reference the "Lockheed Martin Cyber Kill Chain." It is a more standardized kill chain than others and is very commonly used among red and blue teams.
+
+The Lockheed Martin kill chain focuses on a perimeter or external breach. Unlike other kill chains, it does not provide an in-depth breakdown of internal movement. You can think of this kill chain as a summary of all behaviors and operations present.
+
+![red_team](./media/22-cyber-kill-chain.png )
+
+  |       Technique       |                                      Purpose                                      |                     Examples                     |
+  |:---------------------:|:---------------------------------------------------------------------------------:|:------------------------------------------------:|
+  | Reconnaissance        | Obtain information on the target                                                  | Harvesting emails, OSINT                         |
+  | Weaponization         | Combine the objective with an exploit. Commonly results in a deliverable payload. | Exploit with backdoor, malicious office document |
+  | Delivery              | How will the weaponized function be delivered to the target                       | Email, web, USB                                  |
+  | Exploitation          | Exploit the target's system to execute code                                       | MS17-010, Zero-Logon, etc.                       |
+  | Installation          | Install malware or other tooling                                                  | Mimikatz, Rubeus, etc.                           |
+  | Command & Control     | Control the compromised asset from a remote central controller                    | Empire, Cobalt Strike, etc.                      |
+  | Actions on Objectives | Any end objectives: ransomware, data exfiltration, etc.                           | Conti, LockBit2.0, etc.                          |
+
+
+## Reference
+
+- https://0xdf.gitlab.io/2021/07/08/playing-with-printnightmare.html
+- https://attack.mitre.org/groups/G0008/ 
+- https://redteam.guide/docs/checklists/red-team-checklist 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
