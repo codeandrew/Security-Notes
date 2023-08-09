@@ -19,4 +19,30 @@ Regular pentesting has limitations: it's loud, may miss non-tech attacks, and re
 
 ![redteam](./media/22-red-team.png)
 
+Notes: 
+- Vulnerability Assessments CANNOT prepare us to detect a real attacker on our network 
+- Penetration Testers are not concerned about being detected by the client 
+
+## Red Team Engagements 
+
+Red teaming complements penetration tests, focusing on detection and response to real threats. It simulates adversary tactics and strategies to test blue team's reaction without their prior knowledge. Goals are set, like compromising a key system, and red team tries to achieve them while evading detection. It's not about outsmarting blue team, but improving their ability to handle real threats. 
+
+
+Red team engagements also improve on regular penetration tests by considering several attack surfaces:
+
+- Technical Infrastructure: Like in a regular penetration test, a red team will try to uncover technical vulnerabilities, with a much higher emphasis on stealth and evasion.
+- Social Engineering: Targeting people through phishing campaigns, phone calls or social media to trick them into revealing information that should be private.
+- Physical Intrusion: Using techniques like lockpicking, RFID cloning, exploiting weaknesses in electronic access control devices to access restricted areas of facilities.
+- Depending on the resources available, the red team exercise can be run in several ways:
+
+- Full Engagement: Simulate an attacker's full workflow, from initial compromise until final goals have been achieved.
+- Assumed Breach: Start by assuming the attacker has already gained control over some assets, and try to achieve the goals from there. As an example, the red team could receive access to some user's credentials or even a workstation in the internal network.
+- Table-top Exercise:  An over the table simulation where scenarios are discussed between the red and blue teams to evaluate how they would theoretically respond to certain threats. Ideal for situations where doing live simulations might be complicated.
+
+Notes: 
+- The goals of a red team engagement will often be referred to as flags or "crow jewels"
+- Tactics, Techniques and Procedures - During a red team engagement, common methods used by attackers are emulated against the target
+
+
+
 
