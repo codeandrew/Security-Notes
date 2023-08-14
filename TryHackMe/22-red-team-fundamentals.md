@@ -151,7 +151,7 @@ vectr.io: https://vectr.io/ - https://github.com/securityriskadvisors/vectr
 Email
 Slack
 
-
+![operations_plan](./media/22-operation-plans.png)
 
 ## Reference
 
