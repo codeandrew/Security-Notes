@@ -171,6 +171,8 @@ A common security misconfiguration concerns the exposure of debugging features i
 
 One example of such a vulnerability was allegedly used when Patreon got hacked in 2015. Five days before Patreon was hacked, a security researcher reported to Patreon that he had found an open debug interface for a Werkzeug console. Werkzeug is a vital component in Python-based web applications as it provides an interface for web servers to execute the Python code. Werkzeug includes a debug console that can be accessed either via URL on /console, or it will also be presented to the user if an exception is raised by the application. In both cases, the console provides a Python console that will run any code you send to it. For an attacker, this means he can execute commands arbitrarily.
 
+https://owasp.org/Top10/A05_2021-Security_Misconfiguration/
+
 ## 6 Vulnerable and Outdated Components
 
 Occasionally, you may find that the company/entity you're pen-testing is using a program with a well-known vulnerability.
