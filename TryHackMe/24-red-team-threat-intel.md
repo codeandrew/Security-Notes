@@ -69,11 +69,34 @@ Mandiant Advantage
 Ontic
 CrowdStrike Falcon
 
+**Questions**
+Open the provided ATT&CK Navigator layer and identify matched TTPs to the cyber kill chain. Once TTPs are identified, map them to the cyber kill chain in the static site.
+
+To complete the challenge, you must submit one technique name per kill chain section.
+
+Once the chain is complete and you have received the flag, submit it below.
+
+THM{7HR347_1N73L_12_4w35om3}
+Answer questions below relating to needed engagement resources.
+
+What web shell is APT 41 known to use? 
+
+ASPXSpy
+What LOLBAS (Living Off The Land Binaries and Scripts) tool does APT 41 use to aid in file transfers? 
+
+certutil
+What tool does APT 41 use to mine and monitor SMS traffic? 
+
+MESSAGETAPc
+Task
+
 
 
 ## Notes:
 - Rundll32
 - Valid Accounts
+
+- APT41 - research their techniques https://attack.mitre.org/groups/G0096/
 
 
 ## References:
@@ -85,3 +108,5 @@ CrowdStrike Falcon
 
 - https://intezer.com/ost-map/ A map tracking the use of libraries with offensive capabilities by threat actors.
   - https://www.virusbulletin.com/conference/vb2020/abstracts/ost-map-mapping-malware-usage-open-source-offensive-security-tools
+
+- https://attack.mitre.org/groups/G0096/
