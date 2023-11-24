@@ -185,3 +185,11 @@ meterpreter >
 
 ```
 
+
+
+## PowerShell - PSH
+
+PowerShell is an object-oriented programming language executed from the Dynamic Language Runtime (DLR) in .NET with some exceptions for legacy uses.
+> recommended room to practice
+> https://tryhackme.com/room/powershell
+
