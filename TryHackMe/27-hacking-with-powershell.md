@@ -277,3 +277,7 @@ Get-ScheduledTask -TaskName "new-sched-task" | Select-Object -Property TaskPath,
 Get-Acl c:/
 
 ```
+
+
+## References
+- https://learnxinyminutes.com/docs/powershell/
