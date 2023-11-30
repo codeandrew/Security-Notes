@@ -169,4 +169,64 @@ When retrieving output objects, you may want to select objects that match a very
 
 
 
+**EXERCISE**
+```powershell
+# Find Item
+Get-ChildItem -Path C:\ -Include *interesting-file.txt* -File -Recurse -ErrorAction SilentlyContinue
+
+# Get Contents
+Get-Content "C:\Program Files\interesting-file.txt.txt"
+
+# Get how many cmdlets are installed on the system(only cmdlets, not functions and aliases)
+Get-Command | Where-Object -Property CommandType -eq Cmdlet | Measure-Object
+Count    : 6638
+Average  :
+Sum      :
+Maximum  :
+Minimum  :
+Property :
+
+## NOTES
+# In PowerShell, cmdlets are the built-in commands provided by PowerShell itself and by modules that have been loaded into the session. They are native PowerShell commands that are compiled into .NET classes and are designed to perform an action and return .NET objects. Cmdlets are one of the fundamental elements in PowerShell, enabling the bulk of the functional scripting capabilities.
+
+# Using Get-Command with a Where-Object filter to select only objects of the type Cmdlet and then using Measure-Object to count them is a valid method to get the number of cmdlets installed on the system.
+
+
+# Get the MD5 hash of interesting-file.txt
+Get-FileHash -Path "C:\Program Files\interesting-file.txt.txt" -Algorithm MD5
+Algorithm       Hash                                                                   Path
+---------       ----                                                                   ----
+MD5             49A586A2A9456226F8A1B4CEC6FAB329                                       C:\Program Files\interesting-file.txt.txt
+
+# Does the path “C:\Users\Administrator\Documents\Passwords” Exist(Y/N)?
+Get-Location -Path "C:\Users\Administrator\Documents\Passwords"
+
+# What command would you use to make a request to a web server?
+Invoke-WebRequest
+
+# Base64 decode the file b64.txt on Windows.
+Get-ChildItem -Path C:/ -Include b64.txt -Recurse -File
+$base64Content = Get-Content -Path "b64.txt"
+$decodedBytes = [System.Convert]::FromBase64String($base64Content)
+$decodedString = [Text.Encoding]::UTF8.GetString($decodedBytes)
+$decodedString | Out-File -FilePath "decodedOutput.txt"
+type .\decodedOutput.txt
+
+this is the flag - ihopeyoudidthisonwindows
+the rest is garbage
+the rest is garbage
+the rest is garbage
+the rest is garbage
+the rest is garbage
+the rest is garbage
+the rest is garbage
+the rest is garbage
+the rest is garbage
+the rest is garbage
+the rest is garbage
+the rest is garbage
+the rest is garbage
+the rest is garbage
+```
+
 
