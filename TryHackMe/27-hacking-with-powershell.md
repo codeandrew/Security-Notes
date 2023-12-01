@@ -302,5 +302,77 @@ $command = Get-ChildItem -Path $path -Recurse | Select-String -Pattern $string_p
 echo $command
 ```
 
+next excercise is to look for strings with `https://`
+```ps1
+
+$path = "C:\Users\Administrator\Desktop\emails\*"
+$string_pattern = "https://"
+$command = Get-ChildItem -Path $path -Recurse | Select-String -Pattern $string_pattern
+echo $command
+
+```
+## Intermediate Scripting
+
+Now that you've learnt a little bit about how scripting works - let's try something a bit more interesting. Sometimes we may not have utilities like Nmap and Python available, and we are forced to write scripts to do very rudimentary tasks.
+
+Why don't you try writing a simple port scanner using Powershell? Here's the general approach to use: 
+
+Determine IP ranges to scan(in this case it will be localhost) and you can provide the input in any way you want
+Determine the port ranges to scan
+Determine the type of scan to run(in this case it will be a simple TCP Connect Scan)
+
+```ps1
+# simplest sweep
+for($i=130; $i -le 140; $i++){
+    Test-NetConnection localhost -Port $i
+}
+```
+or 
+
+```ps1
+function Test-Port {
+    param (
+        [Parameter(Mandatory = $true)]
+        [string]
+        $IPAddress,
+
+        [Parameter(Mandatory = $true)]
+        [int]
+        $Port,
+
+        [int]
+        $Timeout = 1000
+    )
+
+    $connection = New-Object System.Net.Sockets.TcpClient
+    try {
+        $asyncResult = $connection.BeginConnect($IPAddress, $Port, $null, $null)
+        $waitHandle = $asyncResult.AsyncWaitHandle
+        $result = $waitHandle.WaitOne($Timeout)
+        $connection.Close()
+
+        if ($result) { return $true } else { return $false }
+    } catch {
+        return $false
+    }
+}
+
+# Define IP range and port range
+$IPAddress = "127.0.0.1"  # localhost
+$StartPort = 130
+$EndPort = 140
+
+# Scanning
+$StartPort..$EndPort | ForEach-Object {
+    $port = $_
+    $result = Test-Port -IPAddress $IPAddress -Port $port
+    if ($result) {
+        "Port $port is open"
+    } else {
+        "Port $port is closed"
+    }
+}
+```
+
 ## References
 - https://learnxinyminutes.com/docs/powershell/
