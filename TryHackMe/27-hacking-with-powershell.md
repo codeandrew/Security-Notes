@@ -278,6 +278,29 @@ Get-Acl c:/
 
 ```
 
+## Basic Scripting
+```ps1
+# This is an example script that checks the active ports if its inside the port.txt
+$system_ports = Get-NetTCPConnection -State Listen
+
+$text_port = Get-Content -Path C:\Users\Administrator\Desktop\ports.txt
+
+foreach($port in $text_port){
+
+    if($port -in $system_ports.LocalPort){
+        echo $port
+     }
+
+}
+```
+
+The exercise is to find string that looks for the pattern "password"
+```ps1
+$path = "C:\Users\Administrator\Desktop\emails\*"
+$string_pattern = "password"
+$command = Get-ChildItem -Path $path -Recurse | Select-String -Pattern $string_pattern
+echo $command
+```
 
 ## References
 - https://learnxinyminutes.com/docs/powershell/
