@@ -75,3 +75,37 @@ Related Rooms:
 - SIEM: https://tryhackme.com/room/introtosiem
 
 ## Privacy and Data Protection
+General Data Protection Regulation (GDPR)
+The GDPR is a data protection law implemented by the EU in May 2018 to protect personal data. Personal data is "Any data associated with an individual that can be utilised to identify them either directly or indirectly". Key points of the law include the following:
+
+- Prior approval must be obtained before collecting any personal data.
+- Personal data should be kept to a minimum and only collected when necessary.
+- Adequate measures are to be adopted to protect stored personal data.
+![gdpr](media/29-gdpr.png)
+
+The law applies to all business entities that conduct business in the European Union (EU) and collect/store/process the personal data of EU residents and are required to comply. It is one of the most stringent data privacy regulations worldwide and safeguards personal data during collection. Companies can only collect personal data for a legitimate reason and must inform the owner about its processing. Moreover, this also includes penalties and fines based on non-compliance in the following two tiers:
+
+- Tier 1: More severe violations, including unintended data collection, sharing data with third parties without consent, etc. Maximum penalty amounting to 4% of the organisation's revenue or 20 million euros (whichever is higher).
+- Tier 2: Less severe violations, including data breach notifications, cyber policies, etc. The maximum fine for Tier 2 is 2% of the organisation's revenue or 10 million euros (whichever is higher).
+
+**Payment Card Industry Data Security Standard (PCI DSS)**
+PCI DSS is focused on maintaining secure card transactions and protecting against data theft and fraud. It is widely used by businesses, primarily online, for card-based transactions. It was established by major credit card brands (Visa, MasterCard & American Express). It requires strict control access to cardholder information and monitoring unauthorised access, using recommended measures such as web application firewalls and encryption. You can learn more about the standard here.
+> https://www.pcisecuritystandards.org/
+
+
+Related Links:
+- General Data Protection Regulation: https://gdpr-info.eu/
+
+## NIST Special Publications
+NIST 800-53 is a publication titled "Security and Privacy Controls for Information Systems and Organisations",  developed by the National Institute of Standards and Technology (NIST), US, that provides a catalogue of security controls to protect the CIA triad of information systems. The publication serves as a framework for organisations to assess and enhance the security and privacy of their information systems and comply with various laws, regulations, and policies. It incorporates best practices from multiple sources, including industry standards, guidelines, and international frameworks.
+> https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-53r5.pdf
+
+**Key Points**
+NIST 800-53 offers a comprehensive set of security and privacy controls that organisations can use to safeguard their operations, assets, personnel, and other organisations from various threats and risks. These include intentional attacks, unintentional errors, natural disasters, infrastructure failures, foreign intelligence activity, and privacy concerns. NIST 800-53 Revision 5 organises security controls into twenty families, each addressing a specific security concern category. You can learn more about the controls here (Section 2.2).
+
+![nist-keypoints](media/29-nist.png)
+
+**Compliance Best Practices**
+First and foremost, businesses must conduct a thorough discovery process to recognise and catalogue their data assets, information systems, and associated threats. This includes understanding data flows, system dependencies, and potential vulnerabilities. What are some of best NIST 800-53 compliance practicesThe NIST 800-53 control families must be mapped to the identified assets and hazards, making creating a structured approach for matching the controls to the organisation's demands easier. Thirdly, creating a governance structure, allocating duties, and outlining precise controls implementation and maintenance procedures are all necessary to effectively manage the implementation process. All measures must be regularly monitored and evaluated to ensure compliance. Finally, organisations should establish effective monitoring systems to identify and address security issues, conduct routine evaluations and audits, and improve control implementation. By adhering to these best practices, organisations can successfully implement NIST 800-53 and enhance their security outlook while mitigating risks effectively.
+
+![nist-compliance](media/29-nist-compliance.png)
