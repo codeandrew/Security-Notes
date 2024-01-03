@@ -109,3 +109,30 @@ NIST 800-53 offers a comprehensive set of security and privacy controls that org
 First and foremost, businesses must conduct a thorough discovery process to recognise and catalogue their data assets, information systems, and associated threats. This includes understanding data flows, system dependencies, and potential vulnerabilities. What are some of best NIST 800-53 compliance practicesThe NIST 800-53 control families must be mapped to the identified assets and hazards, making creating a structured approach for matching the controls to the organisation's demands easier. Thirdly, creating a governance structure, allocating duties, and outlining precise controls implementation and maintenance procedures are all necessary to effectively manage the implementation process. All measures must be regularly monitored and evaluated to ensure compliance. Finally, organisations should establish effective monitoring systems to identify and address security issues, conduct routine evaluations and audits, and improve control implementation. By adhering to these best practices, organisations can successfully implement NIST 800-53 and enhance their security outlook while mitigating risks effectively.
 
 ![nist-compliance](media/29-nist-compliance.png)
+
+**NIST 800-63B**
+NIST Special Publication 800-63B is a set of guidelines created by the NIST to help organisations establish effective digital identity practices. Its primary focus is on authenticating and verifying the identities of individuals who access digital services, systems, and networks. The guidelines provide recommendations for different levels of identity assurance, ranging from basic to high assurance. They also offer advice on using authentication factors, including passwords, biometrics, and tokens, and securely managing and storing user credentials.
+
+## Information Security Managemnt and Compliance
+The strategic planning, execution, and continuous administration of security measures are all part of Information Security (IS) management, which protects information assets from unauthorised access, use, disclosure, interruption, alteration, and destruction. It involves risk assessment and identification, security controls and procedures development, incident response planning, and security awareness training. Contrarily, compliance refers to observing information security-related legal, regulatory, contractual, and industry-specific standards. In IS management and compliance, we will go through two key standards.
+
+**ISO/IEC 27001**
+
+ISO 27001 is an internationally recognised standard for requirements to plan, develop, run, and update an organisation's Information Security Management System (ISMS). The official ISO/IEC 27001 documents are paid for and can be purchased from this link. It was developed by International Organization for Standardization (ISO) and the International Electrotechnical Commission (IEC) and has the following core components:
+
+- Scope: This specifies the ISMS's boundaries, including the covered assets and processes.
+- Information security policy: A high-level document defining an organisation's information security approach.
+- Risk assessment: Involves identifying and evaluating the risks to the confidentiality, integrity, and availability of the organisation's information.
+- Risk treatment: Involves selecting and implementing controls to reduce the identified risks to an acceptable level.
+- Statement of Applicability (SoA): This document specifies which controls from the standard are applicable and which are not.
+- Internal audit: This involves conducting periodic audits of the ISMS to ensure that it is operating effectively.
+- Management review: Review the performance of ISMS at regular intervals.
+
+![iso](media/29-iso.png)
+
+An ISMS built on the ISO 27001 standard requires careful design and execution. It entails exhaustively evaluating the organisation's security procedures, detecting gaps, and conducting a thorough risk assessment. Access control, incident response, etc., are just a few examples of the areas where clear rules and processes must be created and aligned with ISO 27001 requirements. Leadership support and resource allocation are also essential for the ISMS to be implemented successfully. Regular monitoring, measurement, and continual development are crucial to guarantee the efficacy and continued alignment of the ISMS with the organization's objectives.
+
+**Service Organisation Control 2 (SOC 2)**
+SOC 2 was developed by the American Institute of Certified Public Accountants (AICPA) as a compliance/auditing framework. It focuses on assessing the efficacy of a company's data security based on the CIA triad. SOC 2 can reassure customers, stakeholders, and business partners that the company has put sufficient controls in place to safeguard its systems, data, and sensitive information.
+
+The SOC 2 framework is essential for service providers interacting with client data or offering solutions that process, store, or transmit sensitive data. It assists businesses in demonstrating their dedication to upholding strict privacy and security standards. Customers frequently ask for SOC 2 reports or use them as a competitive advantage to guarantee clients that their information will be handled securely. You can learn more about it here.
