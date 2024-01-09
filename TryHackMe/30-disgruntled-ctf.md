@@ -163,3 +163,31 @@ We know that he had downloaded a previously prepared script into the machine, wh
 Look at you, second day on the job, and you’ve already solved 2 cases for me. Tell Sophie I told you to give you a raise.
 
 
+## SUMMARY of script
+
+```bash
+# look for was installed
+grep sudo /var/log/auth.log | grep install
+# look for added user
+grep sudo /var/log/auth.log | grep adduser 
+# check if given with sudo privileges
+grep sudo /var/log/auth.log | grep visudo
+
+# check new user bash history
+cat /home/it-admin/.bash_history
+# check given vim for new saved
+cat /home/it-admin/.viminfo | grep saveas
+
+# check the file timeline
+ls -la /bin | grep os-update
+
+# check the actual file
+cat /bin/os-update.sh
+```
+
+## SKILLS TESTED
+- grep
+- linux administration
+    - /var/log files
+    - history
+- vim
