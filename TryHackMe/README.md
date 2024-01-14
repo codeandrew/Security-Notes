@@ -11,7 +11,10 @@
 - https://tryhackme.com/path/outline/jrpenetrationtester 
 - https://tryhackme.com/room/uploadvulns 
 - https://tryhackme.com/path/outline/pentesting 
- 
+
+## RECOMMENDED ROOMS or MODULEs
+- https://tryhackme.com/module/scripting-for-pentesters
+- 
 ### modules
 - https://tryhackme.com/module/intro-to-networking
 - https://tryhackme.com/module/linux-fundamentals 
@@ -49,17 +52,6 @@ Metasploit: Exploitation Task 5
 > learn about ntlm password hashes,
 > learn what registry windows is storing hash password of users
 
-## UNFINISHED ROOMS
-
-Intro to Lan. 
-- https://tryhackme.com/room/introtolan 
-- https://tryhackme.com/room/osimodelzi
-
-Wireshark 101
-- https://tryhackme.com/room/wireshark 
-
-- OWASP TOP 10 
-https://tryhackme.com/room/owasptop10 
 ## CHALLENGES
 
 - EASY https://tryhackme.com/room/basicpentestingjt
