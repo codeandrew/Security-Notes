@@ -296,3 +296,26 @@ Here are some common options you can use with enum4linux:
 but for Simplicity just run this 
 enum4linux -a 10.10.10.10
 ```
+
+
+## RECON
+### PASSSIVE RECON
+```bash
+#!/bin/bash
+
+rhost=tryhackme.com
+
+# Whois
+whois $rhost
+
+# DNS
+# can be used to return all the IPv4 addresses
+nslookup -type=A $rhost 1.1.1.1
+# learn about the email servers and configurations for a particular domain
+nslookup -type=MX $rhost
+# Lookup DNS TXT records	
+nslookup -type=TXT tryhackme.com
+
+# https://dnsdumpster.com/
+echo "[+] Continue Searching Here: https://dnsdumpster.com/ and https://www.shodan.io"
+```
