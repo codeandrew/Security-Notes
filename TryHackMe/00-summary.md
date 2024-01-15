@@ -342,5 +342,5 @@ strace -e trace=file [command]
 **lsof**
 ```bash
 # finds processes using a directory
-lsof +d /path/to/directory
+lsof +D /path/to/directory
 ```
