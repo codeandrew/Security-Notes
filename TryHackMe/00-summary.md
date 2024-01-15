@@ -319,3 +319,22 @@ nslookup -type=TXT tryhackme.com
 # https://dnsdumpster.com/
 echo "[+] Continue Searching Here: https://dnsdumpster.com/ and https://www.shodan.io"
 ```
+
+## Forensics
+
+### Networking
+**tcpdump**
+```bash
+network_interface=eth0
+# capture first 10 packets
+tcpdump -i $network_interface -c 10
+# Capture HTTP request
+tcpdump -i $network_interface 'port 80'
+```
+
+### FILES
+**strace**
+intercepts log and system calls made and signals received by a process
+```bash
+strace -e trace=file [command]
+```
