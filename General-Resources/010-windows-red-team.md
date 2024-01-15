@@ -1,5 +1,9 @@
 # Windows Red Team
 
+Windows Basic Command
+
+
+Red team basic Enumeration
 
 | Command    | Description                                                                                                                                                                       |
 |------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -83,3 +87,44 @@ net localgroup administrators [username] /add
 
 These commands add a new user and put it into the administrators group.
 
+
+## CAPTURE THE FLAG
+
+In a Capture The Flag (CTF) challenge where you're already inside a Windows VM using Meterpreter and you need to find the flag, here are some steps you can take:
+
+1. **Explore the File System:**
+   - Use Meterpreter's `shell` command to get a command prompt on the Windows VM.
+   - Navigate through the file system (`cd`, `dir`, `type`, etc.) to search for the flag. Common locations are the Desktop, Documents, or hidden directories.
+
+2. **Search for Files:**
+   - Use commands like `dir` and `findstr` to search for files containing keywords related to flags.
+   - Example: `dir /s *flag*.*` or `findstr /si flag *.txt`.
+
+3. **Check Registry:**
+   - Examine the Windows Registry for hidden clues. Use `reg query` to look for values that might contain the flag.
+
+4. **Network Enumeration:**
+   - Check network configurations and connected devices. Sometimes, flags are hidden in network-related settings.
+
+5. **Check Running Processes:**
+   - Use `tasklist` to list running processes. Sometimes flags are hidden within process memory or environment variables.
+
+6. **Decode/Decrypt Encoded Strings:**
+   - If you find encoded or encrypted strings, use tools within Meterpreter or Windows itself to decode them.
+
+7. **Check System Logs:**
+   - Inspect system logs for any suspicious activities or messages. Use `eventvwr` to check the Event Viewer.
+
+8. **Examine Active Directory:**
+   - If applicable, check for Active Directory-related information. Flags might be hidden in user attributes, group names, or descriptions.
+
+9. **Examine User Profiles:**
+   - Look into user profiles for any clues. Check the contents of folders like `AppData` for hidden files.
+
+10. **Check Installed Software:**
+    - List installed software (`wmic product get name`) and investigate their configurations for flags.
+
+11. **Payload Persistence:**
+    - If the challenge involved setting up persistence, check the method used. Flags might be hidden in scripts or registry entries related to persistence.
+
+Remember to document your findings and ensure that you're maintaining the rules and objectives of the CTF challenge. Always follow ethical guidelines and rules provided by the CTF organizers.
