@@ -344,3 +344,8 @@ strace -e trace=file [command]
 # finds processes using a directory
 lsof +D /path/to/directory
 ```
+
+**grep**
+```bash
+grep "ERROR" /var/log
+```
