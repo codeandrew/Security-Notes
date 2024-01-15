@@ -338,3 +338,9 @@ intercepts log and system calls made and signals received by a process
 ```bash
 strace -e trace=file [command]
 ```
+
+**lsof**
+```bash
+# finds processes using a directory
+lsof +d /path/to/directory
+```
