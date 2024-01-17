@@ -363,3 +363,19 @@ lsof +D /path/to/directory
 ```bash
 grep "ERROR" /var/log
 ```
+
+
+--- 
+## ONLINE TOOLS
+
+### PASSWORD ATTACKS
+
+Default Passwords:
+Here are some website lists that provide default passwords for various products.
+
+https://cirt.net/passwords
+https://default-password.info/
+https://datarecovery.com/rd/default-passwords/
+
+Leaked Passwords
+- https://github.com/danielmiessler/SecLists/tree/master/Passwords/Leaked-Databases
