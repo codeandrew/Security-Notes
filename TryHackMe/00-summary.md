@@ -373,9 +373,18 @@ grep "ERROR" /var/log
 Default Passwords:
 Here are some website lists that provide default passwords for various products.
 
-https://cirt.net/passwords
-https://default-password.info/
-https://datarecovery.com/rd/default-passwords/
+- https://cirt.net/passwords
+- https://default-password.info/ # example https://default-password.info/juniper/isg2000
+- https://datarecovery.com/rd/default-passwords/
 
 Leaked Passwords
 - https://github.com/danielmiessler/SecLists/tree/master/Passwords/Leaked-Databases
+
+Username generator:
+```bash
+git clone https://github.com/therodri2/username_generator.git
+cd username_generator 
+python3 username_generator.py -h
+echo "John Smith" > users.lst
+python3 username_generator.py -w users.lst
+```
