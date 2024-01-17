@@ -37,3 +37,344 @@ cat file1.txt file2.txt file3.txt > combined_list.txt
 #To clean up the generated combined list to remove duplicated words, we can use sort and uniq 
 sort combined_list.txt | uniq -u > cleaned_combined_list.txt
 ```
+
+**Customized Wordlist**
+
+```bash
+domain=https://clinic.thmredteam.com
+cewl -w list.txt -d 5 -m 5 $domain
+# -w will write the contents to a file. In this case, list.txt.
+# -m 5 gathers strings (words) that are 5 characters or more
+# -d 5 is the depth level of web crawling/spidering (default 2)
+```
+![00](./media/33-password-target.png)
+
+generated list
+```
+Medical
+Elite
+email
+protected
+Health
+Research
+Welcome
+Doctors
+THUMB
+Oxytocin
+Jason
+Carlson
+Paracetamol
+Cortisol
+About
+Contact
+appointment
+Cardiology
+Latest
+March
+February
+providing
+treatment
+patient
+doctors
+SECTION
+TITLE
+commonly
+January
+stress
+Select
+point
+Click
+hospital
+clinic
+Template
+tooplate
+health
+LOADER
+HEADER
+LINKS
+Center
+Staff
+Pregnancy
+Dental
+Google
+Share
+FOOTER
+Opening
+Hours
+Monday
+Friday
+Saturday
+Sunday
+Closed
+Copyright
+Laboratory
+Tests
+Departments
+Insurance
+Policy
+Careers
+SCRIPTS
+Website
+healthier
+Healthy
+Living
+Exercise
+regime
+customised
+Lifestyle
+Balanced
+right
+nutrition
+Benefits
+Stories
+ABOUT
+safest
+clinical
+innovative
+technology
+experience
+century
+multidisciplinary
+teams
+surgeons
+researchers
+other
+specialists
+together
+address
+medicine
+pressing
+issues
+convert
+findings
+novel
+medicines
+treatments
+Tanisha
+Hughes
+President
+Pierre
+Pittman
+Chief
+Weronika
+Burgess
+Dario
+Phillips
+released
+reaction
+social
+connections
+stressful
+situations
+reliever
+alleviate
+aches
+pains
+referred
+hormone
+because
+response
+APPOINTMENT
+CONTACT
+Email
+Department
+General
+Phone
+Number
+Additional
+Message
+Submit
+Button
+GOOGLE
+change
+location
+choose
+Embed
+paste
+within
+field
+below
+affiliated
+company
+employs
+based
+medical
+professionals
+assist
+establishing
+maintaining
+network
+highly
+qualified
+physicians
+committed
+quality
+tailored
+specific
+requirements
+official
+website
+Medicalmedical
+surgery
+porttitor
+lorem
+iaculis
+libero
+justo
+vitae
+gravida
+imperdiet
+vestibulum
+porta
+neque
+purus
+commodo
+posuere
+molestie
+semper
+euismod
+Phasellus
+lectus
+rutrum
+vulputate
+Vestibulum
+vehicula
+sodales
+placerat
+venenatis
+risus
+eleifend
+ipsum
+Fusce
+dolor
+augue
+Amazing
+Technology
+Consultant
+Topic
+Clinic
+thmredteam
+Professional
+ealth
+DETAIL
+Review
+Annual
+Aenean
+Aliquam
+finibus
+egestas
+interdum
+condimentum
+pellentesque
+fringilla
+congue
+maximus
+felis
+volutpat
+Morbi
+tempor
+Mauris
+tincidunt
+Maecenas
+aliquam
+Etiam
+tellus
+Vivamus
+ligula
+tortor
+lobortis
+Nullam
+ornare
+turpis
+luctus
+facilisis
+Nulla
+sapien
+pulvinar
+rhoncus
+lacinia
+dignissim
+Suspendisse
+metus
+laoreet
+auctor
+article
+Facebook
+Twitter
+author
+Lorem
+maecenas
+voluptate
+Recent
+Posts
+Introducing
+healing
+process
+Categories
+Sidebar
+Banner
+Social
+pharetra
+Curabitur
+consequat
+ultricies
+Healing
+Process
+```
+
+**Username Wordlists**
+Gathering employees' names in the enumeration stage is essential. We can generate username lists from the target's website. For the following example, we'll assume we have a {first name} {last name} (ex: John Smith) and a method of generating usernames.
+
+- {first name}: john
+- {last name}: smith
+- {first name}{last name}:  johnsmith 
+- {last name}{first name}:  smithjohn  
+- first letter of the {first name}{last name}: jsmith 
+- first letter of the {last name}{first name}: sjohn  
+- first letter of the {first name}.{last name}: j.smith 
+- first letter of the {first name}-{last name}: j-smith 
+- and so on
+
+```bash
+└─# git clone https://github.com/therodri2/username_generator.git
+Cloning into 'username_generator'...
+remote: Enumerating objects: 9, done.
+remote: Counting objects: 100% (9/9), done.
+remote: Compressing objects: 100% (7/7), done.
+remote: Total 9 (delta 0), reused 0 (delta 0), pack-reused 0
+Receiving objects: 100% (9/9), done.
+                                                                                                                
+┌──(root㉿kali)-[/tmp/pass]
+└─# ls
+list.txt  username_generator
+                                                                                                                
+┌──(root㉿kali)-[/tmp/pass]
+└─# cd username_generator 
+                                                                                                                
+┌──(root㉿kali)-[/tmp/pass/username_generator]
+└─# python3 username_generator.py -h
+usage: username_generator.py [-h] -w wordlist [-u]
+Python script to generate user lists for bruteforcing!
+
+options:
+  -h, --help            show this help message and exit
+  -w wordlist, --wordlist wordlist
+                        Specify path to the wordlist
+  -u, --uppercase       Also produce uppercase permutations. Disabled by default
+                                                                                                                
+┌──(root㉿kali)-[/tmp/pass/username_generator]
+└─# echo "John Smith" > users.lst
+
+┌──(root㉿kali)-[/tmp/pass/username_generator]
+└─# python3 username_generator.py -w users.lst
+john
+smith
+j.smith
+j-smith
+j_smith
+j+smith
+jsmith
+smithjohn
+```
+https://default-password.info/juniper/isg2000
+
