@@ -378,3 +378,241 @@ smithjohn
 ```
 https://default-password.info/juniper/isg2000
 
+## Password Profiling #2 - Keyspace technique and CUPP
+
+```
+└─# crunch -h
+
+crunch version 3.6
+
+Crunch can create a wordlist based on criteria you specify.  The output from crunch can be sent to the screen, file, or to another program.
+
+Usage: crunch <min> <max> [options]
+where min and max are numbers
+
+Please refer to the man page for instructions and examples on how to use crunch.
+┌──(root㉿kali)-[/tmp/pass/crunch]
+└─# crunch 2 2 01234abcd -o crunch.txt
+Crunch will now generate the following amount of data: 243 bytes
+0 MB
+0 GB
+0 TB
+0 PB
+Crunch will now generate the following number of lines: 81 
+crunch: 100% completed generating output
+
+-> cat crunch.txt
+00
+01
+02
+03
+04
+0a
+0b
+0c
+0d
+10
+.
+.
+.
+cb
+cc
+cd
+d0
+d1
+d2
+d3
+d4
+da
+db
+dc
+dd
+```
+
+It's worth noting that crunch can generate a very large text file depending on the word length and combination options you specify. The following command creates a list with an 8 character minimum and maximum length containing numbers 0-9, a-f lowercase letters, and A-F uppercase letters:
+
+`crunch 8 8 0123456789abcdefABCDEF -o crunch.txt` the file generated is `459 GB` and contains `54,875,873,536` words
+
+crunch also lets us specify a character set using the -t option to combine words of our choice. Here are some of the other options that could be used to help create different combinations of your choice:
+
+- @ - lower case alpha characters
+- , - upper case alpha characters
+- % - numeric characters
+- ^ - special characters including space
+
+For example, if part of the password is known to us, and we know it starts with pass and follows two numbers, we can use the % symbol from above to match the numbers. Here we generate a wordlist that contains pass followed by 2 numbers:
+
+```bash
+user@thm$  crunch 6 6 -t pass%%
+Crunch will now generate the following amount of data: 700 bytes
+0 MB
+0 GB
+0 TB
+0 PB
+Crunch will now generate the following number of lines: 100
+pass00
+pass01
+pass02
+pass03
+```
+
+CUPP - Common User Passwords Profiler
+
+> git clone https://github.com/Mebus/cupp.git
+![33](./media/33-cupp.png)
+
+Interactive mode
+```
+user@thm$  python3 cupp.py -i
+ ___________
+   cupp.py!                 # Common
+      \                     # User
+       \   ,__,             # Passwords
+        \  (oo)____         # Profiler
+           (__)    )\
+              ||--|| *      [ Muris Kurgas | j0rgan@remote-exploit.org ]
+                            [ Mebus | https://github.com/Mebus/]
+
+
+[+] Insert the information about the victim to make a dictionary
+[+] If you don't know all the info, just hit enter when asked! ;)
+
+> First Name: 
+> Surname: 
+> Nickname: 
+> Birthdate (DDMMYYYY): 
+
+
+> Partners) name:
+> Partners) nickname:
+> Partners) birthdate (DDMMYYYY):
+
+
+> Child's name:
+> Child's nickname:
+> Child's birthdate (DDMMYYYY):
+
+
+> Pet's name:
+> Company name:
+
+
+> Do you want to add some key words about the victim? Y/[N]:
+> Do you want to add special chars at the end of words? Y/[N]:
+> Do you want to add some random numbers at the end of words? Y/[N]:
+> Leet mode? (i.e. leet = 1337) Y/[N]:
+
+[+] Now making a dictionary...
+[+] Sorting list and removing duplicates...
+[+] Saving dictionary to .....txt, counting ..... words.
+> Hyperspeed Print? (Y/n)
+
+```
+
+Pre created List
+```
+┌──(root㉿kali)-[/tmp/pass/cupp]
+└─# python3 cupp.py -l
+
+ ___________ 
+   cupp.py!                 # Common
+      \                     # User
+       \   ,__,             # Passwords
+        \  (oo)____         # Profiler
+           (__)    )\   
+              ||--|| *      [ Muris Kurgas | j0rgan@remote-exploit.org ]
+                            [ Mebus | https://github.com/Mebus/]
+
+
+        Choose the section you want to download:
+
+     1   Moby            14      french          27      places
+     2   afrikaans       15      german          28      polish
+     3   american        16      hindi           29      random
+     4   aussie          17      hungarian       30      religion
+     5   chinese         18      italian         31      russian
+     6   computer        19      japanese        32      science
+     7   croatian        20      latin           33      spanish
+     8   czech           21      literature      34      swahili
+     9   danish          22      movieTV         35      swedish
+    10   databases       23      music           36      turkish
+    11   dictionaries    24      names           37      yiddish
+    12   dutch           25      net             38      exit program
+    13   finnish         26      norwegian       
+
+
+        Files will be downloaded from http://ftp.funet.fi/pub/unix/security/passwd/crack/dictionaries/ repository
+
+        Tip: After downloading wordlist, you can improve it with -w option
+
+> Enter number: 24
+[+] Downloading dictionaries/names/ASSurnames.gz from http://ftp.funet.fi/pub/unix/security/passwd/crack/dictionaries/names/ASSurnames.gz ... 
+[+] Downloading dictionaries/names/Congress.gz from http://ftp.funet.fi/pub/unix/security/passwd/crack/dictionaries/names/Congress.gz ... 
+[+] Downloading dictionaries/names/Family-Names.gz from http://ftp.funet.fi/pub/unix/security/passwd/crack/dictionaries/names/Family-Names.gz ... 
+[+] Downloading dictionaries/names/Given-Names.gz from http://ftp.funet.fi/pub/unix/security/passwd/crack/dictionaries/names/Given-Names.gz ... 
+[+] Downloading dictionaries/names/actor-givenname.gz from http://ftp.funet.fi/pub/unix/security/passwd/crack/dictionaries/names/actor-givenname.gz ... 
+[+] Downloading dictionaries/names/actor-surname.gz from http://ftp.funet.fi/pub/unix/security/passwd/crack/dictionaries/names/actor-surname.gz ... 
+[+] Downloading dictionaries/names/cis-givenname.gz from http://ftp.funet.fi/pub/unix/security/passwd/crack/dictionaries/names/cis-givenname.gz ... 
+[+] Downloading dictionaries/names/cis-surname.gz from http://ftp.funet.fi/pub/unix/security/passwd/crack/dictionaries/names/cis-surname.gz ... 
+[+] Downloading dictionaries/names/crl-names.gz from http://ftp.funet.fi/pub/unix/security/passwd/crack/dictionaries/names/crl-names.gz ... 
+[+] Downloading dictionaries/names/famous.gz from http://ftp.funet.fi/pub/unix/security/passwd/crack/dictionaries/names/famous.gz ... 
+[+] Downloading dictionaries/names/fast-names.gz from http://ftp.funet.fi/pub/unix/security/passwd/crack/dictionaries/names/fast-names.gz ... 
+[+] Downloading dictionaries/names/female-names-kantr.gz from http://ftp.funet.fi/pub/unix/security/passwd/crack/dictionaries/names/female-names-kantr.gz ... 
+[+] Downloading dictionaries/names/female-names.gz from http://ftp.funet.fi/pub/unix/security/passwd/crack/dictionaries/names/female-names.gz ... 
+[+] Downloading dictionaries/names/givennames-ol.gz from http://ftp.funet.fi/pub/unix/security/passwd/crack/dictionaries/names/givennames-ol.gz ... 
+[+] Downloading dictionaries/names/male-names-kantr.gz from http://ftp.funet.fi/pub/unix/security/passwd/crack/dictionaries/names/male-names-kantr.gz ... 
+[+] Downloading dictionaries/names/male-names.gz from http://ftp.funet.fi/pub/unix/security/passwd/crack/dictionaries/names/male-names.gz ... 
+[+] Downloading dictionaries/names/movie-characters.gz from http://ftp.funet.fi/pub/unix/security/passwd/crack/dictionaries/names/movie-characters.gz ... 
+[+] Downloading dictionaries/names/names.french.gz from http://ftp.funet.fi/pub/unix/security/passwd/crack/dictionaries/names/names.french.gz ... 
+[+] Downloading dictionaries/names/names.hp.gz from http://ftp.funet.fi/pub/unix/security/passwd/crack/dictionaries/names/names.hp.gz ... 
+[+] Downloading dictionaries/names/other-names.gz from http://ftp.funet.fi/pub/unix/security/passwd/crack/dictionaries/names/other-names.gz ... 
+[+] Downloading dictionaries/names/shakesp-names.gz from http://ftp.funet.fi/pub/unix/security/passwd/crack/dictionaries/names/shakesp-names.gz ... 
+[+] Downloading dictionaries/names/surnames-ol.gz from http://ftp.funet.fi/pub/unix/security/passwd/crack/dictionaries/names/surnames-ol.gz ... 
+[+] Downloading dictionaries/names/surnames.finnish.gz from http://ftp.funet.fi/pub/unix/security/passwd/crack/dictionaries/names/surnames.finnish.gz ... 
+[+] Downloading dictionaries/names/usenet-names.gz from http://ftp.funet.fi/pub/unix/security/passwd/crack/dictionaries/names/usenet-names.gz ... 
+[+] files saved to dictionaries/names/
+                                                                                                               
+┌──(root㉿kali)-[/tmp/pass/cupp]
+└─# ls
+CHANGELOG.md  LICENSE  README.md  cupp.cfg  cupp.py  dictionaries  screenshots  test_cupp.py
+└─# cd dictionaries         
+└─# cd names       
+┌──(root㉿kali)-[/tmp/pass/cupp/dictionaries/names]
+└─# ls
+ASSurnames.gz       actor-surname.gz  fast-names.gz          male-names.gz        shakesp-names.gz
+Congress.gz         cis-givenname.gz  female-names-kantr.gz  movie-characters.gz  surnames-ol.gz
+Family-Names.gz     cis-surname.gz    female-names.gz        names.french.gz      surnames.finnish.gz
+Given-Names.gz      crl-names.gz      givennames-ol.gz       names.hp.gz          usenet-names.gz
+actor-givenname.gz  famous.gz         male-names-kantr.gz    other-names.gz
+
+```
+
+Based on your interest, you can choose the wordlist from the list above to aid in generating wordlists for brute-forcing!
+
+Finally, CUPP could also provide default usernames and passwords from the Alecto database by using the -a option. 
+
+```
+┌──(root㉿kali)-[/tmp/pass/cupp]
+└─# python3 cupp.py -a
+
+ ___________ 
+   cupp.py!                 # Common
+      \                     # User
+       \   ,__,             # Passwords
+        \  (oo)____         # Profiler
+           (__)    )\   
+              ||--|| *      [ Muris Kurgas | j0rgan@remote-exploit.org ]
+                            [ Mebus | https://github.com/Mebus/]
+
+
+[+] Checking if alectodb is not present...
+[+] Downloading alectodb.csv.gz from https://github.com/yangbh/Hammer/raw/b0446396e8d67a7d4e53d6666026e078262e5bab/lib/cupp/alectodb.csv.gz ... 
+
+[+] Exporting to alectodb-usernames.txt and alectodb-passwords.txt
+[+] Done.
+
+```
+
+crunch 5 5 -t "THM@%" -o tryhackme.txt
+crunch 5 5 -t “THM^%" -o tryhackme.txt
+crunch 5 5 -t "THM^^" -o tryhackme.txt
