@@ -613,6 +613,306 @@ Finally, CUPP could also provide default usernames and passwords from the Alecto
 
 ```
 
+
+questions:
 crunch 5 5 -t "THM@%" -o tryhackme.txt
 crunch 5 5 -t “THM^%" -o tryhackme.txt
 crunch 5 5 -t "THM^^" -o tryhackme.txt
+
+## Offline Attacks - Dictionary and Bruteforce
+
+**Dictionary attack**   
+
+A dictionary attack is a technique used to guess passwords by using well-known words or phrases. The dictionary attack relies entirely on pre-gathered wordlists that were previously generated or found. It is important to choose or create the best candidate wordlist for your target in order to succeed in this attack. Let's explore performing a dictionary attack using what you've learned in the previous tasks about generating wordlists. We will showcase an offline dictionary attack using hashcat, which is a popular tool to crack hashes.
+
+Let's say that we obtain the following hash `f806fc5a2a0d5ba2471600758452799c`, and want to perform a dictionary attack to crack it. First, we need to know the following at a minimum:
+
+1- What type of hash is this?
+2- What wordlist will we be using? Or what type of attack mode could we use?
+
+To identify the type of hash, we could a tool such as hashid or hash-identifier. For this example, hash-identifier believed the possible hashing method is MD5. Please note the time to crack a hash will depend on the hardware you're using (CPU and/or GPU).
+
+```bash
+user@machine$ hashcat -a 0 -m 0 f806fc5a2a0d5ba2471600758452799c /usr/share/wordlists/rockyou.txt
+hashcat (v6.1.1) starting...
+f806fc5a2a0d5ba2471600758452799c:rockyou
+
+Session..........: hashcat
+Status...........: Cracked
+Hash.Name........: MD5
+Hash.Target......: f806fc5a2a0d5ba2471600758452799c
+Time.Started.....: Mon Oct 11 08:20:50 2021 (0 secs)
+Time.Estimated...: Mon Oct 11 08:20:50 2021 (0 secs)
+Guess.Base.......: File (/usr/share/wordlists/rockyou.txt)
+Guess.Queue......: 1/1 (100.00%)
+Speed.#1.........:   114.1 kH/s (0.02ms) @ Accel:1024 Loops:1 Thr:1 Vec:8
+Recovered........: 1/1 (100.00%) Digests
+Progress.........: 40/40 (100.00%)
+Rejected.........: 0/40 (0.00%)
+Restore.Point....: 0/40 (0.00%)
+Restore.Sub.#1...: Salt:0 Amplifier:0-1 Iteration:0-1
+Candidates.#1....: 123456 -> 123123
+
+Started: Mon Oct 11 08:20:49 2021
+Stopped: Mon Oct 11 08:20:52 2021
+
+```
+
+-a 0  sets the attack mode to a dictionary attack
+
+-m 0  sets the hash mode for cracking MD5 hashes; for other types, run hashcat -h for a list of supported hashes.
+
+f806fc5a2a0d5ba2471600758452799c this option could be a single hash like our example or a file that contains a hash or multiple hashes.
+
+/usr/share/wordlists/rockyou.txt the wordlist/dictionary file for our attack
+
+We run hashcat with --show option to show the cracked value if the hash has been cracked:
+
+```bash
+user@machine$ hashcat -a 0 -m 0 F806FC5A2A0D5BA2471600758452799C /usr/share/wordlists/rockyou.txt --show
+f806fc5a2a0d5ba2471600758452799c:rockyou
+```
+
+**Brute-Force Attack**  
+
+Brute-forcing is a common attack used by the attacker to gain unauthorized access to a personal account. This method is used to guess the victim's password by sending standard password combinations. The main difference between a dictionary and a brute-force attack is that a dictionary attack uses a wordlist that contains all possible passwords.
+
+In contrast, a brute-force attack aims to try all combinations of a character or characters. For example, let's assume that we have a bank account to which we need unauthorized access. We know that the PIN contains 4 digits as a password. We can perform a brute-force attack that starts from **0000 to 9999** to guess the valid PIN based on this knowledge. In other cases, a sequence of numbers or letters can be added to existing words in a list, such as **admin0, admin1, .. admin9999**.
+
+For instance, hashcat has charset options that could be used to generate your own combinations. The charsets can be found in hashcat help options.
+
+```bash
+user@machine$ hashcat --help
+ ? | Charset
+ ===+=========
+  l | abcdefghijklmnopqrstuvwxyz
+  u | ABCDEFGHIJKLMNOPQRSTUVWXYZ
+  d | 0123456789
+  h | 0123456789abcdef
+  H | 0123456789ABCDEF
+  s |  !"#$%&'()*+,-./:;<=>?@[\]^_`{|}~
+  a | ?l?u?d?s
+  b | 0x00 - 0xff
+
+```
+The following example shows how we can use hashcat with the brute-force attack mode with a combination of our choice. 
+
+```bash
+user@machine$ hashcat -a 3 ?d?d?d?d --stdout
+1234
+0234
+2234
+3234
+9234
+4234
+5234
+8234
+7234
+6234
+..
+..
+```
+
+-a 3  sets the attacking mode as a brute-force attack
+
+?d?d?d?d the ?d tells hashcat to use a digit. In our case, ?d?d?d?d for four digits starting with 0000 and ending at 9999
+
+--stdout print the result to the terminal
+
+Now let's apply the same concept to crack the following MD5 hash: 05A5CF06982BA7892ED2A6D38FE832D6 a four-digit PIN number.
+
+```
+user@machine$ hashcat -a 3 -m 0 05A5CF06982BA7892ED2A6D38FE832D6 ?d?d?d?d
+05a5cf06982ba7892ed2a6d38fe832d6:2021
+
+Session..........: hashcat
+Status...........: Cracked
+Hash.Name........: MD5
+Hash.Target......: 05a5cf06982ba7892ed2a6d38fe832d6
+Time.Started.....: Mon Oct 11 10:54:06 2021 (0 secs)
+Time.Estimated...: Mon Oct 11 10:54:06 2021 (0 secs)
+Guess.Mask.......: ?d?d?d?d [4]
+Guess.Queue......: 1/1 (100.00%)
+Speed.#1.........: 16253.6 kH/s (0.10ms) @ Accel:1024 Loops:10 Thr:1 Vec:8
+Recovered........: 1/1 (100.00%) Digests
+Progress.........: 10000/10000 (100.00%)
+Rejected.........: 0/10000 (0.00%)
+Restore.Point....: 0/1000 (0.00%)
+Restore.Sub.#1...: Salt:0 Amplifier:0-10 Iteration:0-10
+Candidates.#1....: 1234 -> 6764
+
+Started: Mon Oct 11 10:54:05 2021
+Stopped: Mon Oct 11 10:54:08 2021
+```
+
+**TASKS**
+Answer the questions below
+Considering the following hash: **8d6e34f987851aa599257d3831a1af040886842f**. What is the hash type?
+```bash
+└─# hashcat 8d6e34f987851aa599257d3831a1af040886842f
+hashcat (v6.2.6) starting in autodetect mode
+
+OpenCL API (OpenCL 3.0 PoCL 3.0+debian  Linux, None+Asserts, RELOC, LLVM 13.0.1, SLEEF, DISTRO, POCL_DEBUG) - Platform #1 [The pocl project]
+============================================================================================================================================
+* Device #1: pthread-Intel(R) Xeon(R) CPU E5-2676 v3 @ 2.40GHz, 1441/2946 MB (512 MB allocatable), 2MCU
+
+The following 7 hash-modes match the structure of your input hash:
+
+      # | Name                                                       | Category
+  ======+============================================================+======================================
+    100 | SHA1                                                       | Raw Hash
+   6000 | RIPEMD-160                                                 | Raw Hash
+    170 | sha1(utf16le($pass))                                       | Raw Hash
+   4700 | sha1(md5($pass))                                           | Raw Hash salted and/or iterated
+  18500 | sha1(md5(md5($pass)))                                      | Raw Hash salted and/or iterated
+   4500 | sha1(sha1($pass))                                          | Raw Hash salted and/or iterated
+    300 | MySQL4.1/MySQL5                                            | Database Server
+
+Please specify the hash-mode with -m [hash-mode].
+
+Started: Thu Jan 18 02:13:14 2024
+Stopped: Thu Jan 18 02:13:29 2024
+
+
+ANSWER: SHA-1
+```
+
+Perform a dictionary attack against the following hash: 8d6e34f987851aa599257d3831a1af040886842f. What is the cracked value? Use rockyou.txt wordlist.
+
+```bash
+hashcat -m 100 -a 0 8d6e34f987851aa599257d3831a1af040886842f /usr/share/wordlists/rockyou.txt
+
+
+hashcat (v6.2.6) starting
+
+OpenCL API (OpenCL 3.0 PoCL 3.0+debian  Linux, None+Asserts, RELOC, LLVM 13.0.1, SLEEF, DISTRO, POCL_DEBUG) - Platform #1 [The pocl project]
+============================================================================================================================================
+* Device #1: pthread-Intel(R) Xeon(R) CPU E5-2676 v3 @ 2.40GHz, 1441/2946 MB (512 MB allocatable), 2MCU
+
+Minimum password length supported by kernel: 0
+Maximum password length supported by kernel: 256
+
+Hashes: 1 digests; 1 unique digests, 1 unique salts
+Bitmaps: 16 bits, 65536 entries, 0x0000ffff mask, 262144 bytes, 5/13 rotates
+Rules: 1
+
+Optimizers applied:
+* Zero-Byte
+* Early-Skip
+* Not-Salted
+* Not-Iterated
+* Single-Hash
+* Single-Salt
+* Raw-Hash
+
+ATTENTION! Pure (unoptimized) backend kernels selected.
+Pure kernels can crack longer passwords, but drastically reduce performance.
+If you want to switch to optimized kernels, append -O to your commandline.
+See the above message to find out about the exact limits.
+
+Watchdog: Hardware monitoring interface not found on your system.
+Watchdog: Temperature abort trigger disabled.
+
+Initializing backend runtime for device #1. Please be patient...
+
+
+Host memory required for this attack: 0 MB
+
+Dictionary cache built:
+* Filename..: /usr/share/wordlists/rockyou.txt
+* Passwords.: 14344392
+* Bytes.....: 139921507
+* Keyspace..: 14344385
+* Runtime...: 26 secs
+
+8d6e34f987851aa599257d3831a1af040886842f:sunshine         
+                                                          
+Session..........: hashcat
+Status...........: Cracked
+Hash.Mode........: 100 (SHA1)
+Hash.Target......: 8d6e34f987851aa599257d3831a1af040886842f
+Time.Started.....: Thu Jan 18 02:21:43 2024 (0 secs)
+Time.Estimated...: Thu Jan 18 02:21:43 2024 (0 secs)
+Kernel.Feature...: Pure Kernel
+Guess.Base.......: File (/usr/share/wordlists/rockyou.txt)
+Guess.Queue......: 1/1 (100.00%)
+Speed.#1.........:     8185 H/s (0.12ms) @ Accel:256 Loops:1 Thr:1 Vec:8
+Recovered........: 1/1 (100.00%) Digests (total), 1/1 (100.00%) Digests (new)
+Progress.........: 512/14344385 (0.00%)
+Rejected.........: 0/512 (0.00%)
+Restore.Point....: 0/14344385 (0.00%)
+Restore.Sub.#1...: Salt:0 Amplifier:0-1 Iteration:0-1
+Candidate.Engine.: Device Generator
+Candidates.#1....: 123456 -> letmein
+
+Started: Thu Jan 18 02:20:34 2024
+Stopped: Thu Jan 18 02:21:44 2024
+
+```
+
+
+Perform a brute-force attack against the following MD5 hash: e48e13207341b6bffb7fb1622282247b. What is the cracked value? Note the password is a 4 digit number: [0-9][0-9][0-9][0-9]
+
+```bash
+hashcat -m 0 -a 3 -o crackMD5.txt e48e13207341b6bffb7fb1622282247b ?d?d?d?d
+
+hashcat (v6.2.6) starting
+
+OpenCL API (OpenCL 3.0 PoCL 3.0+debian  Linux, None+Asserts, RELOC, LLVM 13.0.1, SLEEF, DISTRO, POCL_DEBUG) - Platform #1 [The pocl project]
+============================================================================================================================================
+* Device #1: pthread-Intel(R) Xeon(R) CPU E5-2676 v3 @ 2.40GHz, 1441/2946 MB (512 MB allocatable), 2MCU
+
+Minimum password length supported by kernel: 0
+Maximum password length supported by kernel: 256
+
+Hashes: 1 digests; 1 unique digests, 1 unique salts
+Bitmaps: 16 bits, 65536 entries, 0x0000ffff mask, 262144 bytes, 5/13 rotates
+
+Optimizers applied:
+* Zero-Byte
+* Early-Skip
+* Not-Salted
+* Not-Iterated
+* Single-Hash
+* Single-Salt
+* Brute-Force
+* Raw-Hash
+
+ATTENTION! Pure (unoptimized) backend kernels selected.
+Pure kernels can crack longer passwords, but drastically reduce performance.
+If you want to switch to optimized kernels, append -O to your commandline.
+See the above message to find out about the exact limits.
+
+Watchdog: Hardware monitoring interface not found on your system.
+Watchdog: Temperature abort trigger disabled.
+
+Host memory required for this attack: 0 MB
+
+Approaching final keyspace - workload adjusted.           
+
+                                                          
+Session..........: hashcat
+Status...........: Cracked
+Hash.Mode........: 0 (MD5)
+Hash.Target......: e48e13207341b6bffb7fb1622282247b
+Time.Started.....: Thu Jan 18 02:27:06 2024 (1 sec)
+Time.Estimated...: Thu Jan 18 02:27:07 2024 (0 secs)
+Kernel.Feature...: Pure Kernel
+Guess.Mask.......: ?d?d?d?d [4]
+Guess.Queue......: 1/1 (100.00%)
+Speed.#1.........:    43780 H/s (0.15ms) @ Accel:256 Loops:10 Thr:1 Vec:8
+Recovered........: 1/1 (100.00%) Digests (total), 1/1 (100.00%) Digests (new)
+Progress.........: 10000/10000 (100.00%)
+Rejected.........: 0/10000 (0.00%)
+Restore.Point....: 512/1000 (51.20%)
+Restore.Sub.#1...: Salt:0 Amplifier:0-10 Iteration:0-10
+Candidate.Engine.: Device Generator
+Candidates.#1....: 1813 -> 6764
+
+Started: Thu Jan 18 02:26:44 2024
+Stopped: Thu Jan 18 02:27:08 2024
+                                                                                                        
+┌──(root㉿kali)-[~]
+└─# cat crackMD5.txt 
+e48e13207341b6bffb7fb1622282247b:1337
+```
