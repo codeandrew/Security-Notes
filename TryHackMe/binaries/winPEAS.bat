@@ -138,6 +138,8 @@ REG QUERY HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\Windows\EventLog\EventF
 ECHO.
 CALL :T_Progress 1
 
+@REM fixed here
+
 :LAPSInstallCheck
 CALL :ColorLine " %E%33m[+]%E%97m LAPS installed?"
 ECHO.   [i] Check what is being logged
@@ -270,6 +272,9 @@ for /f "tokens=2 delims='='" %%x in ('wmic process list full^|find /i "executabl
 ECHO.
 CALL :T_Progress 3
 
+@REM 2nd batch
+######### 2nd END HERE 
+
 :RunAtStartup
 CALL :ColorLine " %E%33m[+]%E%97m RUN AT STARTUP"
 ECHO.   [i] Check if you can modify any binary that is going to be executed by admin or if you can impersonate a not found binary
@@ -357,6 +362,9 @@ CALL :T_Progress 1
 CALL :ColorLine " %E%33m[+]%E%97m WIFI"
 for /f "tokens=4 delims=: " %%a in ('netsh wlan show profiles ^| find "Profile "') do (netsh wlan show profiles name=%%a key=clear | findstr "SSID Cipher Content" | find /v "Number" & ECHO.)
 CALL :T_Progress 1
+
+### 3rd 
+
 
 :BasicUserInfo
 CALL :ColorLine "%E%32m[*]%E%97m BASIC USER INFO
@@ -459,6 +467,9 @@ for /f "tokens=2" %%n in ('sc query state^= all^| findstr SERVICE_NAME') do (
 		ECHO.%%~s ^| findstr /r /c:"[a-Z][ ][a-Z]" >nul 2>&1 && (ECHO.%%n && ECHO.%%~s && icacls %%s | findstr /i "(F) (M) (W) :\" | findstr /i ":\\ everyone authenticated users todos %username%") && ECHO.
 	)
 )
+
+### 4th batch 
+
 CALL :T_Progress 2
 ::wmic service get name,displayname,pathname,startmode | more | findstr /i /v "C:\\Windows\\system32\\" | findstr /i /v """
 ECHO.

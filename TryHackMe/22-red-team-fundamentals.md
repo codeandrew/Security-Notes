@@ -153,6 +153,15 @@ Slack
 
 ![operations_plan](./media/22-operation-plans.png)
 
+## Governance & Regulation
+> https://tryhackme.com/room/cybergovernanceregulation
+- Governance: Managing and directing an organisation or system to achieve its objectives and ensure compliance with laws, -regulations, and standards.
+- Regulation: A rule or law enforced by a governing body to ensure compliance and protect against harm.
+- Compliance: The state of adhering to laws, regulations, and standards that apply to an organisation or system.
+
+
+
+
 ## Reference
 
 - https://0xdf.gitlab.io/2021/07/08/playing-with-printnightmare.html

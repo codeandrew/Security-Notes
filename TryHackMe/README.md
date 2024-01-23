@@ -11,7 +11,10 @@
 - https://tryhackme.com/path/outline/jrpenetrationtester 
 - https://tryhackme.com/room/uploadvulns 
 - https://tryhackme.com/path/outline/pentesting 
- 
+
+## RECOMMENDED ROOMS or MODULEs
+- https://tryhackme.com/module/scripting-for-pentesters
+- 
 ### modules
 - https://tryhackme.com/module/intro-to-networking
 - https://tryhackme.com/module/linux-fundamentals 
