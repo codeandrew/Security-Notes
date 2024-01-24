@@ -44,9 +44,7 @@ Can you avoid hash collisions? (Yea/Nay)
 If you have an 8 bit hash output, how many possible hashes are there?
 > 256
 
-## Related rooms
-- https://tryhackme.com/room/encryptioncrypto101
-- https://tryhackme.com/room/johntheripper0
+
 
 ## Uses for Hashing
 janilla.yuzon@i2sbs.com What can we do with hashing?
@@ -264,3 +262,7 @@ Answer: 1750
 https://hashcat.net/wiki/doku.php?id=example_hashes
 
 
+
+## Related rooms
+- https://tryhackme.com/room/encryptioncrypto101
+- https://tryhackme.com/room/johntheripper0
