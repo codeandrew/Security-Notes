@@ -1296,3 +1296,13 @@ Hydra (https://github.com/vanhauser-thc/thc-hydra) starting at 2024-01-22 12:41:
 Hydra (https://github.com/vanhauser-thc/thc-hydra) finished at 2024-01-22 12:42:44
 
 ```
+
+```bash
+rhost=10.10.98.196
+kali=10.10.70.157
+
+
+
+
+
+```
