@@ -52,6 +52,12 @@ Metasploit: Exploitation Task 5
 > learn about ntlm password hashes,
 > learn what registry windows is storing hash password of users
 
+## SCRIPTING ROOMS
+
+https://tryhackme.com/room/intropocscripting
+https://tryhackme.com/room/capture
+https://tryhackme.com/room/vulnnetdotpy
+
 ## CHALLENGES
 
 - EASY https://tryhackme.com/room/basicpentestingjt
