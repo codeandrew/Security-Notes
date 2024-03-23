@@ -1515,3 +1515,7 @@ rooms to test:
 - https://tryhackme.com/r/room/printerhacking101
 
 
+## Lessons learned
+- windows forensics
+- windows enumeration
+- windows services
