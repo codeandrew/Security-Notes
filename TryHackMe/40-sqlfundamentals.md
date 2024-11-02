@@ -3,6 +3,8 @@
 
 ## LABS
 
+
+### DATABASES STATEMENTS
 ```mysql
 Ubuntu@tryhackme:~$ mysql -u root -p
 Enter password: 
@@ -73,5 +75,36 @@ Query OK, 0 rows affected (0.04 sec)
 Records: 0  Duplicates: 0  Warnings: 0
 
 mysql> 
+
+
+mysql> SHOW DATABASES;
++-----------------------------------------------+
+| Database                                      |
++-----------------------------------------------+
+| THM{575a947132312f97b30ee5aeebba629b723d30f9} |
+| information_schema                            |
+| mysql                                         |
+| performance_schema                            |
+| sys                                           |
+| task_4_db                                     |
+| thm_bookmarket_db                             |
+| thm_books                                     |
+| thm_books2                                    |
+| tools_db                                      |
++-----------------------------------------------+
+10 rows in set (0.00 sec)
+
+mysql> USE task_4_db;
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Database changed
+mysql> SHOW TABLES;
++-----------------------------------------------+
+| Tables_in_task_4_db                           |
++-----------------------------------------------+
+| THM{692aa7eaec2a2a827f4d1a8bed1f90e5e49d2410} |
++-----------------------------------------------+
+1 row in set (0.00 sec)
 
 ```
