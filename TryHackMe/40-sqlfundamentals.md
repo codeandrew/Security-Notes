@@ -202,4 +202,108 @@ mysql> SELECT * FROM hacking_tools;
 8 rows in set (0.00 sec)
 
 
+---
+
+
+mysql> SELECT name FROM hacking_tools ORDER BY name ASC;
++------------------+
+| name             |
++------------------+
+| Bash Bunny       |
+| Flipper Zero     |
+| iCopy-XS         |
+| Lan Turtle       |
+| O.MG cables      |
+| Proxmark 3 RDV4  |
+| USB Rubber Ducky |
+| Wi-Fi Pineapple  |
++------------------+
+8 rows in set (0.00 sec)
+
+mysql> SELECT name FROM hacking_tools ORDER BY name DESC;
++------------------+
+| name             |
++------------------+
+| Wi-Fi Pineapple  |
+| USB Rubber Ducky |
+| Proxmark 3 RDV4  |
+| O.MG cables      |
+| Lan Turtle       |
+| iCopy-XS         |
+| Flipper Zero     |
+| Bash Bunny       |
++------------------+
+8 rows in set (0.00 sec)
+
+
+
+
+---
+mysql> SHOW DATABASES;
++-----------------------------------------------+
+| Database                                      |
++-----------------------------------------------+
+| THM{575a947132312f97b30ee5aeebba629b723d30f9} |
+| information_schema                            |
+| mysql                                         |
+| performance_schema                            |
+| sys                                           |
+| task_4_db                                     |
+| thm_bookmarket_db                             |
+| thm_books                                     |
+| thm_books2                                    |
+| tools_db                                      |
++-----------------------------------------------+
+10 rows in set (0.00 sec)
+
+mysql> use thm_books;
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Database changed
+mysql> SHOW TABLES;
++---------------------+
+| Tables_in_thm_books |
++---------------------+
+| books               |
++---------------------+
+1 row in set (0.00 sec)
+
+mysql> DESCRIBE books;
++----------------+--------------+------+-----+---------+----------------+
+| Field          | Type         | Null | Key | Default | Extra          |
++----------------+--------------+------+-----+---------+----------------+
+| id             | int          | NO   | PRI | NULL    | auto_increment |
+| name           | varchar(255) | NO   |     | NULL    |                |
+| published_date | date         | YES  |     | NULL    |                |
+| description    | text         | NO   |     | NULL    |                |
++----------------+--------------+------+-----+---------+----------------+
+4 rows in set (0.01 sec)
+
+mysql> SELECT name, COUNT(*) FROM books GROUP BY name;
++----------------------------+----------+
+| name                       | COUNT(*) |
++----------------------------+----------+
+| Android Security Internals |        1 |
+| Bug Bounty Bootcamp        |        1 |
+| Car Hacker's Handbook      |        1 |
+| Designing Secure Software  |        1 |
+| Ethical Hacking            |        2 |
++----------------------------+----------+
+5 rows in set (0.00 sec)
+
+
+mysql> SELECT DISTINCT name FROM books;
++----------------------------+
+| name                       |
++----------------------------+
+| Android Security Internals |
+| Bug Bounty Bootcamp        |
+| Car Hacker's Handbook      |
+| Designing Secure Software  |
+| Ethical Hacking            |
++----------------------------+
+5 rows in set (0.00 sec)
+
+
 ```
