@@ -307,3 +307,151 @@ mysql> SELECT DISTINCT name FROM books;
 
 
 ```
+
+
+SQL OPERATORS
+```sql
+ubuntu@tryhackme:~$ mysql -uroot -p
+Enter password: 
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 9
+Server version: 8.0.39-0ubuntu0.20.04.1 (Ubuntu)
+
+Copyright (c) 2000, 2024, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> use thm_books2;
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Database changed
+mysql> SELECT *
+    ->     FROM books
+    ->     WHERE description LIKE "%guide%";
++----+----------------------------+----------------+--------------------------------------------------------+--------------------+
+| id | name                       | published_date | description                                            | category           |
++----+----------------------------+----------------+--------------------------------------------------------+--------------------+
+|  1 | Android Security Internals | 2014-10-14     | An In-Depth Guide to Android's Security Architecture   | Defensive Security |
+|  2 | Bug Bounty Bootcamp        | 2021-11-16     | The Guide to Finding and Reporting Web Vulnerabilities | Offensive Security |
+|  3 | Car Hacker's Handbook      | 2016-02-25     | A Guide for the Penetration Tester                     | Offensive Security |
+|  4 | Designing Secure Software  | 2021-12-21     | A Guide for Developers                                 | Defensive Security |
++----+----------------------------+----------------+--------------------------------------------------------+--------------------+
+4 rows in set (0.00 sec)
+
+mysql> SELECT *
+    ->     FROM books
+    ->     WHERE category = "Offensive Security" AND name = "Bug Bounty Bootcamp"; 
++----+---------------------+----------------+--------------------------------------------------------+--------------------+
+| id | name                | published_date | description                                            | category           |
++----+---------------------+----------------+--------------------------------------------------------+--------------------+
+|  2 | Bug Bounty Bootcamp | 2021-11-16     | The Guide to Finding and Reporting Web Vulnerabilities | Offensive Security |
++----+---------------------+----------------+--------------------------------------------------------+--------------------+
+1 row in set (0.00 sec)
+
+mysql> SELECT *
+    ->     FROM books
+    ->     WHERE name LIKE "%Android%" OR name LIKE "%iOS%"; 
++----+----------------------------+----------------+------------------------------------------------------+--------------------+
+| id | name                       | published_date | description                                          | category           |
++----+----------------------------+----------------+------------------------------------------------------+--------------------+
+|  1 | Android Security Internals | 2014-10-14     | An In-Depth Guide to Android's Security Architecture | Defensive Security |
++----+----------------------------+----------------+------------------------------------------------------+--------------------+
+1 row in set (0.00 sec)
+
+mysql> SELECT *
+    ->     FROM books
+    ->     WHERE NOT description LIKE "%guide%";
++----+-----------------+----------------+----------------------------------------+--------------------+
+| id | name            | published_date | description                            | category           |
++----+-----------------+----------------+----------------------------------------+--------------------+
+|  5 | Ethical Hacking | 2021-11-02     | A Hands-on Introduction to Breaking In | Offensive Security |
++----+-----------------+----------------+----------------------------------------+--------------------+
+1 row in set (0.01 sec)
+
+mysql> SELECT *
+    ->     FROM books
+    ->     WHERE id BETWEEN 2 AND 4;
++----+---------------------------+----------------+--------------------------------------------------------+--------------------+
+| id | name                      | published_date | description                                            | category           |
++----+---------------------------+----------------+--------------------------------------------------------+--------------------+
+|  2 | Bug Bounty Bootcamp       | 2021-11-16     | The Guide to Finding and Reporting Web Vulnerabilities | Offensive Security |
+|  3 | Car Hacker's Handbook     | 2016-02-25     | A Guide for the Penetration Tester                     | Offensive Security |
+|  4 | Designing Secure Software | 2021-12-21     | A Guide for Developers                                 | Defensive Security |
++----+---------------------------+----------------+--------------------------------------------------------+--------------------+
+3 rows in set (0.00 sec)
+
+mysql> SELECT *
+    ->     FROM books
+    ->     WHERE name = "Designing Secure Software";
++----+---------------------------+----------------+------------------------+--------------------+
+| id | name                      | published_date | description            | category           |
++----+---------------------------+----------------+------------------------+--------------------+
+|  4 | Designing Secure Software | 2021-12-21     | A Guide for Developers | Defensive Security |
++----+---------------------------+----------------+------------------------+--------------------+
+1 row in set (0.01 sec)
+
+mysql> SELECT *
+    ->     FROM books
+    ->     WHERE category != "Offensive Security";
++----+----------------------------+----------------+------------------------------------------------------+--------------------+
+| id | name                       | published_date | description                                          | category           |
++----+----------------------------+----------------+------------------------------------------------------+--------------------+
+|  1 | Android Security Internals | 2014-10-14     | An In-Depth Guide to Android's Security Architecture | Defensive Security |
+|  4 | Designing Secure Software  | 2021-12-21     | A Guide for Developers                               | Defensive Security |
++----+----------------------------+----------------+------------------------------------------------------+--------------------+
+2 rows in set (0.00 sec)
+
+mysql> SELECT *
+    ->     FROM books
+    ->     WHERE published_date < "2020-01-01";
++----+----------------------------+----------------+------------------------------------------------------+--------------------+
+| id | name                       | published_date | description                                          | category           |
++----+----------------------------+----------------+------------------------------------------------------+--------------------+
+|  1 | Android Security Internals | 2014-10-14     | An In-Depth Guide to Android's Security Architecture | Defensive Security |
+|  3 | Car Hacker's Handbook      | 2016-02-25     | A Guide for the Penetration Tester                   | Offensive Security |
++----+----------------------------+----------------+------------------------------------------------------+--------------------+
+2 rows in set (0.00 sec)
+
+mysql> SELECT *
+    ->     FROM books
+    ->     WHERE published_date > "2020-01-01";
++----+---------------------------+----------------+--------------------------------------------------------+--------------------+
+| id | name                      | published_date | description                                            | category           |
++----+---------------------------+----------------+--------------------------------------------------------+--------------------+
+|  2 | Bug Bounty Bootcamp       | 2021-11-16     | The Guide to Finding and Reporting Web Vulnerabilities | Offensive Security |
+|  4 | Designing Secure Software | 2021-12-21     | A Guide for Developers                                 | Defensive Security |
+|  5 | Ethical Hacking           | 2021-11-02     | A Hands-on Introduction to Breaking In                 | Offensive Security |
++----+---------------------------+----------------+--------------------------------------------------------+--------------------+
+3 rows in set (0.00 sec)
+
+mysql> SELECT *
+    ->     FROM books
+    ->     WHERE published_date <= "2021-11-15";
++----+----------------------------+----------------+------------------------------------------------------+--------------------+
+| id | name                       | published_date | description                                          | category           |
++----+----------------------------+----------------+------------------------------------------------------+--------------------+
+|  1 | Android Security Internals | 2014-10-14     | An In-Depth Guide to Android's Security Architecture | Defensive Security |
+|  3 | Car Hacker's Handbook      | 2016-02-25     | A Guide for the Penetration Tester                   | Offensive Security |
+|  5 | Ethical Hacking            | 2021-11-02     | A Hands-on Introduction to Breaking In               | Offensive Security |
++----+----------------------------+----------------+------------------------------------------------------+--------------------+
+3 rows in set (0.00 sec)
+
+mysql> SELECT *
+    ->     FROM books
+    ->     WHERE published_date >= "2021-11-02";
++----+---------------------------+----------------+--------------------------------------------------------+--------------------+
+| id | name                      | published_date | description                                            | category           |
++----+---------------------------+----------------+--------------------------------------------------------+--------------------+
+|  2 | Bug Bounty Bootcamp       | 2021-11-16     | The Guide to Finding and Reporting Web Vulnerabilities | Offensive Security |
+|  4 | Designing Secure Software | 2021-12-21     | A Guide for Developers                                 | Defensive Security |
+|  5 | Ethical Hacking           | 2021-11-02     | A Hands-on Introduction to Breaking In                 | Offensive Security |
++----+---------------------------+----------------+--------------------------------------------------------+--------------------+
+3 rows in set (0.00 sec)
+
+
+```
