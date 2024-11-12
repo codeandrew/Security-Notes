@@ -455,3 +455,96 @@ mysql> SELECT *
 
 
 ```
+
+
+FUNCTIONS
+```mysql
+ubuntu@tryhackme:~$ mysql -u root -p
+Enter password: 
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 8
+Server version: 8.0.39-0ubuntu0.20.04.1 (Ubuntu)
+
+Copyright (c) 2000, 2024, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> show databases;
++-----------------------------------------------+
+| Database                                      |
++-----------------------------------------------+
+| THM{575a947132312f97b30ee5aeebba629b723d30f9} |
+| information_schema                            |
+| mysql                                         |
+| performance_schema                            |
+| sys                                           |
+| task_4_db                                     |
+| thm_books                                     |
+| thm_books2                                    |
+| tools_db                                      |
++-----------------------------------------------+
+9 rows in set (0.00 sec)
+
+mysql> use tools_db;
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Database changed
+mysql> show tables;
++--------------------+
+| Tables_in_tools_db |
++--------------------+
+| hacking_tools      |
++--------------------+
+1 row in set (0.00 sec)
+
+mysql> select * from hacking_tools;
++----+------------------+----------------------+-------------------------------------------------------------------------+--------+
+| id | name             | category             | description                                                             | amount |
++----+------------------+----------------------+-------------------------------------------------------------------------+--------+
+|  1 | Flipper Zero     | Multi-tool           | A portable multi-tool for pentesters and geeks in a toy-like form       |    169 |
+|  2 | O.MG cables      | Cable-based attacks  | Malicious USB cables that can be used for remote attacks and testing    |    180 |
+|  3 | Wi-Fi Pineapple  | Wi-Fi hacking        | A device used to perform man-in-the-middle attacks on wireless networks |    140 |
+|  4 | USB Rubber Ducky | USB attacks          | A USB keystroke injection tool disguised as a flash drive               |     80 |
+|  5 | iCopy-XS         | RFID cloning         | A tool used for reading and cloning RFID cards for security testing     |    375 |
+|  6 | Lan Turtle       | Network intelligence | A covert tool for remote access and network intelligence gathering      |     80 |
+|  7 | Bash Bunny       | USB attacks          | A multi-function USB attack device for penetration testers              |    120 |
+|  8 | Proxmark 3 RDV4  | RFID cloning         | A powerful RFID tool for reading, writing, and analyzing RFID tags      |    300 |
++----+------------------+----------------------+-------------------------------------------------------------------------+--------+
+8 rows in set (0.00 sec)
+
+mysql> SELECT name
+    -> FROM hacking_tools
+    -> ORDER BY LENGTH(name) DESC;
++------------------+
+| name             |
++------------------+
+| USB Rubber Ducky |
+| Wi-Fi Pineapple  |
+| Proxmark 3 RDV4  |
+| Flipper Zero     |
+| O.MG cables      |
+| Lan Turtle       |
+| Bash Bunny       |
+| iCopy-XS         |
++------------------+
+8 rows in set (0.00 sec)
+
+mysql> SELECT name
+    -> FROM hacking_tools
+    -> ORDER BY LENGTH(name) DESC
+    -> LIMIT 1;
++------------------+
+| name             |
++------------------+
+| USB Rubber Ducky |
++------------------+
+1 row in set (0.00 sec)
+
+mysql> 
+
+```
